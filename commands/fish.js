@@ -4,7 +4,7 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('fish')
     .setDescription('go fishing'),
-  cooldown: '45',
+  cooldown: '10',
   async execute(int, c) {
     const app = require('../app')
     const func = require('../resources/functions')

@@ -6,6 +6,7 @@ const func = require('./resources/functions')
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] })
 client.commands = new Collection();
+client.enchants = new Collection();
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 const adminFiles = fs.readdirSync('./admincmd').filter(file => file.endsWith('.js'));
@@ -24,6 +25,9 @@ for (const file of adminFiles) {
 
 function getCommands() {
   return client.commands
+}
+function getEnchants() {
+  return client.enchants
 }
 
 client.on('messageCreate', async message => {
@@ -55,8 +59,7 @@ client.on('interactionCreate', async int => {
   }
   const timestamps = cooldowns.get(command.commandName);
   const cooldownAmount = (command.cooldown || 1) * 1000;
-    // && !config.tester.includes(int.user.id)
-  if (timestamps.has(int.user.id)) {
+  if (timestamps.has(int.user.id) && !config.tester.includes(int.user.id)) {
     const expirationTime = timestamps.get(int.user.id) + cooldownAmount;
     if (now < expirationTime) {
       const timeLeft = (expirationTime - now) / 1000;
@@ -69,7 +72,7 @@ client.on('interactionCreate', async int => {
     setTimeout(() => timestamps.delete(int.user.id), cooldownAmount);
     await command.execute(int, client);
   } catch (error) {
-    console.error(error);
+    func.error(error);
     await int.reply({ content: 'There was an error while executing this command!', ephemeral: true });
   }
   
@@ -77,6 +80,11 @@ client.on('interactionCreate', async int => {
 });
 
 client.once('ready', async () => {
+  const enchantFiles = fs.readdirSync('./resources/enchants').filter(file => file.endsWith('.js'));
+  for (const file of enchantFiles) {
+    const ench = require(`./resources/enchants/${file}`);
+    client.enchants.set(ench.name, ench);
+  }
   const storedBalances = await Users.findAll();
   storedBalances.forEach(b => currency.set(b.user_id, b));
   console.log('Ready!')
@@ -104,5 +112,5 @@ Reflect.defineProperty(currency, 'getBalance', {
   },
 });
 
-module.exports = { getCommands, currency }
+module.exports = { getCommands, getEnchants, currency }
 client.login(config.token)
