@@ -28,6 +28,11 @@ module.exports = {
     client.channels.cache.get('837801271036608572').send(`<console> ${text2}`)
     return console.log(`${client.ws.ping}ms ${time} - <console> ${text2}`);
   },
+  error: function (text) {
+    var errorfile = fs.readFileSync('error.txt', 'utf-8')
+    fs.writeFileSync('error.txt', `${errorfile}` + `\n${text}`)
+    return console.log('logged error to log file')
+  },
   clearStatus: function (userEffects) {
     userEffects.burn = Number(0)
     userEffects.poison = Number(0)
