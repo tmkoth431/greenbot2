@@ -31,6 +31,7 @@ module.exports = {
   error: function (text) {
     var errorfile = fs.readFileSync('error.txt', 'utf-8')
     fs.writeFileSync('error.txt', `${errorfile}` + `\n${text}`)
+    return console.log('logged error to log file')
   },
   clearStatus: function (userEffects) {
     userEffects.burn = Number(0)
