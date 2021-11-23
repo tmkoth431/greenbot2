@@ -6,6 +6,7 @@ module.exports = {
   async execute(int, userEffects, tUserEffects, user, tUser) {
     tUserEffects.burn = Number(3)
     tUserEffects.save()
-    return int.reply(`<@${tUser.user_id}>, you have been set on fire`)
+    return int.reply(`Debuff 'On Fire' added to ${user.tag}.`)
+    // Toby! Fix                                  ^^^^^^^^
   },
 }

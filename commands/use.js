@@ -3,10 +3,10 @@ const { SlashCommandBuilder } = require('@discordjs/builders')
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('use')
-    .setDescription('uses an item')
+    .setDescription('Uses an Item')
     .addStringOption(options =>
       options.setName('item_id')
-        .setDescription('item id')
+        .setDescription('Item ID')
         .setRequired(true)),
   async execute(int, c) {
     const app = require('../app')
@@ -19,13 +19,14 @@ module.exports = {
     let item = await UserItems.findOne({ where: { user_id: int.user.id, item_id: { [Op.like]: itemName } } });
     if (!item) {
       item = await UserItems.findOne({ where: { user_id: int.user.id, shop_id: itemName } });
-      if (!item) return int.reply(`unnable to find item ${itemName}`)
+      if (!item) return int.reply(`No Such Item Exists in ${user.tag}'s Inventory!`)
+      // Toby! Fix                                          ^^^^^^^^
     }
     const userEffects = await UserEffects.findOne({ where: { user_id: int.user.id } })
-    if (item.amount < 0) return int.reply(`you do not own any ${item.item_id}s`)
+    if (item.amount < 0) return int.reply(`${user.tag} does not own any ${item.item_id}s`)
     if (user.combat) {
-      if (!user.turn) return int.reply('not your turn in combat')
-
+      if (!user.turn) return int.reply(`It is not currently ${user.id}'s turn in combat!`)
+      // Toby! Fix                                           ^^^^^^^^
       if (user.combat_target_id == '0') {
         const enemy = Enemy.findOne({ where: { user_id: int.user.id } })
         const userEffects = await UserEffects.findOne({ where: { user_id: int.user.id } })
@@ -34,12 +35,12 @@ module.exports = {
         if (ecrit) erand * 2
         user.health -= Number(erand)
         user.save()
-        if (!ecrit) { int.reply(`${int.user.tag} was hit by ${enemy.name} for ${erand}`); }
-        else { int.reply(`${int.user.tag} was CRIT by ${enemy.name} for ${erand}`) }
+        if (!ecrit) { int.reply(`${int.user.tag} was hit by ${enemy.name} for ${erand}!`); }
+        else { int.reply(`${int.user.tag} got a Critical Hit on ${enemy.name} for ${erand}!`) }
         if (user.health < 1) {
           user.combat = Boolean(false)
           user.save()
-          func.die(int, `was killed by the ${enemy.name}`, user, userEffects, c)
+          func.die(int, `was defeated by the ${enemy.name}!`, user, userEffects, c)
           return await Enemy.destroy({ where: { user_id: int.user.id } })
         }
       }
@@ -62,11 +63,11 @@ module.exports = {
       await user.addItem(item.item_id, item.id, -1)
 
       func.log(`used a ${item.item_id}`, int, c);
-      return int.reply(`${int.user.tag} healed for ${heal}`);
+      return int.reply(`${int.user.tag} healed ${heal} health`);
     } else if (item.type == 'e') {
       const equipped = await UserItems.findOne({ where: { user_id: { [Op.like]: int.user.id }, equipped: true } })
-      if (!equipped) return int.reply('must have a weapon equipped to enchant')
-      if (user.level_points < item.ecost) return int.reply('you dont have enough level points')
+      if (!equipped) return int.reply(`${user.id} must have a weapon equipped to enchant!`)
+      if (user.level_points < item.ecost) return int.reply(`${user.id} does not have enough XP points!`)
       equipped.amount -= Number(1)
       equipped.equipped = Boolean(false)
       equipped.save()
@@ -82,9 +83,9 @@ module.exports = {
       is_item.equipped = Boolean(true)
       is_item.save()
 
-      func.log(`enchanted ${equipped.item_id} with ${item.enchant}`, message, client);
-      return int.reply(`${int.user.tag} healed for ${heal}`);
+      func.log(`${user.id} Enchanted ${equipped.item_id} with ${item.enchant}.`, message, client);
+      return int.reply(`${int.user.tag} healed for ${heal}.`);
     }
-    return int.reply(`${itemName} is not a consumable`)
+    return int.reply(`${itemName} is not consumable!`)
   },
 }

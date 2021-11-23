@@ -1,6 +1,8 @@
 const func = require('../functions')
 const app = require('../../app')
 
+//toby make all these take from .js files instead of this bullshit
+
 module.exports = {
   name: 'mystery',
   async execute(int, userEffects, tUserEffects, user, tUser) {

@@ -7,5 +7,6 @@ module.exports = {
     tUserEffects.necrofire = Boolean(true)
     tUserEffects.save()
     return int.reply(`<@${tUser.user_id}>, you have been set on fire`)
+    // Toby! Make the reply always be the same as flame.js
   },
 }

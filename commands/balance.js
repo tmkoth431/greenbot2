@@ -3,10 +3,10 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('balance')
-    .setDescription('gets balance')
+    .setDescription("Shows a Players' Balance.")
     .addUserOption(options =>
       options.setName('user')
-        .setDescription('target user')
+        .setDescription('Targeted User')
         .setRequired(false)),
   async execute(int, c) {
     const app = require('../app')
@@ -16,6 +16,6 @@ module.exports = {
     const user = app.currency.get(target.id)
     const bal = user.balance || '???'
     func.log(`checked ${target} balance of ${bal}`, int, c)
-    return int.reply(`${target.tag} has ${bal}💰`);
+    return int.reply(`${target.tag} has \$${bal}.`);
   },
 };

@@ -3,10 +3,10 @@ const { SlashCommandBuilder } = require('@discordjs/builders')
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('stats')
-    .setDescription('gets user stats')
+    .setDescription("Retrives a Users' Stats")
     .addUserOption(options =>
       options.setName('user')
-        .setDescription('target user')
+        .setDescription('Targeted User')
         .setRequired(true)),
   async execute(int, c) {
     const app = require('../app')
@@ -15,7 +15,7 @@ module.exports = {
 
     const target = int.options.getUser('user') ?? int.user;
     const user = app.currency.get(target.id)
-    if (!user) return int.reply(`${target.username} was not found`)
+    if (!user) return int.reply(`${target.username} does not exist!`)
     let wep
     const weapon = await UserItems.findOne({ where: { user_id: int.user.id, equipped: true } })
     const userEffects = await UserEffects.findOne({ where: { user_id: int.user.id } })
@@ -27,19 +27,19 @@ module.exports = {
     const enemy = await Enemy.findOne({ where: { user_id: int.user.id } })
     func.log(`is checking the stats of ${target}`, int, c)
     return int.reply(`${target.username}'s stats: \n` +
-      `level: ${user.level}  ${user.exp}/${func.calclvl(user.level)}\n` +
-      `points: ${user.level_points}\n` +
-      `health: ${user.health}/${user.max_health} \n` +
-      `luck: ${user.luck} \n` +
-      `strength: ${user.strength}\n` +
-      `dexterity: ${user.dexterity}\n` +
-      `fish exp: ${user.fish_exp}\n` +
-      `biggest fish: ${user.biggest_catch}\n` +
-      `weapon: ${wep}\n` +
-      `status:${effects}` +
+      `Level: ${user.level}  ${user.exp}/${func.calclvl(user.level)}\n` +
+      `Points: ${user.level_points}\n` +
+      `Health: ${user.health}/${user.max_health} \n` +
+      `Luck: ${user.luck} \n` +
+      `Strength: ${user.strength}\n` +
+      `Dexterity: ${user.dexterity}\n` +
+      `Fish XP: ${user.fish_exp}\n` +
+      `Biggest Fish: ${user.biggest_catch}\n` +
+      `Weapon: ${wep}\n` +
+      `Status:${effects}` +
       `${enemy ? `\n\nEnemy:\n` +
-        `name: ${enemy.name}\n` +
-        `health: ${enemy.health}/${enemy.max_health}` : ''}`
+        `Name: ${enemy.name}\n` +
+        `Health: ${enemy.health}/${enemy.max_health}` : ''}`
       , { code: true })
 
   }

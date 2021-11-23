@@ -13,7 +13,7 @@ module.exports = {
     const items = await Shop.findAll();
     func.log(`opened the shop`, int, c)
     const embededd = new MessageEmbed()
-      .setTitle('Shop or Something')
+      .setTitle('Shop')
       .setColor('#25c059')
       .setDescription('Consumables:\n' +
       items.sort((a, b) => a.id - b.id).filter(a => a.type === 'c' && a.buyable).map(item => `[ID: ${item.id}] ${item.name}: \$${item.cost} Heal: ${item.heal}`).join('\n') + '\n\n' +

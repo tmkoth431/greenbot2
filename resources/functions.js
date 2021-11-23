@@ -47,8 +47,8 @@ module.exports = {
       user.level += Number(1)
       user.level_points += Number(1)
       user.save()
-      this.logconsole(`<${user.user_id}> leveled up`, int.createdAt, client)
-      int.reply(`${int.user.tag} leveled up`)
+      this.logconsole(`<${user.user_id}> leveled up.`, int.createdAt, client)
+      int.reply(`${int.user.tag} leveled up.`)
       this.levelup(int, user, client)
     } else {
       return
@@ -69,17 +69,17 @@ module.exports = {
       userEffects.burn -= Number(1)
       user.save()
       userEffects.save()
-      if (userEffects.burn < 1) message.reply('you are no longer burning')
-      return cause = 'burned to death'
+      if (userEffects.burn < 1) message.reply(`Debuff 'On Fire' removed from ${user.tag}`)
+      return cause = 'burned to a crisp'
     }
     if (userEffects.poison > 0) {
       user.health -= Number(1)
       userEffects.burn -= Number(1)
       user.save()
       userEffects.save()
-      if (userEffects.poison < 1) message.reply('you are no longer poisoned')
-      return cause = 'died by poison'
+      if (userEffects.poison < 1) message.reply(`Debuff 'Poison' removed from ${user.tag}`)
+      return cause = 'did not get the antidote in time'
     }
-    return cause = 'just died'
+    return cause = 'passed away'
   }
 }
