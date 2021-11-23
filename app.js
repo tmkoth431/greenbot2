@@ -1,7 +1,7 @@
 const { Client, Collection, Intents } = require('discord.js')
 const config = require('./config.json')
 const fs = require('fs');
-const { Users, Shop } = require('./dbObjects.js');
+const { Users, Shop, UserEffects } = require('./dbObjects.js');
 const func = require('./resources/functions')
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] })
@@ -38,11 +38,15 @@ client.on('messageCreate', async message => {
 client.on('interactionCreate', async int => {
   if (!int.isCommand()) return;
   let user = currency.get(int.user.id)
+  let userEffects = await UserEffects.findOne({ where: { user_id: int.user.id } })
   const now = Date.now();
   if (!user) {
     user = await Users.create({ user_id: int.user.id });
+    userEffects = await UserEffects.create({ user_id: int.user.id })
     currency.set(int.user.id, user);
     if (config.author.includes(int.user.id)) {
+      user.addUniqueItem('god\_sword', 'w', null, 100, 'str', 1, null, null, 1)
+      user.addUniqueItem('wacking\_stick', 'w', 'randomness', 0, 'none', 0, null, null, 1)
       user.balance += Number(100)
       user.save()
     }

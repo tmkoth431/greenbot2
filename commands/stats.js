@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
+const { Formatters } = require('discord.js')
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -7,7 +8,7 @@ module.exports = {
     .addUserOption(options =>
       options.setName('user')
         .setDescription('target user')
-        .setRequired(true)),
+        .setRequired(false)),
   async execute(int, c) {
     const app = require('../app')
     const func = require('../resources/functions')
@@ -15,7 +16,7 @@ module.exports = {
 
     const target = int.options.getUser('user') ?? int.user;
     const user = app.currency.get(target.id)
-    if (!user) return int.reply(`${target.username} was not found`)
+    if (!user) return int.reply(`${target.tag} was not found`)
     let wep
     const weapon = await UserItems.findOne({ where: { user_id: int.user.id, equipped: true } })
     const userEffects = await UserEffects.findOne({ where: { user_id: int.user.id } })
@@ -26,7 +27,7 @@ module.exports = {
     if (!weapon) { wep = 'none' } else { wep = weapon.item_id }
     const enemy = await Enemy.findOne({ where: { user_id: int.user.id } })
     func.log(`is checking the stats of ${target}`, int, c)
-    return int.reply(`${target.username}'s stats: \n` +
+    return int.reply(Formatters.codeBlock(`${target.tag}'s stats: \n` +
       `level: ${user.level}  ${user.exp}/${func.calclvl(user.level)}\n` +
       `points: ${user.level_points}\n` +
       `health: ${user.health}/${user.max_health} \n` +
@@ -40,7 +41,7 @@ module.exports = {
       `${enemy ? `\n\nEnemy:\n` +
         `name: ${enemy.name}\n` +
         `health: ${enemy.health}/${enemy.max_health}` : ''}`
-      , { code: true })
+      ))
 
   }
 }
