@@ -8,6 +8,7 @@ module.exports = {
       options.setName('user')
         .setDescription('target user')
         .setRequired(false)),
+  cooldown: '120',
   async execute(int, c) {
     const app = require('../app')
     const func = require('../resources/functions')

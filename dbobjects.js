@@ -77,6 +77,24 @@ Reflect.defineProperty(Users.prototype, 'getItems', {
 
 });
 
+Reflect.defineProperty(Users.prototype, 'equip', {
+  value: async function equip(item) {
+    const equip = await UserItems.findOne({
+      where: { user_id: this.user_id, item_id: item },
+      include: ['item'],
+    });
+    const prev = await UserItems.findOne({
+      where: { user_id: this.user_id, equipped: true },
+      include: ['item'],
+    }) || equip
+    prev.equipped = Boolean(false);
+    equip.equipped = Boolean(true);
+    prev.save()
+    equip.save()
+    return
+  }
+})
+
 Reflect.defineProperty(Users.prototype, 'setBalance', {
   value: async function add(amount) {
     this.balance = amount

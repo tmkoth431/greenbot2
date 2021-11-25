@@ -28,9 +28,9 @@ module.exports = {
     client.channels.cache.get('837801271036608572').send(`<console> ${text2}`)
     return console.log(`${client.ws.ping}ms ${time} - <console> ${text2}`);
   },
-  error: function (text) {
+  error: function (text, time) {
     var errorfile = fs.readFileSync('error.txt', 'utf-8')
-    fs.writeFileSync('error.txt', `${errorfile}` + `\n${text}`)
+    fs.writeFileSync('error.txt', `${errorfile}` + `\n${time}: ${text}`)
   },
   clearStatus: function (userEffects) {
     userEffects.burn = Number(0)
@@ -47,7 +47,7 @@ module.exports = {
       user.level_points += Number(1)
       user.save()
       this.logconsole(`<${user.user_id}> leveled up`, int.createdAt, client)
-      int.reply(`${int.user.tag} leveled up`)
+      int.channel.send(`${int.user.tag} leveled up`)
       this.levelup(int, user, client)
     } else {
       return
@@ -60,7 +60,7 @@ module.exports = {
     userEffects.save()
     this.clearStatus(userEffects)
     this.log(cause, int, client)
-    return int.reply(cause)
+    return int.channel.send(cause)
   },
   updateEffects: function (message, user, userEffects) {
     if (userEffects.burn > 0) {

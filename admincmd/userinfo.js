@@ -14,14 +14,15 @@ module.exports = {
     const func = require('../resources/functions')
 
     const name = int.options.getString('user_id')
-    const user = app.currency.get(id)
-    func.log(`is looking at user <${id}>`, int, c);
+    const user = app.currency.get(name)
     if (!user) return int.reply(Formatters.codeBlock(`${user.user_id} :: 
 		not initialized`))
-    return int.reply(Formatters.codeBlock(`${user.user_id} ::
+    func.log(`is looking at user <${name}>`, int, c);
+		return int.reply(Formatters.codeBlock(`${user.user_id} ::
 		adventure: ${user.adventure}
 		leaderboard: ${user.leaderboard}
 		level: ${user.level}
+		level_points: ${user.level_points}
 		turn: ${user.turn}
 		combat: ${user.combat}
 		combat_target_id: ${user.comabt_target_id}

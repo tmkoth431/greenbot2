@@ -82,7 +82,7 @@ module.exports = {
       is_item.equipped = Boolean(true)
       is_item.save()
 
-      func.log(`enchanted ${equipped.item_id} with ${item.enchant}`, message, client);
+      func.log(`enchanted ${equipped.item_id} with ${item.enchant}`, int, c);
       return int.reply(`${int.user.tag} healed for ${heal}`);
     }
     return int.reply(`${itemName} is not a consumable`)

@@ -53,6 +53,7 @@ client.on('interactionCreate', async int => {
     func.logconsole(`initialized user <${int.user.id}>`, int.createdAt, client)
   }
 
+  func.levelup(int, user, client)
   const command = client.commands.get(int.commandName);
 
   if (!command) return;
@@ -76,9 +77,10 @@ client.on('interactionCreate', async int => {
     setTimeout(() => timestamps.delete(int.user.id), cooldownAmount);
     await command.execute(int, client);
   } catch (error) {
-    func.error(error);
+    func.error(error, int.createdAt);
     await int.reply({ content: 'There was an error while executing this command!', ephemeral: true });
   }
+  func.levelup(int, user, client)
   
 
 });
