@@ -1,14 +1,14 @@
-// const { SlashCommandBuilder } = require('@discordjs/builders')
+const { SlashCommandBuilder } = require('@discordjs/builders')
 
-// module.exports = {
-//   data: new SlashCommandBuilder()
-//     .setName('hello')
-//     .setDescription('says hello'),
-//   async execute(int, c) {
-//     const app = require('../app')
-//     const func = require('../resources/functions')
+module.exports = {
+  data: new SlashCommandBuilder()
+    .setName('hello')
+    .setDescription('says hello'),
+  async execute(int, c) {
+    const app = require('../app')
+    const func = require('../resources/functions')
 
-//     func.log(`says hello`, int, c)
-//     await int.reply('hello')
-//   },
-// }
+    func.log(`says hello`, int, c)
+    await int.reply('hello')
+  },
+}
