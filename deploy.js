@@ -8,8 +8,8 @@ const admincmds = [];
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 const adminFiles = fs.readdirSync('./admincmd').filter(file => file.endsWith('.js'));
 
-const clientId = '703642701974995085';
-const guildId = '801224345758072852';
+const clientId = '911084869872914473';
+const guildId = '909190547233718292';
 
 for (const file of commandFiles) {
   const command = require(`./commands/${file}`);

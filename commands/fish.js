@@ -10,7 +10,7 @@ module.exports = {
     const func = require('../resources/functions')
 
     const user = app.currency.get(int.user.id);
-    if (user.combat) return message.channel.send('You cannot fish while in combat!')
+    if (user.combat) return message.channel.reply('You cannot fish while in combat!')
     const fishexp = user.fish_exp || 0;
     const randmult = Math.sqrt(fishexp) * 2
     const randmult2 = Number(user.luck) / Math.round((Math.random() + 1) * 2)
@@ -26,6 +26,6 @@ module.exports = {
     user.save();
 
     func.log(`caught a ${rand}in fish`, int, c)
-    return int.reply(`${int.user.tag} caught a ${rand}in :fish:.`)
+    return int.reply(`${int.user.tag} caught a \$${rand} fish!`)
   },
 };
