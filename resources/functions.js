@@ -13,7 +13,7 @@ module.exports = {
       author = author.replace(`${config.coolids[x]}`, `${config.coolnames[x]}`)
     }
     fs.writeFileSync('archives.txt', readarchives + `\n${i.createdAt}: ${i.guild} - ${author} ${text2}`)
-    client.channels.cache.get('837801271036608572').send(`${i.guild} - ${author} ${text2}`)
+    // client.channels.cache.get('837801271036608572').send(`${i.guild} - ${author} ${text2}`)
     return console.log(`${client.ws.ping}ms ${i.createdAt}: ${i.guild} - ${author} ${text2}`);
   },
   logconsole: function (text, time, client) {
@@ -25,13 +25,13 @@ module.exports = {
     }
     fs.writeFileSync('archives.txt', readarchives + `\n${time} - <console> ${text2}`)
     if (!client) return console.log(`<console> ${text2}`);
-    client.channels.cache.get('837801271036608572').send(`<console> ${text2}`)
+    // client.channels.cache.get('837801271036608572').send(`<console> ${text2}`)
     return console.log(`${client.ws.ping}ms ${time} - <console> ${text2}`);
   },
   error: function (text) {
     var errorfile = fs.readFileSync('error.txt', 'utf-8')
     fs.writeFileSync('error.txt', `${errorfile}` + `\n${text}`)
-    return console.log('logged error to log file')
+    return console.log(`${text}`)
   },
   clearStatus: function (userEffects) {
     userEffects.burn = Number(0)

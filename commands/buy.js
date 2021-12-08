@@ -39,6 +39,7 @@ module.exports = {
     user.save();
 
     func.log(`bought ${buyAmmount} ${item.name}`, int, c)
-    return int.reply(`${user.tag} bought ${buyAmmount} ${item.name}.`);
+    return int.reply(`${int.user.tag} bought ${buyAmmount} ${item.name}.`);
+  // Tobey fix         ^^^^^^^^^
   },
 }
