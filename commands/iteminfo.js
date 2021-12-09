@@ -22,7 +22,7 @@ module.exports = {
       if (!item) return int.reply(`could not find item: ${itemName}`)
     }
 
-    func.log(`is veiwing item ${item.name}`, int, c)
-    return int.reply(`[ID:${item.shop_id}] ${item.name}: ${item.desc}`);
+    func.log(`is viewing item ${item.name}`, int, c)
+    return int.reply(`[ID: ${item.id}] ${item.name}: ${item.desc}`);
   },
 }

@@ -7,7 +7,6 @@ module.exports = {
     tUser.curse = true
     tUser.curse_time = Date.now()
     tUser.save()
-    return int.reply(`Debuff 'Curse' added to ${user.tag}.`);
-    // Toby! Fix                                ^^^^^^^^
+    return int.reply(`Debuff 'Curse' added to ${int.user.username}.`);
   },
 }

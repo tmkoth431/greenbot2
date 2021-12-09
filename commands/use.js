@@ -63,11 +63,11 @@ module.exports = {
       await user.addItem(item.item_id, item.id, -1)
 
       func.log(`used a ${item.item_id}`, int, c);
-      return int.reply(`${int.user.tag} healed ${heal} health`);
+      return int.reply(`${int.user.username} healed ${heal} health`);
     } else if (item.type == 'e') {
       const equipped = await UserItems.findOne({ where: { user_id: { [Op.like]: int.user.id }, equipped: true } })
-      if (!equipped) return int.reply(`${user.id} must have a weapon equipped to enchant!`)
-      if (user.level_points < item.ecost) return int.reply(`${user.id} does not have enough XP points!`)
+      if (!equipped) return int.reply(`${int.user.username} must have a weapon equipped to enchant!`)
+      if (user.level_points < item.ecost) return int.reply(`${int.user.username} does not have enough XP points!`)
       equipped.amount -= Number(1)
       equipped.equipped = Boolean(false)
       equipped.save()

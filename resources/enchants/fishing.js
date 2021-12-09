@@ -6,7 +6,6 @@ module.exports = {
   async execute(int, userEffects, tUserEffects, user, tUser) {
     user.fish_exp += Number(5)
     user.save()
-    return int.reply(`${user.tag}'s fishing ability improved.`)
-    // Toby! Fix        ^^^^^^^^
+    return int.reply(`${int.user.username}'s fishing ability improved.`)
   },
 }

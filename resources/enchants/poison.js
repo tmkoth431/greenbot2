@@ -6,7 +6,6 @@ module.exports = {
   async execute(int, userEffects, tUserEffects, user, tUser) {
     tUserEffects.poison = Number(6)
     tUserEffects.save()
-    return int.reply(`Debuff 'Poison' added to ${user.tag}.`)
-    // Toby! Fix                                 ^^^^^^^^
+    return int.reply(`Debuff 'Poison' added to ${int.user.username}.`)
   },
 }

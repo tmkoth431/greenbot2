@@ -1,7 +1,7 @@
 const func = require('../functions')
 const app = require('../../app')
 
-//toby make all these take from .js files instead of this bullshit
+//toby make all these take from .js files instead of this
 
 module.exports = {
   name: 'mystery',

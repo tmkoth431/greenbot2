@@ -16,6 +16,6 @@ module.exports = {
     const user = app.currency.get(target.id)
     const bal = user.balance || '???'
     func.log(`checked ${target} balance of ${bal}`, int, c)
-    return int.reply(`${target.tag} has \$${bal}.`);
+    return int.reply(`${target.username} has \$${bal}.`);
   },
 };

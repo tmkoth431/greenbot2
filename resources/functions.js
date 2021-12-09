@@ -69,7 +69,7 @@ module.exports = {
       userEffects.burn -= Number(1)
       user.save()
       userEffects.save()
-      if (userEffects.burn < 1) message.reply(`Debuff 'On Fire' removed from ${user.tag}`)
+      if (userEffects.burn < 1) message.reply(`Debuff 'On Fire' removed from ${int.user.username}`)
       return cause = 'burned to a crisp'
     }
     if (userEffects.poison > 0) {
@@ -77,7 +77,7 @@ module.exports = {
       userEffects.burn -= Number(1)
       user.save()
       userEffects.save()
-      if (userEffects.poison < 1) message.reply(`Debuff 'Poison' removed from ${user.tag}`)
+      if (userEffects.poison < 1) message.reply(`Debuff 'Poison' removed from ${int.user.username}`)
       return cause = 'did not get the antidote in time'
     }
     return cause = 'passed away'

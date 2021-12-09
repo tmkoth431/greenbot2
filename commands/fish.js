@@ -26,6 +26,6 @@ module.exports = {
     user.save();
 
     func.log(`caught a ${rand}in fish`, int, c)
-    return int.reply(`${int.user.tag} caught a \$${rand} fish!`)
+    return int.reply(`${int.user.username} caught a \$${rand} fish!`)
   },
 };
