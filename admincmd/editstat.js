@@ -20,13 +20,13 @@ module.exports = {
     const app = require('../app')
     const func = require('../resources/functions')
 
-    const user = app.currency.get(args[0])
     const args = [
-      int.options.getNumber('user'),
-      int.options.getNumber('stat'),
-      int.options.getNumber('val')
+      int.options.getString('user'),
+      int.options.getString('stat'),
+      int.options.getString('val')
     ]
-    if (!user) return message.channel.send(`could not find user ${args[0]}`)
+    const user = app.currency.get(args[0])
+    if (!user) return int.reply(`could not find user ${args[0]}`)
     switch (args[1]) {
       case 'adventure':
         user.adventure = Boolean(args[2])
@@ -113,6 +113,7 @@ module.exports = {
         user.save()
         break
     }
-    return func.log(`changed <${args[0]}> ${args[1]} to ${args[2]}`, int, c);
+    func.log(`changed <${args[0]}> ${args[1]} to ${args[2]}`, int, c);
+    return int.reply(`changed <${args[0]}> ${args[1]} to ${args[2]}`)
   },
 }
