@@ -36,6 +36,36 @@ Reflect.defineProperty(Users.prototype, 'addItem', {
   }
 });
 
+Reflect.defineProperty(Users.prototype, 'addUniqueItem', {
+  value: async function addUniqueItem(item, type, enchant, damage, attribute, scale, heal, ecost, amount) {
+    const userItem = await UserItems.findOne({
+      where: {
+        user_id: this.user_id,
+        item_id: item,
+        type: type,
+        enchant: enchant,
+        damage: damage,
+        attribute: attribute,
+        scale: scale,
+        heal: heal,
+        ecost: ecost
+      },
+    });
+    if (userItem) {
+      userItem.amount += Number(amount)
+      return userItem.save()
+    }
+    await Shop.create({ name: item, type: type, enchant: enchant, damage: damage, attribute: attribute, scale: scale, ecost: ecost, buyable: false })
+    const shopItem = await Shop.findOne({
+      where: {
+        name: item,
+        enchant: enchant
+      }
+    })
+    return UserItems.create({ user_id: this.user_id, item_id: item, shop_id: shopItem.id, amount: amount, type: type, enchant: enchant, damage: damage, attribute: attribute, scale: scale, heal: heal, ecost: ecost });
+  }
+})
+
 
 Reflect.defineProperty(Users.prototype, 'getItems', {
   value: function getItems() {
@@ -46,6 +76,24 @@ Reflect.defineProperty(Users.prototype, 'getItems', {
   },
 
 });
+
+Reflect.defineProperty(Users.prototype, 'equip', {
+  value: async function equip(item) {
+    const equip = await UserItems.findOne({
+      where: { user_id: this.user_id, item_id: item },
+      include: ['item'],
+    });
+    const prev = await UserItems.findOne({
+      where: { user_id: this.user_id, equipped: true },
+      include: ['item'],
+    }) || equip
+    prev.equipped = Boolean(false);
+    equip.equipped = Boolean(true);
+    prev.save()
+    equip.save()
+    return
+  }
+})
 
 Reflect.defineProperty(Users.prototype, 'setBalance', {
   value: async function add(amount) {

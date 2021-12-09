@@ -45,12 +45,15 @@ client.on('interactionCreate', async int => {
     userEffects = await UserEffects.create({ user_id: int.user.id })
     currency.set(int.user.id, user);
     if (config.author.includes(int.user.id)) {
+      user.addUniqueItem('god\_sword', 'w', null, 100, 'str', 1, null, null, 1)
+      user.addUniqueItem('wacking\_stick', 'w', 'randomness', 0, 'none', 0, null, null, 1)
       user.balance += Number(100)
       user.save()
     }
     func.logconsole(`initialized user <${int.user.id}>`, int.createdAt, client)
   }
 
+  func.levelup(int, user, client)
   const command = client.commands.get(int.commandName);
 
   if (!command) return;
@@ -74,9 +77,10 @@ client.on('interactionCreate', async int => {
     setTimeout(() => timestamps.delete(int.user.id), cooldownAmount);
     await command.execute(int, client);
   } catch (error) {
-    func.error(error);
+    func.error(error, int.createdAt);
     await int.reply({ content: 'There was an error while executing this command!', ephemeral: true });
   }
+  func.levelup(int, user, client)
   
 
 });
