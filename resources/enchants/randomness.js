@@ -1,6 +1,8 @@
 const func = require('../functions')
 const app = require('../../app')
 
+// Toby make these all take from the different .js files, instead of this
+
 module.exports = {
   name: 'randomness',
   async execute(int, userEffects, tUserEffects, user, tUser) {

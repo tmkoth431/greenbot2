@@ -6,6 +6,6 @@ module.exports = {
   async execute(int, userEffects, tUserEffects, user, tUser) {
     user.curse = false
     user.save()
-    return int.reply('you have been lifted of your curse')
+    return int.reply(`Debuff 'Curse' removed from ${int.user.username}.`)
   },
 }

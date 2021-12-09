@@ -13,7 +13,7 @@ module.exports = {
       author = author.replace(`${config.coolids[x]}`, `${config.coolnames[x]}`)
     }
     fs.writeFileSync('archives.txt', readarchives + `\n${i.createdAt}: ${i.guild} - ${author} ${text2}`)
-    client.channels.cache.get('837801271036608572').send(`${i.guild} - ${author} ${text2}`)
+    // client.channels.cache.get('837801271036608572').send(`${i.guild} - ${author} ${text2}`)
     return console.log(`${client.ws.ping}ms ${i.createdAt}: ${i.guild} - ${author} ${text2}`);
   },
   logconsole: function (text, time, client) {
@@ -25,7 +25,7 @@ module.exports = {
     }
     fs.writeFileSync('archives.txt', readarchives + `\n${time} - <console> ${text2}`)
     if (!client) return console.log(`<console> ${text2}`);
-    client.channels.cache.get('837801271036608572').send(`<console> ${text2}`)
+    // client.channels.cache.get('837801271036608572').send(`<console> ${text2}`)
     return console.log(`${client.ws.ping}ms ${time} - <console> ${text2}`);
   },
   error: function (text, time) {
@@ -68,17 +68,17 @@ module.exports = {
       userEffects.burn -= Number(1)
       user.save()
       userEffects.save()
-      if (userEffects.burn < 1) message.reply('you are no longer burning')
-      return cause = 'burned to death'
+      if (userEffects.burn < 1) message.reply(`Debuff 'On Fire' removed from ${int.user.username}`)
+      return cause = 'burned to a crisp'
     }
     if (userEffects.poison > 0) {
       user.health -= Number(1)
       userEffects.burn -= Number(1)
       user.save()
       userEffects.save()
-      if (userEffects.poison < 1) message.reply('you are no longer poisoned')
-      return cause = 'died by poison'
+      if (userEffects.poison < 1) message.reply(`Debuff 'Poison' removed from ${int.user.username}`)
+      return cause = 'did not get the antidote in time'
     }
-    return cause = 'just died'
+    return cause = 'passed away'
   }
 }

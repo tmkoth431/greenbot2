@@ -32,7 +32,7 @@ Reflect.defineProperty(Users.prototype, 'addItem', {
       userItem.amount += Number(add);
       return userItem.save();
     }
-    return UserItems.create({ user_id: this.user_id, item_id: item, shop_id: shopItem.id, amount: add, type: shopItem.type, enchant: shopItem.enchant, damage: shopItem.damage, attribute: shopItem.attribute, scale: shopItem.scale, heal: shopItem.heal, ecost: shopItem.ecost });
+    return await UserItems.create({ user_id: this.user_id, item_id: item, shop_id: shopItem.id, amount: add, type: shopItem.type, enchant: shopItem.enchant, damage: shopItem.damage, attribute: shopItem.attribute, scale: shopItem.scale, heal: shopItem.heal, ecost: shopItem.ecost });
   }
 });
 

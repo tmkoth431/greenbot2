@@ -6,6 +6,6 @@ module.exports = {
   async execute(int, userEffects, tUserEffects, user, tUser) {
     userEffects.poison = Number(0)
     userEffects.save()
-    return int.reply('you are no longer poisoned')
-  },
+    return int.reply(`Debuff 'Poison' removed from ${int.user.username}.`)
+  }
 }
