@@ -69,7 +69,7 @@ module.exports = {
     if (weapon.enchant != null) {
       let ench = app.getEnchants()
       ench = ench.get(weapon.enchant)
-      await ench.execute(int, null, tUserEffects, user, tUser)
+      await ench.execute(int, tUser, tUserEffects, user, tUser)
     }
 
     func.log(`attacked ${user.combat_target_id}`, int, c);

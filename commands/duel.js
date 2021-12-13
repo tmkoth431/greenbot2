@@ -13,9 +13,9 @@ module.exports = {
     const func = require('../resources/functions')
     const { UserItems } = require('../dbobjects')
 
-    const target = int.options.getUser('item_id')
+    const target = int.options.getUser('user')
     const user = app.currency.get(int.user.id)
-    if (!args[0]) {
+    if (!user) {
       if (!user.combat) return int.reply('you are not in combat, mention a user to start')
       return int.reply(`you are in combat with ${user.combat_target}\n`
         + `it is ${user.turn ? 'your turn' : 'not your turn'}`

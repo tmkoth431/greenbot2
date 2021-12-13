@@ -11,28 +11,28 @@ module.exports = {
       case 0:
         userEffects.burn = Number(2)
         userEffects.save()
-        int.reply('you have been set on fire')
+        int.channel.send('you have been set on fire')
         break;
       case 1:
         userEffects.poison = Number(5)
         userEffects.save()
-        int.reply('you have been poisoned')
+        int.channel.send('you have been poisoned')
         break;
       case 2:
         user.fish_exp += Math.round(user.fish_exp / 10)
         user.save()
-        int.reply('you get better at fishing')
+        int.channel.send('you get better at fishing')
         break;
       case 3:
         user.luck += Number(2)
         user.save()
-        int.reply('you get luckier')
+        int.channel.send('you get luckier')
         break;
       case 4:
         user.curse = true
         user.curse_time = Date.now()
         user.save()
-        int.reply(`you have been cursed`);
+        int.channel.send(`you have been cursed`);
         break
     }
   },
