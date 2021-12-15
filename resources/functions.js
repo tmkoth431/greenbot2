@@ -56,6 +56,7 @@ module.exports = {
   die: function (int, cause, user, userEffects, client) {
     user.health = Number(1)
     user.balance = 0
+    user.death_count += Number(1)
     user.save()
     userEffects.save()
     this.clearStatus(userEffects)

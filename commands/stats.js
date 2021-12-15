@@ -54,6 +54,7 @@ module.exports = {
         `Dexterity: ${user.dexterity}` + '\n' +
         `Fish XP: ${user.fish_exp}` + '\n' +
         `Biggest Fish: ${user.biggest_catch}` + '\n' +
+        `Death Count: ${user.death_count}\n`
         `Weapon: ${wep}` + '\n' +
         `${effects ? `Status:${effects}` + '\n' : ''}` +
         `${enemy ? `\nEnemy:\n 

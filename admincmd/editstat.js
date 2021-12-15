@@ -112,6 +112,10 @@ module.exports = {
         user.curse_time = Number(args[2])
         user.save()
         break
+      case 'death_count':
+        user.curse_time = Number(args[2])
+        user.save()
+        break
     }
     func.log(`changed <${args[0]}> ${args[1]} to ${args[2]}`, int, c);
     return int.reply(`changed <${args[0]}> ${args[1]} to ${args[2]}`)
