@@ -14,12 +14,11 @@ module.exports = {
     const { Shop } = require('../dbobjects')
 
     const itemName = int.options.getString('item_id')
-    if (!itemName) return int.reply('please enter a item name/id')
     const user = app.currency.get(int.user.id);
     let item = await Shop.findOne({ where: { name: itemName } });
     if (!item) {
       item = await Shop.findOne({ where: { id: itemName } });
-      if (!item) return int.reply(`could not find item: ${itemName}`)
+      if (!item) return int.reply(`Could not find item: ${itemName}!`)
     }
 
     func.log(`is viewing item ${item.name}`, int, c)

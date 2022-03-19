@@ -19,7 +19,6 @@ module.exports = {
 
     const buyName = int.options.getString('item_id')
     var buyAmmount = int.options.getNumber('count') || 1
-    if (!buyName) return int.reply('Please select an item!')
     const user = app.currency.get(int.user.id);
     if (user.combat) return int.reply('You cannot purchase an item while in combat.')
     let item = await Shop.findOne({ where: { name: buyName } });

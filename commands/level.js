@@ -51,11 +51,11 @@ module.exports = {
         user.dexterity += Number(amount)
         break
       default:
-        int.reply(`unknown stat ${args}`)
+        int.reply(`${args} is not a stat!`)
         break
     }
     user.save()
-    func.log(`leveled up their ${stat}`, int, c)
+    func.log(`leveled up their ${statn}`, int, c)
     return int.reply(`${int.user.tag} leveled up their ${statn} ${amount} ${amount > 1 ? `times` : `time`}`)
   }
 }

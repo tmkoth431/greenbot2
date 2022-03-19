@@ -29,8 +29,9 @@ module.exports = {
     return console.log(`${client.ws.ping}ms ${time} - <console> ${text2}`);
   },
   error: function (text, time) {
-    var errorfile = fs.readFileSync('error.txt', 'utf-8')
-    fs.writeFileSync('error.txt', `${errorfile}` + `\n${time}: ${text}`)
+    //var errorfile = fs.readFileSync('error.txt', 'utf-8')
+    // fs.writeFileSync('error.txt', `${errorfile}` + `\n${time}: ${text}`)
+    fs.appendFileSync('error.txt', `\n${time}: ${text}`)
   },
   clearStatus: function (userEffects) {
     userEffects.burn = Number(0)

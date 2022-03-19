@@ -23,4 +23,4 @@ module.exports = {
       items.sort((a, b) => a.id - b.id).filter(a => a.type === 'e' && a.buyable).map(item => `[ID: ${item.id}] ${item.name}: \$${item.cost} Enchantment Cost: ${item.ecost}`).join('\n'))
     return int.reply({ embeds: [embededd] })
     },
-}
+} 

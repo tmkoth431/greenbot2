@@ -47,6 +47,6 @@ module.exports = {
 
     func.log(`initiated combat with <@${target.id}>`, int, c);
     int.channel.send(`${int.user.username} initiated combat with ${target.username}`);
-    return int.channel.send(`<@${tUser.user_id}>, it is your turn`)
+    return int.channel.send(`${tUser.user_id} it is your turn`)
   },
 }
