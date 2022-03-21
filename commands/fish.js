@@ -15,7 +15,7 @@ module.exports = {
 
     const user = app.currency.get(int.user.id);
     if (user.combat) {
-      embededd.setDescription('You cannot fish while in combat!').setThumbnail('../assets/images/x_image.png')
+      embededd.setDescription('You cannot fish while in combat!').setThumbnail('https://i.imgur.com/tDWLV66.png')
       return message.channel.reply({ embeds: [embededd] })
     }
     const fishexp = user.fish_exp || 0;
