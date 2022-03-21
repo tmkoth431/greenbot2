@@ -24,9 +24,9 @@ module.exports = {
       text2 = text2.replace(`${config.coolids[x]}`, `${config.coolnames[x]}`)
       if (text2.includes(config.coolids[x])) console.log('name change failed')
     }
-    fs.writeFileSync('archives.txt', readarchives + `\n${client.ws.ping}ms ${time}: <console> - ${text2}`)
+    fs.writeFileSync('archives.txt', readarchives + `\n${client.ws.ping}ms ${new Date(Date.now)}: <console> - ${text2}`)
     if (!client) return console.log(`<console> - ${text2}`);
-    client.channels.cache.get(config.log_channel).send(`${client.ws.ping}ms ${time}: <console> - ${text2}`)
+    client.channels.cache.get(config.log_channel).send(`${client.ws.ping}ms ${new Date(Date.now)}: <console> - ${text2}`)
     return console.log(`${client.ws.ping}ms ${time}: <console> - ${text2}`);
   },
   error: function (text, time, client) {
