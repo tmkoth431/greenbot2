@@ -9,7 +9,7 @@ module.exports = {
     const app = require('../app')
     const func = require('../resources/functions')
 
-    func.log(`says hello`, int, c)
+    func.log(`says hello as an admin`, int, c)
     await int.reply('hello')
   },
 }

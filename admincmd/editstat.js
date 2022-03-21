@@ -114,7 +114,7 @@ module.exports = {
         user.save()
         break
       case 'death_count':
-        user.curse_time = Math.round(args[2])
+        user.death_count = Math.round(args[2])
         user.save()
         break
       default:
