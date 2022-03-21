@@ -22,7 +22,7 @@ module.exports = {
     if (name == 'none') {
       let weapon = await UserItems.findOne({ where: { user_id: int.user.id, equipped: true } })
       if (!weapon) {
-        embededd.setDescription('Please enter the ID of the weapon you wish to equip.').setThumbnail('../assets/images/x_image.png')
+        embededd.setDescription('Please enter the ID of the weapon you wish to equip.').setThumbnail('https://i.imgur.com/tDWLV66.png')
         return int.reply({ embeds: [embededd] })
       }
       weapon.equipped = Boolean(false)
@@ -37,16 +37,16 @@ module.exports = {
     if (!weapon) {
       weapon = await UserItems.findOne({ where: { user_id: int.user.id, shop_id: name } })
       if (!weapon) {
-        embededd.setDescription('Could not find that item!').setThumbnail('../assets/images/x_image.png')
+        embededd.setDescription('Could not find that item!').setThumbnail('https://i.imgur.com/tDWLV66.png')
         return int.reply({ embeds: [embededd] })
       }
     }
     if (weapon.amount <= 0) {
-      embededd.setDescription(`You do not have any ${weapon.name}'s!`).setThumbnail('../assets/images/x_image.png')
+      embededd.setDescription(`You do not have any ${weapon.name}'s!`).setThumbnail('https://i.imgur.com/tDWLV66.png')
       return int.reply({ embeds: [embededd] })
     }
     if (weapon.type != 'w') {
-      embededd.setDescription(`${name} is not a weapon!`).setThumbnail('../assets/images/x_image.png')
+      embededd.setDescription(`${name} is not a weapon!`).setThumbnail('https://i.imgur.com/tDWLV66.png')
       return int.reply({ embeds: [embededd] })
     }
     await user.equip(weapon.item_id)
