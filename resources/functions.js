@@ -27,12 +27,12 @@ module.exports = {
     fs.writeFileSync('archives.txt', readarchives + `\n${client.ws.ping}ms ${new Date(Date.now)}: <console> - ${text2}`)
     if (!client) return console.log(`<console> - ${text2}`);
     client.channels.cache.get(config.log_channel).send(`${client.ws.ping}ms <console> - ${text2}`)
-    return console.log(`${client.ws.ping}ms ${time}: <console> - ${text2}`);
+    return console.log(`${client.ws.ping}ms ${new Date(Date.now)}: <console> - ${text2}`);
   },
   error: function (text, time, client) {
     // var errorfile = fs.readFileSync('error.txt', 'utf-8')
     // fs.writeFileSync('error.txt', `${errorfile}` + `\n${time}: ${text}`)
-    fs.appendFileSync('error.txt', `\n${client.ws.ping}ms ${time}: ${text}`)
+    fs.appendFileSync('error.txt', `\n${client.ws.ping}ms ${new Date(Date.now)}: ${text}`)
   },
   clearStatus: function (userEffects) {
     userEffects.burn = Number(0)
