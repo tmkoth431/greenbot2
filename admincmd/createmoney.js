@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 
 module.exports = {
+  defaultPermission: false,
   data: new SlashCommandBuilder()
     .setName('createmoney')
     .setDescription('creates money')
@@ -16,7 +17,7 @@ module.exports = {
     const input = int.options.getNumber('input')
     user.balance += Math.round(input)
     user.save()
-    func.log(`created $${input}`, int, c)
-    return int.reply(`created $${input}`)
+    func.log(`generated $${input}`, int, c)
+    return int.reply(`generated $${input}`)
   },
 }

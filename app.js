@@ -64,11 +64,11 @@ client.on('interactionCreate', async int => {
   }
   const timestamps = cooldowns.get(command.commandName);
   const cooldownAmount = (command.cooldown || 1) * 1000;
-  if (timestamps.has(int.user.id) && !config.tester.includes(int.user.id)) {
+  if (timestamps.has(int.user.id) && (!config.tester.includes(int.user.id) && !config.author.includes(int.user.id))) {
     const expirationTime = timestamps.get(int.user.id) + cooldownAmount;
     if (now < expirationTime) {
       const timeLeft = (expirationTime - now) / 1000;
-      return int.reply({ content: `ahhhhh! too fast, slow it down for ${timeLeft.toFixed(1)} more second(s) before reusing the \`${int.commandName}\` command.`, ephemeral: true });
+      return int.reply({ content: `Too fast. Wait for ${timeLeft.toFixed(1)} more second${timeLeft.toFixed(1) > 1 ? 's' : ''} before reusing the \`${int.commandName}\` command.`, ephemeral: true });
     }
   }
 

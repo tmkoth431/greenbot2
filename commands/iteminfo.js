@@ -1,9 +1,10 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
+const { MessageEmbed } = require('discord.js');
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('iteminfo')
-    .setDescription('gets info on an item')
+    .setDescription('Returns information about an item')
     .addStringOption(options =>
       options.setName('item_id')
         .setDescription('item id')
@@ -12,17 +13,23 @@ module.exports = {
     const app = require('../app')
     const func = require('../resources/functions')
     const { Shop } = require('../dbobjects')
+    const embededd = new MessageEmbed()
+      .setTitle(`Item Info`)
+      .setColor('#25c059')
 
     const itemName = int.options.getString('item_id')
-    if (!itemName) return int.reply('please enter a item name/id')
     const user = app.currency.get(int.user.id);
     let item = await Shop.findOne({ where: { name: itemName } });
     if (!item) {
       item = await Shop.findOne({ where: { id: itemName } });
-      if (!item) return int.reply(`could not find item: ${itemName}`)
+      if (!item) {
+        embededd.setDescription(`Could not find item: ${itemName}!`).setThumbnail('../assets/images/x_image.png')
+        return int.reply({ embeds: [embededd] })
+      }
     }
 
     func.log(`is viewing item ${item.name}`, int, c)
-    return int.reply(`[ID: ${item.id}] ${item.name}: ${item.desc}`);
+    embededd.setDescription(`[ID: ${item.id}] ${item.name}: ${item.desc}`)
+    return int.reply({ embeds: [embededd] });
   },
 }

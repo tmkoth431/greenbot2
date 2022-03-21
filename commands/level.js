@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
+const { MessageEmbed } = require('discord.js');
 const { Formatters } = require('discord.js');
 
 module.exports = {
@@ -7,7 +8,7 @@ module.exports = {
     .setDescription('level up')
     .addStringOption(options =>
       options.setName('stat')
-        .setDescription('stat to level up')
+        .setDescription('Stat to level up')
         .setRequired(true)
         .addChoice('health', 'h')
         .addChoice('luck', 'l')
@@ -20,14 +21,26 @@ module.exports = {
   async execute(int, c) {
     const app = require('../app')
     const func = require('../resources/functions')
+    const embededd = new MessageEmbed()
+      .setTitle(`Level`)
+      .setColor('#25c059')
 
     const stat = int.options.getString('stat')
-    let amount = int.options.getInteger('amount') || 1
+    let amount = int.options.getInteger('amount')
     const user = app.currency.get(int.user.id);
-    if (user.combat) return int.reply('you cannot do that while in combat')
-    if (user.level_points <= 0) return int.reply('you do not have any level points')
+    if (user.combat) {
+      embededd.setDescription('You cannot level up while in combat!').setThumbnail('../assets/images/x_image.png')
+      return int.reply({ embeds: [embededd] })
+    }
+    if (user.level_points <= 0) {
+      embededd.setDescription('You do not have any level points!').setThumbnail('../assets/images/x_image.png')
+      return int.reply({ embeds: [embededd] })
+    }
     if (amount == 'max') amount = user.level_points
-    if (isNaN(amount)) return int.reply('please enter a number')
+    if (isNaN(amount)) {
+      embededd.setDescription('Please enter a number!').setThumbnail('../assets/images/x_image.png')
+      return int.reply({ embeds: [embededd] })
+    }
     amount = Math.min(amount, user.level_points)
     user.level_points -= Number(amount)
     user.save()
@@ -51,11 +64,13 @@ module.exports = {
         user.dexterity += Number(amount)
         break
       default:
-        int.reply(`unknown stat ${args}`)
+        int.reply(`${args} is not a stat!`)
         break
     }
     user.save()
-    func.log(`leveled up their ${stat}`, int, c)
-    return int.reply(`${int.user.tag} leveled up their ${statn} ${amount} ${amount > 1 ? `times` : `time`}`)
+
+    func.log(`leveled up their ${statn}`, int, c)
+    embededd.setDescription(`${int.user.tag} leveled up their ${statn} ${amount} ${amount > 1 ? `times` : `time`}`)
+    return int.reply({ embeds: [embededd] })
   }
 }

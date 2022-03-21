@@ -1,12 +1,13 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 
 module.exports = {
+  defaultPermission: false,
   data: new SlashCommandBuilder()
     .setName('exitcombat')
-    .setDescription('force exits combat')
+    .setDescription('Force exits combat')
     .addStringOption(options =>
       options.setName('user')
-        .setDescription('target user id')
+        .setDescription('Targeted user\'s ID')
         .setRequired(true)),
   async execute(int, c) {
     const app = require('../app')
@@ -15,6 +16,7 @@ module.exports = {
 
     const id = int.options.getString('user')
     const user = app.currency.get(id)
+    if (!user.combat) return int.reply(`${user.id.username} is not in combat.`)
     await Enemy.destroy({ where: { user_id: user.user_id } })
     const tUser = app.currency.get(user.combat_target_id)
     user.combat = Boolean(false)
@@ -23,6 +25,7 @@ module.exports = {
     tUser.combat = Boolean(false)
     tUser.turn = Boolean(true)
     tUser.save()
-    func.log(`says hello`, int, c);
+    func.log(`forcefully removed ${user.combat_target_id} from combat`, int, c);
+    return int.reply(`forcefully removed <@${user.combat_target_id}> from combat.`)
   },
 }

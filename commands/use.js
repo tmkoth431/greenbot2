@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
+const { MessageEmbed } = require('discord.js');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -13,20 +14,30 @@ module.exports = {
     const func = require('../resources/functions')
     const { UserItems, UserEffects, Shop, Enemy } = require('../dbObjects')
     const { Op } = require('sequelize');
+    const embededd = new MessageEmbed()
+      .setTitle(`Use`)
+      .setColor('#25c059')
 
     const user = app.currency.get(int.user.id)
     const itemName = int.options.getString('item_id')
     let item = await UserItems.findOne({ where: { user_id: int.user.id, item_id: { [Op.like]: itemName } } });
     if (!item) {
       item = await UserItems.findOne({ where: { user_id: int.user.id, shop_id: itemName } });
-      if (!item) return int.reply(`No Such Item Exists in ${user.tag}'s Inventory!`)
-      // Toby! Fix                                          ^^^^^^^^
+      if (!item) {
+        embededd.setDescription(`That item is not in your inventory!`).setThumbnail('../assets/images/x_image.png')
+        return int.reply({ embeds: [embededd] })
+      }
     }
     const userEffects = await UserEffects.findOne({ where: { user_id: int.user.id } })
-    if (item.amount < 0) return int.reply(`${user.tag} does not own any ${item.item_id}s`)
+    if (item.amount < 0) {
+      embededd.setDescription(`${user.id.username} does not own any ${item.item_id}s`).setThumbnail('../assets/images/x_image.png')
+      return int.reply({ embeds: [embededd] })
+    }
     if (user.combat) {
-      if (!user.turn) return int.reply(`It is not currently ${user.id}'s turn in combat!`)
-      // Toby! Fix                                           ^^^^^^^^
+      if (!user.turn) {
+        embededd.setDescription(`It is not currently ${user.id.username}'s turn in combat!`).setThumbnail('../assets/images/x_image.png')
+        return int.reply({ embeds: [embededd] })
+      }
       if (user.combat_target_id == '0') {
         const enemy = Enemy.findOne({ where: { user_id: int.user.id } })
         const userEffects = await UserEffects.findOne({ where: { user_id: int.user.id } })
@@ -35,8 +46,13 @@ module.exports = {
         if (ecrit) erand * 2
         user.health -= Number(erand)
         user.save()
-        if (!ecrit) { int.reply(`${int.user.tag} was hit by ${enemy.name} for ${erand}!`); }
-        else { int.reply(`${int.user.tag} got a Critical Hit on ${enemy.name} for ${erand}!`) }
+        if (!ecrit) { 
+          embededd.setDescription(`${int.user.tag} was hit by ${enemy.name} for ${erand}!`)
+          int.reply({ embeds: [embededd] }); 
+        } else { 
+          embededd.setDescription(`${int.user.tag} was hit by ${enemy.name} for ${erand}! Critical hit!`)
+          int.reply({ embeds: [embededd] }) 
+        }
         if (user.health < 1) {
           user.combat = Boolean(false)
           user.save()
@@ -63,11 +79,18 @@ module.exports = {
       await user.addItem(item.item_id, item.id, -1)
 
       func.log(`used a ${item.item_id}`, int, c);
-      return int.reply(`${int.user.username} healed ${heal} health`);
+      embededd.setDescription(`${int.user.username} healed ${heal} health`)
+      return int.reply({ embeds: [embededd] });
     } else if (item.type == 'e') {
       const equipped = await UserItems.findOne({ where: { user_id: { [Op.like]: int.user.id }, equipped: true } })
-      if (!equipped) return int.reply(`${int.user.username} must have a weapon equipped to enchant!`)
-      if (user.level_points < item.ecost) return int.reply(`${int.user.username} does not have enough XP points!`)
+      if (!equipped) {
+        embededd.setDescription(`${int.user.username} must have a weapon equipped to enchant!`).setThumbnail('../assets/images/x_image.png')
+        return int.reply({ embeds: [embededd] })
+      }
+      if (user.level_points < item.ecost) {
+        embededd.setDescription(`${int.user.username} does not have enough XP points!`).setThumbnail('../assets/images/x_image.png')
+        return int.reply({ embeds: [embededd] })
+      }
       equipped.amount -= Number(1)
       equipped.equipped = Boolean(false)
       equipped.save()
@@ -84,8 +107,11 @@ module.exports = {
       is_item.save()
 
       func.log(`${user.id} Enchanted ${equipped.item_id} with ${item.enchant}.`, message, client);
-      return int.reply(`${int.user.tag} healed for ${heal}.`);
+      embededd.setDescription(`${int.user.tag} healed for ${heal}.`)
+      return int.reply({ embeds: [embededd] });
+    } else {
+      embededd.setDescription(`${itemName} is not consumable!`).setThumbnail('../assets/images/x_image.png')
+      return int.reply({ embeds: [embededd] })
     }
-    return int.reply(`${itemName} is not consumable!`)
   },
 }

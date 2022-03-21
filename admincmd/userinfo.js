@@ -2,6 +2,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders')
 const { Formatters } = require('discord.js')
 
 module.exports = {
+  defaultPermission: false,
   data: new SlashCommandBuilder()
     .setName('userinfo')
     .setDescription('gets full list of user info')
@@ -15,9 +16,8 @@ module.exports = {
 
     const name = int.options.getString('user_id')
     const user = app.currency.get(name)
-    if (!user) return int.reply(Formatters.codeBlock(`${user.user_id} :: 
-		not initialized`))
-    func.log(`is looking at user <${name}>`, int, c);
+    if (!user) return int.reply(`${user.user_id} :: not initialized`)
+    func.log(`is looking at user ${name} in a sussy way`, int, c);
 		return int.reply(Formatters.codeBlock(`${user.user_id} ::
 		adventure: ${user.adventure}
 		leaderboard: ${user.leaderboard}

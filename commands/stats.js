@@ -1,6 +1,9 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 const { MessageEmbed } = require('discord.js');
 
+// THIS IS COMPLETELY FUCKING BROKEN I LITERALLY WASTED ABOUT 5 HOURS OF MY LIFE TOTAL TRYING TO FIX IT BUT IT IS TOTALLY FUCKED
+// ok i actually just forgot to add a + between strings
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('stats')
@@ -14,7 +17,7 @@ module.exports = {
     const func = require('../resources/functions')
     const { UserItems, UserEffects, Enemy } = require('../dbobjects')
 
-    const target = int.options.getUser('user') ?? int.user;
+    const target = int.options.getUser('user') || int.user;
     const user = app.currency.get(target.id)
     if (!user) return int.reply(`${target.username} does not exist!`)
     let wep
@@ -42,12 +45,12 @@ module.exports = {
     //     `Name: ${enemy.name}\n` +
     //     `Health: ${enemy.health}/${enemy.max_health}` : ''}`
     //   , { code: true })
-
-      const embededd = new MessageEmbed()
-      .setTitle(`${target.username}'s Stats: \n`)
+    const embededd = new MessageEmbed()
+      .setTitle(`${int.user.username}'s Stats: \n`)
       .setColor('#25c059')
-      .setDescription(`Level: ${user.level}, XP: ${user.exp}/${func.calclvl(user.level)}\n` +
+      .setDescription(`XP Level: ${user.level}, XP: ${user.exp}/${func.calclvl(user.level)}` + '\n' +
         `XP Level Points: ${user.level_points}` + '\n' +
+        `Money: ${user.balance}` + '\n' +
         `Health: ${user.health}/${user.max_health}` + '\n' +
         `Luck: ${user.luck}` + '\n' +
         `Strength: ${user.strength}` + '\n' +
@@ -60,6 +63,7 @@ module.exports = {
         `${enemy ? `\nEnemy:\n 
           Name: ${enemy.name}\n
           Health: ${enemy.health}/${enemy.max_health}` : ''}`)
-      return int.reply({ embeds: [embededd] })
+        .setThumbnail(target.displayAvatarURL())
+    return int.reply({ embeds: [embededd] })
   }
 }

@@ -1,20 +1,21 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 
 module.exports = {
+  defaultPermission: false,
   data: new SlashCommandBuilder()
     .setName('editstat')
-    .setDescription('edits a users stat')
+    .setDescription('Edits a user\'s statistics')
     .addStringOption(options =>
       options.setName('user')
-        .setDescription('target user id')
+        .setDescription('The targeted user\'s ID')
         .setRequired(true))
     .addStringOption(options =>
       options.setName('stat')
-        .setDescription('target stat to change')
+        .setDescription('The statistic to change')
         .setRequired(true))
     .addStringOption(options =>
       options.setName('val')
-        .setDescription('value')
+        .setDescription('New value')
         .setRequired(true)),
   async execute(int, c) {
     const app = require('../app')
@@ -26,7 +27,7 @@ module.exports = {
       int.options.getString('val')
     ]
     const user = app.currency.get(args[0])
-    if (!user) return int.reply(`could not find user ${args[0]}`)
+    if (!user) return int.reply(`Couldn\'t find the user ${args[0]}!`)
     switch (args[1]) {
       case 'adventure':
         user.adventure = Boolean(args[2])
@@ -116,8 +117,10 @@ module.exports = {
         user.curse_time = Math.round(args[2])
         user.save()
         break
+      default:
+        return int.reply(`${args[1]} is not a changeable value!`)
     }
-    func.log(`changed <${args[0]}> ${args[1]} to ${args[2]}`, int, c);
-    return int.reply(`changed <${args[0]}> ${args[1]} to ${args[2]}`)
+    func.log(`changed ${args[0]}\'s ${args[1]} to ${args[2]}`, int, c);
+    return int.reply(`Successfully changed <@${args[0]}>\'s ${args[1]} to ${args[2]}!`)
   },
 }
