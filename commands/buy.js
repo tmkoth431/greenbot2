@@ -7,7 +7,7 @@ module.exports = {
     .setDescription('Buys an Item From the Shop')
     .addStringOption(options =>
       options.setName('item_id')
-        .setDescription('Item ID')
+        .setDescription('Item Name')
         .setRequired(true))
     .addNumberOption(options =>
       options.setName('count')
