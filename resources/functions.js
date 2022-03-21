@@ -64,6 +64,9 @@ module.exports = {
     user.balance = 0
     // user.save()
     // userEffects.save()
+    user.death_count += Number(1)
+    user.save()
+    userEffects.save()
     this.clearStatus(userEffects)
     this.log(cause, int, client)
     const embededd = new MessageEmbed()

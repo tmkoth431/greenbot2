@@ -38,6 +38,7 @@ module.exports = {
 		strength: ${user.strength}
 		dexterity: ${user.dexterity}
 		curse: ${user.curse}
-		curse_time: ${user.curse_time}`))
+		curse_time: ${user.curse_time}
+		death_count: ${user.death_count}`))
   },
 }

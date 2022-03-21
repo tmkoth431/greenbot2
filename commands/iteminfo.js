@@ -23,7 +23,7 @@ module.exports = {
     if (!item) {
       item = await Shop.findOne({ where: { id: itemName } });
       if (!item) {
-        embededd.setDescription(`Could not find item: ${itemName}!`).setThumbnail('https://i.imgur.com/IRh7QZo.png')
+        embededd.setDescription(`Could not find item: ${itemName}!`).setThumbnail('../assets/images/x_image.png')
         return int.reply({ embeds: [embededd] })
       }
     }

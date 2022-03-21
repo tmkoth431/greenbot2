@@ -25,30 +25,30 @@ module.exports = {
     var buyAmmount = int.options.getNumber('count') || 1
     const user = app.currency.get(int.user.id);
     if (user.combat) {
-      embededd.setDescription('You cannot purchase an item while in combat.').setThumbnail('https://i.imgur.com/IRh7QZo.png')
+      embededd.setDescription('You cannot purchase an item while in combat.').setThumbnail('../assets/images/x_image.png')
       return int.reply({ embeds: [embededd] })
     }
     let item = await Shop.findOne({ where: { name: buyName } });
     if (!item) {
       item = await Shop.findOne({ where: { id: buyName } });
       if (!item) {
-        embededd.setDescription(`Could not find ${buyName}!`).setThumbnail('https://i.imgur.com/IRh7QZo.png')
+        embededd.setDescription(`Could not find ${buyName}!`).setThumbnail('../assets/images/x_image.png')
         return int.reply({ embeds: [embededd] })
       }
     }
     if (!item.buyable) {
-      embededd.setDescription('Unable to purchase that item!').setThumbnail('https://i.imgur.com/IRh7QZo.png')
+      embededd.setDescription('Unable to purchase that item!').setThumbnail('../assets/images/x_image.png')
       return int.reply({ embeds: [embededd] })
     }
     if (buyAmmount == 'max' || buyAmmount == 'all') buyAmmount = Math.floor(user.balance / item.cost)
     if (isNaN(buyAmmount)) {
-      embededd.setDescription('Please select an amount!').setThumbnail('https://i.imgur.com/IRh7QZo.png')
+      embededd.setDescription('Please select an amount!').setThumbnail('../assets/images/x_image.png')
       return int.reply({ embeds: [embededd] })
     }
     const totalCost = item.cost * Number(buyAmmount)
     const bal = user.balance || 0;
     if (totalCost > bal) {
-      embededd.setDescription('No enough money!').setThumbnail('https://i.imgur.com/IRh7QZo.png')
+      embededd.setDescription('No enough money!').setThumbnail('../assets/images/x_image.png')
       return int.reply({ embeds: [embededd] })
     }
 

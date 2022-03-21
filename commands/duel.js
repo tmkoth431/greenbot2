@@ -23,27 +23,27 @@ module.exports = {
     const equipped = await UserItems.findOne({ where: { user_id: int.user.id, equipped: true } })
     const tEquipped = await UserItems.findOne({ where: { user_id: target.id, equipped: true } })
     if (!tUser || !target) {
-      embededd.setDescription(`Unable to find ${target.username}`).setThumbnail('https://i.imgur.com/IRh7QZo.png')
+      embededd.setDescription(`Unable to find ${target.username}`).setThumbnail('../assets/images/x_image.png')
       return int.reply({ embeds: [embededd] })
     }
     if (user.combat) {
-      embededd.setDescription('You are already in combat!').setThumbnail('https://i.imgur.com/IRh7QZo.png')
+      embededd.setDescription('You are already in combat!').setThumbnail('../assets/images/x_image.png')
       return int.reply({ embeds: [embededd] })
     }
     if (tUser.combat) {
-      embededd.setDescription(`${target.username} is already in combat!`).setThumbnail('https://i.imgur.com/IRh7QZo.png')
+      embededd.setDescription(`${target.username} is already in combat!`).setThumbnail('../assets/images/x_image.png')
       return int.reply({ embeds: [embededd] })
     }
     if (!equipped) {
-      embededd.setDescription('You cannot enter combat without a weapon!').setThumbnail('https://i.imgur.com/IRh7QZo.png')
+      embededd.setDescription('You cannot enter combat without a weapon!').setThumbnail('../assets/images/x_image.png')
       return int.reply({ embeds: [embededd] })
     }
     if (!tEquipped) {
-      embededd.setDescription(`${target.username} does not have a weapon!`).setThumbnail('https://i.imgur.com/IRh7QZo.png')
+      embededd.setDescription(`${target.username} does not have a weapon!`).setThumbnail('../assets/images/x_image.png')
       return int.reply({ embeds: [embededd] })
     }
     if (Number(tUser.health / tUser.max_health) < Number(3 / 4)) {
-      embededd.setDescription(`${target.username} has too little health!`).setThumbnail('https://i.imgur.com/IRh7QZo.png')
+      embededd.setDescription(`${target.username} has too little health!`).setThumbnail('../assets/images/x_image.png')
       return int.reply({ embeds: [embededd] })
     }
 
