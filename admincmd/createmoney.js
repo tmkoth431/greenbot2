@@ -14,7 +14,7 @@ module.exports = {
 
     const user = app.currency.get(int.user.id);
     const input = int.options.getNumber('input')
-    user.balance += Number(input)
+    user.balance += Math.round(input)
     user.save()
     func.log(`created $${input}`, int, c)
     return int.reply(`created $${input}`)

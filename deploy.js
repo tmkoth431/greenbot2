@@ -24,12 +24,12 @@ const rest = new REST({ }).setToken(config.token);
     console.log('Started refreshing application (/) commands.');
 
     await rest.put(
-      Routes.applicationCommands(config.clientId),
-      { body: commands },
-    );
-    await rest.put(
       Routes.applicationGuildCommands(config.clientId, config.guildId),
       { body: admincmds },
+    );
+    await rest.put(
+      Routes.applicationCommands(config.clientId),
+      { body: commands },
     );
     console.log('Successfully reloaded application (/) commands.')
   } catch (error) {

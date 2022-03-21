@@ -22,7 +22,7 @@ module.exports = {
     let item = await Shop.findOne({ where: { name: name } })
     if (!item) item = await Shop.findOne({ where: { id: name } })
     if (!item) return int.reply('not an item')
-    item.cost = Number(price)
+    item.cost = Math.round(price)
     func.log(`changed the price of an item`, int, c)
     item.save()
     return int.reply(`changed the price of ${item.name} to ${price}`)

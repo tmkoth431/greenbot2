@@ -37,15 +37,15 @@ module.exports = {
         user.save()
         break
       case 'level':
-        user.level = Number(args[2])
+        user.level = Math.round(args[2])
         user.save()
         break
       case 'exp':
-        user.exp = Number(args[2])
+        user.exp = Math.round(args[2])
         user.save()
         break
       case 'level_points':
-        user.level_points = Number(args[2])
+        user.level_points = Math.round(args[2])
         user.save()
         break
       case 'turn':
@@ -65,43 +65,43 @@ module.exports = {
         user.save()
         break
       case 'max_health':
-        user.max_health = Number(args[2])
+        user.max_health = Math.round(args[2])
         user.save()
         break
       case 'health':
-        user.health = Number(args[2])
+        user.health = Math.round(args[2])
         user.save()
         break
       case 'balance':
-        user.balance = Number(args[2])
+        user.balance = Math.round(args[2])
         user.save()
         break
       case 'fish_exp':
-        user.fish_exp = Number(args[2])
+        user.fish_exp = Math.round(args[2])
         user.save()
         break
       case 'biggest_catch':
-        user.biggest_catch = Number(args[2])
+        user.biggest_catch = Math.round(args[2])
         user.save()
         break
       case 'crime_exp':
-        user.crime_exp = Number(args[2])
+        user.crime_exp = Math.round(args[2])
         user.save()
         break
       case 'combat_exp':
-        user.combat_exp = Number(args[2])
+        user.combat_exp = Math.round(args[2])
         user.save()
         break
       case 'luck':
-        user.luck = Number(args[2])
+        user.luck = Math.round(args[2])
         user.save()
         break
       case 'strength':
-        user.strength = Number(args[2])
+        user.strength = Math.round(args[2])
         user.save()
         break
       case 'dexterity':
-        user.dexterity = Number(args[2])
+        user.dexterity = Math.round(args[2])
         user.save()
         break
       case 'curse':
@@ -109,11 +109,11 @@ module.exports = {
         user.save()
         break
       case 'curse_time':
-        user.curse_time = Number(args[2])
+        user.curse_time = Math.round(args[2])
         user.save()
         break
       case 'death_count':
-        user.curse_time = Number(args[2])
+        user.curse_time = Math.round(args[2])
         user.save()
         break
     }
