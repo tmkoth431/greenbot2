@@ -24,18 +24,18 @@ module.exports = {
     if (!item) {
       item = await UserItems.findOne({ where: { user_id: int.user.id, shop_id: itemName } });
       if (!item) {
-        embededd.setDescription(`That item is not in your inventory!`).setThumbnail('https://i.imgur.com/IRh7QZo.png').setColor('#ff0000')
+        embededd.setDescription(`That item is not in your inventory!`).setThumbnail('https://i.imgur.com/IRh7QZo.png')
         return int.reply({ embeds: [embededd] })
       }
     }
     const userEffects = await UserEffects.findOne({ where: { user_id: int.user.id } })
     if (item.amount < 0) {
-      embededd.setDescription(`${user.id.username} does not own any ${item.item_id}s`).setThumbnail('https://i.imgur.com/IRh7QZo.png').setColor('#ff0000')
+      embededd.setDescription(`${user.id.username} does not own any ${item.item_id}s`).setThumbnail('https://i.imgur.com/IRh7QZo.png')
       return int.reply({ embeds: [embededd] })
     }
     if (user.combat) {
       if (!user.turn) {
-        embededd.setDescription(`It is not currently ${user.id.username}'s turn in combat!`).setThumbnail('https://i.imgur.com/IRh7QZo.png').setColor('#ff0000')
+        embededd.setDescription(`It is not currently ${user.id.username}'s turn in combat!`).setThumbnail('https://i.imgur.com/IRh7QZo.png')
         return int.reply({ embeds: [embededd] })
       }
       if (user.combat_target_id == '0') {
@@ -84,11 +84,11 @@ module.exports = {
     } else if (item.type == 'e') {
       const equipped = await UserItems.findOne({ where: { user_id: { [Op.like]: int.user.id }, equipped: true } })
       if (!equipped) {
-        embededd.setDescription(`${int.user.username} must have a weapon equipped to enchant!`).setThumbnail('https://i.imgur.com/IRh7QZo.png').setColor('#ff0000')
+        embededd.setDescription(`${int.user.username} must have a weapon equipped to enchant!`).setThumbnail('https://i.imgur.com/IRh7QZo.png')
         return int.reply({ embeds: [embededd] })
       }
       if (user.level_points < item.ecost) {
-        embededd.setDescription(`${int.user.username} does not have enough XP points!`).setThumbnail('https://i.imgur.com/IRh7QZo.png').setColor('#ff0000')
+        embededd.setDescription(`${int.user.username} does not have enough XP points!`).setThumbnail('https://i.imgur.com/IRh7QZo.png')
         return int.reply({ embeds: [embededd] })
       }
       equipped.amount -= Number(1)
@@ -110,7 +110,7 @@ module.exports = {
       embededd.setDescription(`${int.user.tag} healed for ${heal}.`)
       return int.reply({ embeds: [embededd] });
     } else {
-      embededd.setDescription(`${itemName} is not consumable!`).setThumbnail('https://i.imgur.com/IRh7QZo.png').setColor('#ff0000')
+      embededd.setDescription(`${itemName} is not consumable!`).setThumbnail('https://i.imgur.com/IRh7QZo.png')
       return int.reply({ embeds: [embededd] })
     }
   },

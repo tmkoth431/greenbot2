@@ -2,6 +2,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders')
 const { MessageEmbed } = require('discord.js');
 
 // THIS IS COMPLETELY FUCKING BROKEN I LITERALLY WASTED ABOUT 5 HOURS OF MY LIFE TOTAL TRYING TO FIX IT BUT IT IS TOTALLY FUCKED
+// ok i actually just forgot to add a + between strings
 
 module.exports = {
   data: new SlashCommandBuilder()

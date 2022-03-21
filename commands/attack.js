@@ -17,11 +17,11 @@ module.exports = {
     const user = app.currency.get(int.user.id)
     const user2 = app.currency.get(int.user)
     if (!user.combat) {
-      embededd.setDescription('You are not in combat!').setThumbnail('https://i.imgur.com/IRh7QZo.png').setColor('#ff0000')
+      embededd.setDescription('You are not in combat!').setThumbnail('https://i.imgur.com/IRh7QZo.png')
       return int.reply({ embeds: [embededd] })
     }
     if (!user.turn) {
-      embededd.setDescription('It is not your turn!').setThumbnail('https://i.imgur.com/IRh7QZo.png').setColor('#ff0000')
+      embededd.setDescription('It is not your turn!').setThumbnail('https://i.imgur.com/IRh7QZo.png')
       return int.reply({ embeds: [embededd] })
     }
     const weapon = await UserItems.findOne({ where: { user_id: { [Op.like]: int.user.id }, equipped: true } })

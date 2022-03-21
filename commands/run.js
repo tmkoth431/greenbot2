@@ -15,11 +15,11 @@ module.exports = {
 
     const user = app.currency.get(int.user.id)
     if (!user.combat) {
-      embededd.setDescription('You are not in combat!').setThumbnail('https://i.imgur.com/IRh7QZo.png').setColor('#ff0000')
+      embededd.setDescription('You are not in combat!').setThumbnail('https://i.imgur.com/IRh7QZo.png')
       return int.reply({ embeds: [embededd] })
     }
     if (!user.turn) {
-      embededd.setDescription('It is not your turn!').setThumbnail('https://i.imgur.com/IRh7QZo.png').setColor('#ff0000')
+      embededd.setDescription('It is not your turn!').setThumbnail('https://i.imgur.com/IRh7QZo.png')
       return int.reply({ embeds: [embededd] })
     }
 
