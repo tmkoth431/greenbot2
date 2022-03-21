@@ -7,7 +7,7 @@ module.exports = {
     .setDescription('Returns information about an item')
     .addStringOption(options =>
       options.setName('item_id')
-        .setDescription('item id')
+        .setDescription('Item Name')
         .setRequired(true)),
   async execute(int, c) {
     const app = require('../app')

@@ -4,7 +4,7 @@ const { Formatters, MessageEmbed } = require('discord.js');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('shop')
-    .setDescription('displays shop'),
+    .setDescription('Shows shop'),
   async execute(int, c) {
     const app = require('../app')
     const func = require('../resources/functions')
