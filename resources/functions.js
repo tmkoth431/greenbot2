@@ -13,9 +13,9 @@ module.exports = {
       if (text2.includes(config.coolids[x])) console.log('name change failed')
       author = author.replace(`${config.coolids[x]}`, `${config.coolnames[x]}`)
     }
-    fs.writeFileSync('archives.txt', readarchives + `\n${i.createdAt}: ${i.guild} - ${author} ${text2}`)
+    fs.writeFileSync('archives.txt', readarchives + `\n${new Date(Date.now)}: ${i.guild} - ${author} ${text2}`)
     // client.channels.cache.get('837801271036608572').send(`${i.guild} - ${author} ${text2}`)
-    return console.log(`${client.ws.ping}ms ${i.createdAt}: ${i.guild} - ${author} ${text2}`);
+    return console.log(`${client.ws.ping}ms ${new Date(Date.now)}: ${i.guild} - ${author} ${text2}`);
   },
   logconsole: function (text, time, client) {
     var readarchives = fs.readFileSync('archives.txt', `utf-8`);
@@ -48,7 +48,7 @@ module.exports = {
       user.level += Number(1)
       user.level_points += Number(1)
       user.save()
-      this.logconsole(`${user.user_id} leveled up`, int.createdAt, client)
+      this.logconsole(`${user.user_id} leveled up`, new Date(Date.now), client)
       const embededd = new MessageEmbed()
       .setTitle(`Level Up`)
       .setColor('#25c059')

@@ -93,7 +93,7 @@ client.once('ready', async () => {
   }
   const storedBalances = await Users.findAll();
   storedBalances.forEach(b => currency.set(b.user_id, b));
-  console.log('Ready!')
+  console.log(`${new Date(Date.now())}: Logged in as ${client.user.tag}!`)
 })
 Reflect.defineProperty(currency, 'add', {
   value: async function add(id, amount) {

@@ -1,11 +1,10 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
-const { Formatters } = require('discord.js');
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('level')
-    .setDescription('level up')
+    .setDescription('Level up your character')
     .addStringOption(options =>
       options.setName('stat')
         .setDescription('Stat to level up')
@@ -16,7 +15,7 @@ module.exports = {
         .addChoice('dexterity', 'd'))
     .addIntegerOption(options =>
       options.setName('amount')
-        .setDescription('amount to level up')
+        .setDescription('The number of times to level up')
         .setRequired(false)),
   async execute(int, c) {
     const app = require('../app')

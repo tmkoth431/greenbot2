@@ -19,6 +19,7 @@ module.exports = {
     const embededd = new MessageEmbed()
       .setTitle(`${target.username}'s Inventory`)
       .setColor('#25c059')
+      .setThumbnail(target.displayAvatarURL())
     
     const user = app.currency.get(target.id);
     if (!user) return int.reply(`${target} does not exist`)

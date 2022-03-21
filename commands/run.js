@@ -4,7 +4,7 @@ const { MessageEmbed } = require('discord.js');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('run')
-    .setDescription('attempt to flee from combat'),
+    .setDescription('Try to run from combat'),
   async execute(int, c) {
     const app = require('../app')
     const func = require('../resources/functions')
