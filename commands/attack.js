@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
+const { MessageEmbed } = require('discord.js');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -9,10 +10,20 @@ module.exports = {
     const func = require('../resources/functions')
     const { UserItems, UserEffects, Enemy } = require('../dbobjects')
     const { Op } = require('sequelize');
+    const embededd = new MessageEmbed()
+      .setTitle(`Duel`)
+      .setColor('#25c059')
 
     const user = app.currency.get(int.user.id)
-    if (!user.combat) return int.reply('You are not in combat')
-    if (!user.turn) return int.reply('It is not your turn')
+    const user2 = app.currency.get(int.user)
+    if (!user.combat) {
+      embededd.setDescription('You are not in combat!').setThumbnail('https://i.imgur.com/IRh7QZo.png').setColor('#ff0000')
+      return int.reply({ embeds: [embededd] })
+    }
+    if (!user.turn) {
+      embededd.setDescription('It is not your turn!').setThumbnail('https://i.imgur.com/IRh7QZo.png').setColor('#ff0000')
+      return int.reply({ embeds: [embededd] })
+    }
     const weapon = await UserItems.findOne({ where: { user_id: { [Op.like]: int.user.id }, equipped: true } })
     const userEffects = await UserEffects.findOne({ where: { user_id: int.user.id } })
     let scale = Number(0)
@@ -32,15 +43,21 @@ module.exports = {
       const enemy = await Enemy.findOne({ where: { user_id: int.user.id } })
       enemy.health -= Number(rand)
       enemy.save()
-      func.log(`attacked enemy:${enemy.name}`, int, c);
-      if (!crit) { int.reply(`${int.user.tag} hit ${enemy.name} for ${rand}.`); }
-      else { int.reply(`${int.user.tag} hit ${enemy.name} for ${rand}. Critical hit!`) }
+      func.log(`attacked enemy: ${enemy.name}`, int, c);
+      if (!crit) { 
+        embededd.setDescription(`${int.user.username} hit ${enemy.name} for ${rand} damage.`)
+        return int.reply({ embeds: [embededd] });
+      } else if (crit) { 
+        embededd.setDescription(`${int.user.username} hit ${enemy.name} for ${rand} damage. Critical hit!`)
+        return int.reply({ embeds: [embededd] }) 
+      }
       if (enemy.health < 1) {
         user.combat = Boolean(false)
         user.combat_exp += Number(1)
         user.save()
-        func.log(`killed enemy:${enemy.name}`, int, c)
-        int.reply(`${int.user.tag} killed the ${enemy.name}!`)
+        func.log(`killed enemy: ${enemy.name}`, int, c)
+        embededd.setDescription(`${int.user.username} killed the ${enemy.name}!`)
+        int.reply({ embeds: [embededd] })
         return await Enemy.destroy({ where: { user_id: int.user.id } })
       }
       let erand = Math.round(((Math.random() - 0.5) * 2) + (enemy.damage))
@@ -48,12 +65,17 @@ module.exports = {
       if (ecrit) erand * 2
       user.health -= Number(erand)
       user.save()
-      if (!ecrit) { int.reply(`${int.user.username} was hit by ${enemy.name} for ${erand}.`); }
-      else { int.reply(`${int.user.tag} was hit by ${enemy.name} for ${erand}. Critical hit!`) }
+      if (!ecrit) { 
+        embededd.setDescription(`${int.user.username} was hit by ${enemy.name} for ${erand}.`)
+        int.reply({ embeds: [embededd] });
+      } else { 
+        embededd.setDescription(`${int.user.username} was hit by ${enemy.name} for ${erand}. Critical hit!`)
+        int.reply({ embeds: [embededd] }) 
+      }
       if (user.health < 1) {
         user.combat = Boolean(false)
         user.save()
-        func.die(int, `was killed by the ${enemy.name}!`, user, userEffects, c)
+        func.die(int, `was killed by the ${enemy.name}!`, user2, userEffects, c)
         return await Enemy.destroy({ where: { user_id: int.user.id } })
       }
     }
@@ -73,8 +95,13 @@ module.exports = {
     }
 
     func.log(`attacked ${user.combat_target_id}`, int, c);
-    if (!crit) { int.reply(`${int.user.username} attacked ${user.combat_target} for ${rand}.`); }
-    else { int.reply(`${int.user.tag} attacked ${user.combat_target} for ${rand}. Critical hit!`) }
+    if (!crit) { 
+      embededd.setDescription(`${int.user.username} attacked ${user.combat_target} for ${rand} damage.`)
+      int.channel.send({ embeds: [embededd] }); 
+    } else { 
+      embededd.setDescription(`${int.user.username} attacked ${user.combat_target} for ${rand}. Critical hit!`)
+      int.channel.send({ embeds: [embededd] }) 
+    }
     if (tUser.health < 1) {
       user.combat = Boolean(false)
       tUser.combat = Boolean(false)
@@ -84,8 +111,10 @@ module.exports = {
       tUser.save()
       func.clearStatus(tUserEffects)
       func.log(`killed ${user.combat_target_id}`, int, c)
-      func.die(int, `was killed by ${int.user.id}`, tUser, tUserEffects, c)
+      func.die(int, `was killed by ${int.user.id}`, user.combat_target_id, tUserEffects, c)
+    } else {
+      embededd.setDescription(`<@${user.combat_target_id}> it is your turn`)
+      return int.reply({ embeds: [embededd] })
     }
-    return int.channel.send(`${user.combat_target_id} it is your turn`)
   },
 }

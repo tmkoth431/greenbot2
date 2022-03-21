@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 
 module.exports = {
+  defaultPermission: false,
   data: new SlashCommandBuilder()
     .setName('createcombat')
     .setDescription('starts combat for testing')

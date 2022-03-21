@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
+const { MessageEmbed } = require('discord.js');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -8,10 +9,20 @@ module.exports = {
     const app = require('../app')
     const func = require('../resources/functions')
     const { UserItems, UserEffects, Enemy } = require('../dbobjects')
+    const embededd = new MessageEmbed()
+      .setTitle(`Duel`)
+      .setColor('#25c059')
 
     const user = app.currency.get(int.user.id)
-    if (!user.combat) return int.reply('you are not in combat')
-    if (!user.turn) return int.reply('not your turn')
+    if (!user.combat) {
+      embededd.setDescription('You are not in combat!').setThumbnail('https://i.imgur.com/IRh7QZo.png').setColor('#ff0000')
+      return int.reply({ embeds: [embededd] })
+    }
+    if (!user.turn) {
+      embededd.setDescription('It is not your turn!').setThumbnail('https://i.imgur.com/IRh7QZo.png').setColor('#ff0000')
+      return int.reply({ embeds: [embededd] })
+    }
+
     let rand = Math.random() * 4
 
     if (user.combat_target_id == '0') {
@@ -22,9 +33,14 @@ module.exports = {
       if (ecrit) erand * 2
       user.health -= Number(erand)
       user.save()
-      if (!ecrit) { int.reply(`${int.user.tag} was hit by ${enemy.name} for ${erand}`); }
-      else { int.reply(`${int.user.tag} was CRIT by ${enemy.name} for ${erand}`) }
-      if (user.health < 1) {
+      if (!ecrit) { 
+        embededd.setDescription(`${int.user.tag} was hit by ${enemy.name} for ${erand}`)
+        int.reply({ embeds: [embededd] }); 
+      } else { 
+        embededd.setDescription(`${int.user.tag} was critically hit by ${enemy.name} for ${erand}`)
+        int.reply({ embeds: [embededd] }) 
+      }
+      if (user.health <= 0) {
         user.combat = Boolean(false)
         user.save()
         func.die(int, `was killed by the ${enemy.name}`, user, userEffects, c)
@@ -39,8 +55,8 @@ module.exports = {
     tUser.save()
 
     if (rand < 3) {
-      int.reply('you failed to run away')
-      return int.channel.send(`<@${user.combat_target_id}>, it is your turn`)
+      embededd.setDescription(`You failed to run away.\n\nIt is ${user.combat_target}'s turn`)
+      return int.reply({ embeds: [embededd] })
     }
     user.combat = Boolean(false)
     user.combat_exp -= Number(1)
@@ -50,6 +66,7 @@ module.exports = {
     tUser.save()
 
     func.log(`ran away from ${user.combat_target_id}`, int, c);
-    return int.channel.send(`${int.user.tag} ran away from ${user.combat_target}`);
+    embededd.setDescription(`${int.user.tag} ran away from ${user.combat_target}`)
+    return int.reply({ embeds: [embededd] });
   },
 }

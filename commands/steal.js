@@ -1,17 +1,21 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
+const { MessageEmbed } = require('discord.js');
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('steal')
-    .setDescription('steals money from target')
+    .setDescription('Steals money from a target!')
     .addUserOption(options =>
       options.setName('user')
-        .setDescription('target user')
+        .setDescription('The targeted user')
         .setRequired(false)),
   cooldown: '120',
   async execute(int, c) {
     const app = require('../app')
     const func = require('../resources/functions')
+    const embededd = new MessageEmbed()
+      .setTitle(`Steal`)
+      .setColor('#25c059')
 
     const target = int.options.getUser('user') ?? int.user;
     const user = app.currency.get(target.id)
@@ -24,13 +28,15 @@ module.exports = {
         user.exp += Number(2)
         user.save()
         func.log(`mugged an innocent civilian for ${money}`, int, c)
-        return int.reply(`${int.user.tag} stole from an innocent civilian for ${money}💰`)
+        embededd.setDescription(`${int.user.username} stole from an innocent civilian and earned \$${money}`)
+        return int.reply({ embeds: [embededd] })
       } else {
         user.crime_exp -= 1
         user.balance -= (money * 1.5)
         user.save()
         func.log(`tried mugged an innocent civilian and lost ${money * 1.5}`, int, c)
-        return int.reply(`${int.user.tag} tried to steal from an innocent civilian and lost ${money * 1.5}💰`)
+        embededd.setDescription(`${int.user.username} tried to steal from an innocent civilian and lost \$${money * 1.5}!`)
+        return int.reply({ embeds: [embededd] })
       }
 
     } else {
@@ -46,7 +52,8 @@ module.exports = {
         user.save()
         u.save()
         func.log(`stole ${target} for ${money}`, int, c)
-        return int.reply(`${int.user.tag} stole ${money}💰 from ${target}`)
+        embededd.setDescription(`${int.user.username} stole \$${money} from ${target}!`)
+        return int.reply({ embeds: [embededd] })
       } else {
         const money = Math.round(user.balance * .05)
         user.crime_exp += 1
@@ -56,7 +63,8 @@ module.exports = {
         user.save()
         u.save()
         func.log(`tried to mug ${target} and lost ${money}`, int, c)
-        return int.reply(`${int.user.tag} tried to steal from ${target} and lost ${money}💰`)
+        embededd.setDescription(`${int.user.username} tried to steal from ${target} and lost \$${money}`)
+        return int.reply({ embeds: [embededd] })
       }
 
     }
