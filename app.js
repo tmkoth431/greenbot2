@@ -77,7 +77,7 @@ client.on('interactionCreate', async int => {
     setTimeout(() => timestamps.delete(int.user.id), cooldownAmount);
     await command.execute(int, client);
   } catch (error) {
-    func.error(error, int.createdAt);
+    func.error(error, int.createdAt, client);
     await int.reply({ content: 'There was an error while executing this command!', ephemeral: true });
   }
   func.levelup(int, user, client)
@@ -93,7 +93,7 @@ client.once('ready', async () => {
   }
   const storedBalances = await Users.findAll();
   storedBalances.forEach(b => currency.set(b.user_id, b));
-  console.log(`${new Date(Date.now())}: Logged in as ${client.user.tag}!`)
+  console.log(`${client.ws.ping}ms ${new Date(Date.now())}: Logged in as ${client.user.tag}!`)
 })
 Reflect.defineProperty(currency, 'add', {
   value: async function add(id, amount) {
