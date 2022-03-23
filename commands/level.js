@@ -25,7 +25,7 @@ module.exports = {
       .setColor('#25c059')
 
     const stat = int.options.getString('stat')
-    let amount = int.options.getInteger('amount')
+    let amount = int.options.getInteger('amount') || 1;
     const user = app.currency.get(int.user.id);
     if (user.combat) {
       embededd.setDescription('You cannot level up while in combat!').setThumbnail('https://i.imgur.com/tDWLV66.png')
@@ -69,7 +69,7 @@ module.exports = {
     user.save()
 
     func.log(`leveled up their ${statn}`, int, c)
-    embededd.setDescription(`${int.user.tag} leveled up their ${statn} ${amount} ${amount > 1 ? `times` : `time`}`)
+    embededd.setDescription(`<@${int.user.id}> leveled up their ${statn} ${amount} ${amount > 1 ? `times!` : `time!`}`)
     return int.reply({ embeds: [embededd] })
   }
 }

@@ -1,3 +1,5 @@
+const startTime = Date.now();
+
 const Sequelize = require('sequelize');
 const config = require('./config.json')
 
@@ -26,23 +28,27 @@ sequelize.sync({ force }).then(async () => {
     Shop.upsert({ name: 'Water', cost: 10, type: 'c', heal: 1, enchant: 'water', desc: "Removes the 'On Fire' debuff" }),
     Shop.upsert({ name: 'Bread', cost: 30, type: 'c', heal: 2, desc: 'Heals two health' }),
     Shop.upsert({ name: 'Antidote', cost: 50, type: 'c', heal: 1, enchant: 'antidote', desc: 'Cures Poison' }),
-    Shop.upsert({ name: 'Fishing Potion', cost: 100, type: 'c', heal: 0, enchant: 'fishing', desc: 'Minor increase to fishing ability' }),
+    Shop.upsert({ name: 'Fishing Potion', cost: 100, type: 'c', heal: 0, enchant: 'fishing', desc: 'Increases fishing ability' }),
     Shop.upsert({ name: 'XP Potion', cost: 125, type: 'c', heal: 1, enchant: 'exp', desc: '+10 XP' }),
-    Shop.upsert({ name: 'Mysterious Brew', cost: 75, type: 'c', heal: 1, enchant: 'mystery', desc: 'Applies random effect' }),
+    Shop.upsert({ name: 'Mysterious Brew', cost: 75, type: 'c', heal: 1, enchant: 'mystery', desc: 'Applies a random effect' }),
     Shop.upsert({ name: 'Stick', cost: 10, type: 'w', damage: 1, attribute: 'None', desc: 'Basic Weapon' }),
     Shop.upsert({ name: 'Wood Dagger', cost: 25, type: 'w', damage: 2, attribute: 'Speed', scale: 10, desc: 'A weak, speed focused weapon' }),
     Shop.upsert({ name: 'Wood Sword', cost: 30, type: 'w', damage: 3, attribute: 'Strength', scale: 10, desc: 'A weak, damage focused weapon' }),
     Shop.upsert({ name: 'Iron Dagger', cost: 55, type: 'w', damage: 4, attribute: 'Speed', scale: 10, desc: 'A strong, speed focused weapon' }),
     Shop.upsert({ name: 'Iron Greatsword', cost: 60, type: 'w', damage: 6, attribute: 'Strength', scale: 10, desc: 'A strong, damage focused weapon' }),
-    Shop.upsert({ name: 'Poison Dust', cost: 200, type: 'e', enchant: 'poison', ecost: 3, desc: 'When applied, makes your weapon have poison effect' }),
-    Shop.upsert({ name: 'Fire Dust', cost: 200, type: 'e', enchant: 'flame', ecost: 3, desc: 'When applied, makes your weapon ignite enemies' }),
+    Shop.upsert({ name: 'Poison Dust', cost: 200, type: 'e', enchant: 'poison', ecost: 3, desc: 'Makes your weapon have poison effect' }),
+    Shop.upsert({ name: 'Fire Dust', cost: 200, type: 'e', enchant: 'flame', ecost: 3, desc: 'Makes your weapon ignite enemies' }),
 
     QuestBoard.upsert({ name: 'goblins', desc: 'we need you to kill the goblin that has been killing our sheep', diff: 1, enemy: 'goblin', damage: 2 }),
     QuestBoard.upsert({ name: 'gigantic', desc: 'there is a terrifying giant living in those distant mountains, we need you to take care of it', diff: 100, enemy: 'giant', max_health: 100, damage: 12, reward: 10000 }),
   ];
   try {
     await Promise.all(shop);
-    console.log('db synced');
+    if (force) {
+      console.log(`${new Date(Date.now())}: Database reset in ${(Date.now() - startTime) / 1000} seconds.`);
+    } else {
+      console.log(`${new Date(Date.now())}: Database synced in ${(Date.now() - startTime) / 1000} seconds.`);
+    }
     sequelize.close();
   } catch (e) {
     console.log(e)

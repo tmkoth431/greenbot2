@@ -13,7 +13,7 @@ module.exports = {
     const app = require('../app')
     const func = require('../resources/functions')
     const { UserItems } = require('../dbobjects')
-    
+
     let target = int.options.getUser('user') || int.user
 
     const embededd = new MessageEmbed()
@@ -25,8 +25,8 @@ module.exports = {
     if (!user) return int.reply(`${target} does not exist`)
     const items = await user.getItems()
     if (!items.length) {
-      func.log(`checked ${target.id} inventory`, int, c)
-      embededd.setDescription(`${target.username} does not have any items.`)
+      func.log(`checked ${target.id}'s inventory`, int, c)
+      embededd.setDescription(`<@${target.id}> does not have any items.`)
       return int.reply({ embeds: [embededd] });
     }
     let wep
@@ -34,10 +34,10 @@ module.exports = {
     let ctext = ''
     let wtext = ''
     let etext = ''
-    if (items.filter(a => a.type == 'c' && a.amount > 0).map(item => `${item.item_id}`).join('\n')) ctext = 'Consumables:\n' + items.sort((a, b) => a.shop_id - b.shop_id).filter(a => a.type === 'c' && a.amount > 0).map(item => `[ID: ${item.shop_id}] ${item.amount} ${item.amount >1? `${item.item_id}` + 's' : `${item.item_id}`}`).join('\n')
-    if (items.filter(a => a.type == 'w' && a.amount > 0).map(item => `${item.item_id}`).join('\n')) wtext = `${ctext ? '\n\n' : ''}Weapons:\n` + items.sort((a, b) => a.shop_id - b.shop_id).filter(a => a.type === 'w' && a.amount > 0).map(item => `[ID: ${item.shop_id}] ${item.amount} ${item.amount >1? `${item.item_id}` + 's' : `${item.item_id}`}`).join('\n')
-    if (items.filter(a => a.type == 'e' && a.amount > 0).map(item => `${item.item_id}`).join('\n')) etext = `${wtext || ctext ? '\n\n' : ''}Enchantments:\n` + items.sort((a, b) => a.shop_id - b.shop_id).filter(a => a.type === 'e' && a.amount > 0).map(item => `[ID: ${item.shop_id}] ${item.amount} ${item.amount >1? `${item.item_id}` + 's' : `${item.item_id}`}`).join('\n')
-    if (!weapon) { wep = '' } else { wep = `${etext || wtext || ctext ? '\n\n' : ''}[ID: ${item.shop_id}] Equipped:\n${weapon.item_id}` } 
+    if (items.filter(a => a.type == 'c' && a.amount > 0).map(item => `${item.item_id}`).join('\n')) ctext = 'Consumables:\n' + items.sort((a, b) => a.shop_id - b.shop_id).filter(a => a.type === 'c' && a.amount > 0).map(item => `[ID: ${item.shop_id}] ${item.amount > 1 ? `${item.amount}` : ''} ${item.amount >1? `${item.item_id}` + 's' : `${item.item_id}`}`).join('\n')
+    if (items.filter(a => a.type == 'w' && a.amount > 0).map(item => `${item.item_id}`).join('\n')) wtext = `${ctext ? '\n\n' : ''}Weapons:\n` + items.sort((a, b) => a.shop_id - b.shop_id).filter(a => a.type === 'w' && a.amount > 0).map(item => `[ID: ${item.shop_id}] ${item.amount > 1 ? `${item.amount}` : ''} ${item.amount >1? `${item.item_id}` + 's' : `${item.item_id}`}`).join('\n')
+    if (items.filter(a => a.type == 'e' && a.amount > 0).map(item => `${item.item_id}`).join('\n')) etext = `${wtext || ctext ? '\n\n' : ''}Enchantments:\n` + items.sort((a, b) => a.shop_id - b.shop_id).filter(a => a.type === 'e' && a.amount > 0).map(item => `[ID: ${item.shop_id}] ${item.amount > 1 ? `${item.amount}` : ''} ${item.amount >1? `${item.item_id}` + 's' : `${item.item_id}`}`).join('\n')
+    if (!weapon) { wep = '' } else { wep = `${etext || wtext || ctext ? '\n\n' : ''}Equipped:\n[ID: ${weapon.shop_id}] ${weapon.item_id}` } 
     func.log(`checked ${target.id}'s inventory`, int, c)
     // return int.reply(Formatters.codeBlock('Consumables:\n' +
     // items.sort((a, b) => a.id - b.id).filter(a => a.type === 'c' && a.buyable).map(item => `[ID: ${item.id}] ${item.name}: \$${item.cost} Heal: ${item.heal}`).join('\n') + '\n\n' +

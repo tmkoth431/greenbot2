@@ -45,10 +45,10 @@ module.exports = {
       enemy.save()
       func.log(`attacked enemy: ${enemy.name}`, int, c);
       if (!crit) { 
-        embededd.setDescription(`${int.user.username} hit ${enemy.name} for ${rand} damage.`)
+        embededd.setDescription(`<@${int.user.id}> hit ${enemy.name} for ${rand} damage.`)
         return int.reply({ embeds: [embededd] });
       } else if (crit) { 
-        embededd.setDescription(`${int.user.username} hit ${enemy.name} for ${rand} damage. Critical hit!`)
+        embededd.setDescription(`<@${int.user.id}> hit ${enemy.name} for ${rand} damage. Critical hit!`)
         return int.reply({ embeds: [embededd] }) 
       }
       if (enemy.health < 1) {
@@ -56,7 +56,7 @@ module.exports = {
         user.combat_exp += Number(1)
         user.save()
         func.log(`killed enemy: ${enemy.name}`, int, c)
-        embededd.setDescription(`${int.user.username} killed the ${enemy.name}!`)
+        embededd.setDescription(`<@${int.user.id}> killed the ${enemy.name}!`)
         int.reply({ embeds: [embededd] })
         return await Enemy.destroy({ where: { user_id: int.user.id } })
       }
@@ -66,10 +66,10 @@ module.exports = {
       user.health -= Number(erand)
       user.save()
       if (!ecrit) { 
-        embededd.setDescription(`${int.user.username} was hit by ${enemy.name} for ${erand}.`)
+        embededd.setDescription(`<@${int.user.id}> was hit by ${enemy.name} for ${erand}.`)
         int.reply({ embeds: [embededd] });
       } else { 
-        embededd.setDescription(`${int.user.username} was hit by ${enemy.name} for ${erand}. Critical hit!`)
+        embededd.setDescription(`<@${int.user.id}> was hit by ${enemy.name} for ${erand}. Critical hit!`)
         int.reply({ embeds: [embededd] }) 
       }
       if (user.health < 1) {
@@ -94,12 +94,12 @@ module.exports = {
       await ench.execute(int, tUser, tUserEffects, user, tUser)
     }
 
-    func.log(`attacked ${user.combat_target_id}`, int, c);
+    func.log(`attacked <@${user.combat_target_id}>`, int, c);
     if (!crit) { 
-      embededd.setDescription(`${int.user.username} attacked ${user.combat_target} for ${rand} damage.`)
+      embededd.setDescription(`<@${int.user.id}> attacked <@${user.combat_target_id}> for ${rand} damage.`)
       int.channel.send({ embeds: [embededd] }); 
     } else { 
-      embededd.setDescription(`${int.user.username} attacked ${user.combat_target} for ${rand}. Critical hit!`)
+      embededd.setDescription(`<@${int.user.id}> attacked <@${user.combat_target_id}> for ${rand}. Critical hit!`)
       int.channel.send({ embeds: [embededd] }) 
     }
     if (tUser.health < 1) {
@@ -111,7 +111,7 @@ module.exports = {
       tUser.save()
       func.clearStatus(tUserEffects)
       func.log(`killed ${user.combat_target_id}`, int, c)
-      func.die(int, `was killed by ${int.user.id}`, user.combat_target_id, tUserEffects, c)
+      func.die(int, `was killed by <@${int.user.id}>`, user.combat_target_id, tUserEffects, c)
     } else {
       embededd.setDescription(`<@${user.combat_target_id}> it is your turn`)
       return int.reply({ embeds: [embededd] })

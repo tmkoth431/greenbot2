@@ -30,12 +30,12 @@ module.exports = {
     }
     const userEffects = await UserEffects.findOne({ where: { user_id: int.user.id } })
     if (item.amount < 0) {
-      embededd.setDescription(`${user.id.username} does not own any ${item.item_id}s`).setThumbnail('https://i.imgur.com/tDWLV66.png')
+      embededd.setDescription(`You do not own any ${item.name}s`).setThumbnail('https://i.imgur.com/tDWLV66.png')
       return int.reply({ embeds: [embededd] })
     }
     if (user.combat) {
       if (!user.turn) {
-        embededd.setDescription(`It is not currently ${user.id.username}'s turn in combat!`).setThumbnail('https://i.imgur.com/tDWLV66.png')
+        embededd.setDescription(`It is not your turn in combat!`).setThumbnail('https://i.imgur.com/tDWLV66.png')
         return int.reply({ embeds: [embededd] })
       }
       if (user.combat_target_id == '0') {
@@ -79,16 +79,16 @@ module.exports = {
       await user.addItem(item.item_id, item.id, -1)
 
       func.log(`used a ${item.item_id}`, int, c);
-      embededd.setDescription(`${int.user.username} healed ${heal} health`)
+      embededd.setDescription(`<@${int.user.id}> healed ${heal} health`)
       return int.reply({ embeds: [embededd] });
     } else if (item.type == 'e') {
       const equipped = await UserItems.findOne({ where: { user_id: { [Op.like]: int.user.id }, equipped: true } })
       if (!equipped) {
-        embededd.setDescription(`${int.user.username} must have a weapon equipped to enchant!`).setThumbnail('https://i.imgur.com/tDWLV66.png')
+        embededd.setDescription(`You must have a weapon equipped to enchant!`).setThumbnail('https://i.imgur.com/tDWLV66.png')
         return int.reply({ embeds: [embededd] })
       }
       if (user.level_points < item.ecost) {
-        embededd.setDescription(`${int.user.username} does not have enough XP points!`).setThumbnail('https://i.imgur.com/tDWLV66.png')
+        embededd.setDescription(`You do not have enough XP points!`).setThumbnail('https://i.imgur.com/tDWLV66.png')
         return int.reply({ embeds: [embededd] })
       }
       equipped.amount -= Number(1)
@@ -106,8 +106,12 @@ module.exports = {
       is_item.equipped = Boolean(true)
       is_item.save()
 
-      func.log(`${user.id} Enchanted ${equipped.item_id} with ${item.enchant}.`, message, client);
-      embededd.setDescription(`${int.user.tag} healed for ${heal}.`)
+      func.log(`${int.user.id} Enchanted ${equipped.item_id} with ${item.enchant}.`, message, client);
+      if (item.ench != NaN && item.heal <= 0) {
+        embededd.setDescription(`<@${int.user.id}> improved their ${item.ench} ability!`)
+        return int.reply({ embeds: [embededd] })
+      }
+      embededd.setDescription(`<@${int.user.id}> healed for ${heal}.`)
       return int.reply({ embeds: [embededd] });
     } else {
       embededd.setDescription(`${itemName} is not consumable!`).setThumbnail('https://i.imgur.com/tDWLV66.png')

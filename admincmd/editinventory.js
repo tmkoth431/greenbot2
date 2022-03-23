@@ -45,13 +45,13 @@ module.exports = {
       await user.addItem(item.name, item.id, Number(args[2]))
       user.save()
       func.log(`added ${args[2]} ${itemName} to ${args[0]}`, int, c)
-      return int.reply(`added ${args[2]} ${itemName} to <@${user.id}>`)
+      return int.reply(`added ${args[2]} ${itemName} to <@${args[0]}>`)
     } else {
-      if (item.amount < Number(args[2])) return int.reply(`<@${user.id}> does not have that many items!`)
+      if (item.amount < Number(args[2])) return int.reply(`<@${args[0]}> does not have that many items!`)
       await user.addItem(item.name, item.id, -Number(args[2]))
       user.save()
       func.log(`removed ${args[2]} ${itemName} from ${args[0]}`, int, c)
-      return int.reply(`removed ${args[2]} ${itemName} from <@${user.id}>`)
+      return int.reply(`removed ${args[2]} ${itemName} from <@${args[0]}>`)
     }
   },
 }
