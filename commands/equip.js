@@ -29,7 +29,7 @@ module.exports = {
       weapon.save()
 
       func.log(`unequipped ${weapon.item_id}`, int, c);
-      embededd.setDescription(`${int.user.username} unequipped ${weapon.item_id}.`)
+      embededd.setDescription(`<@${int.user.id}> unequipped ${weapon.item_id}.`)
       return int.reply({ embeds: [embededd] });
     }
     const user = app.currency.get(int.user.id)
@@ -38,6 +38,14 @@ module.exports = {
       weapon = await UserItems.findOne({ where: { user_id: int.user.id, shop_id: name } })
       if (!weapon) {
         embededd.setDescription('Could not find that item!').setThumbnail('https://i.imgur.com/tDWLV66.png')
+        return int.reply({ embeds: [embededd] })
+      }
+      if (weapon.amount <= 0) {
+        embededd.setDescription(`You do not have any ${weapon.name}'s!`).setThumbnail('https://i.imgur.com/tDWLV66.png')
+        return int.reply({ embeds: [embededd] })
+      }
+      if (weapon.type != 'w') {
+        embededd.setDescription(`${name} is not a weapon!`).setThumbnail('https://i.imgur.com/tDWLV66.png')
         return int.reply({ embeds: [embededd] })
       }
     }
@@ -52,7 +60,7 @@ module.exports = {
     await user.equip(weapon.item_id)
 
     func.log(`equipped ${weapon.item_id}`, int, c);
-    embededd.setDescription(`${int.user.username} equipped ${weapon.item_id}.`)
+    embededd.setDescription(`<@${int.user.id}> equipped ${weapon.item_id}.`)
     return int.reply({ embeds: [embededd] });
   },
 }

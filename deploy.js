@@ -1,3 +1,5 @@
+const startTime = Date.now();
+
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 const config = require('./config.json');
@@ -21,7 +23,7 @@ const rest = new REST({ }).setToken(config.token);
 
 (async () => {
   try {
-    console.log('Started refreshing application (/) commands.');
+    console.log(`${new Date(startTime)}: <console> - Started refreshing application (/) commands...`);
 
     await rest.put(
       Routes.applicationCommands(config.clientId),
@@ -31,7 +33,7 @@ const rest = new REST({ }).setToken(config.token);
       Routes.applicationGuildCommands(config.clientId, config.guildId),
       { body: admincmds },
     );
-    console.log('Successfully reloaded application (/) commands.')
+    console.log(`${new Date(Date.now())}: <console> - Successfully reloaded application (/) commands in ${(Date.now() - startTime) / 1000} seconds.`)
   } catch (error) {
     console.error(error);
   }

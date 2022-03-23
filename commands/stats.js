@@ -19,7 +19,7 @@ module.exports = {
 
     const target = int.options.getUser('user') || int.user;
     const user = app.currency.get(target.id)
-    if (!user) return int.reply(`${target.username} does not exist!`)
+    if (!user) return int.reply(`<@${target.id}> is not initialized!`)
     let wep
     const weapon = await UserItems.findOne({ where: { user_id: target.id, equipped: true } })
     const userEffects = await UserEffects.findOne({ where: { user_id: target.id } })
@@ -46,7 +46,7 @@ module.exports = {
     //     `Health: ${enemy.health}/${enemy.max_health}` : ''}`
     //   , { code: true })
     const embededd = new MessageEmbed()
-      .setTitle(`${int.user.username}'s Stats: \n`)
+      .setTitle(`${target.username}'s Stats: \n`)
       .setColor('#25c059')
       .setDescription(`XP Level: ${user.level}, XP: ${user.exp}/${func.calclvl(user.level)}` + '\n' +
         `XP Level Points: ${user.level_points}` + '\n' +
