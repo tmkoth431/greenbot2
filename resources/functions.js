@@ -1,7 +1,7 @@
 const fs = require('fs');
 const config = require('../config.json');
 const { MessageEmbed } = require('discord.js');
-const { inlineCode } = require('@discordjs/builders');
+const { codeBlock } = require('@discordjs/builders');
 
 module.exports = {
   log: function (text, i, client) {
@@ -17,7 +17,7 @@ module.exports = {
       author = author.replace(`${config.coolids[x]}`, `${config.coolnames[x]}`)
     }
     fs.writeFileSync('archives.txt', readarchives + `\n${client.ws.ping}ms ${new Date(Date.now())}: ${i.guild} - ${author} ${text2}`)
-    client.channels.cache.get(config.log_channel).send(inlineCode(`${client.ws.ping}ms ${i.guild} - ${author} ${text2}`))
+    client.channels.cache.get(config.log_channel).send(codeBlock(`${client.ws.ping}ms ${i.guild} - ${author} ${text2}`))
     return console.log(`${client.ws.ping}ms ${new Date(Date.now())}: ${i.guild} - ${author} ${text2}`);
   },
   logconsole: function (text, time, client) {
@@ -29,7 +29,7 @@ module.exports = {
     }
     fs.appendFileSync('archives.txt', `\n${client.ws.ping}ms ${new Date(Date.now())}: <console> - ${text2}`)
     if (!client) return console.log(`<console> - ${text2}`);
-    client.channels.cache.get(config.log_channel).send(inlineCode(`${client.ws.ping}ms <console> - ${text2}`))
+    client.channels.cache.get(config.log_channel).send(codeBlock(`${client.ws.ping}ms <console> - ${text2}`))
     return console.log(`${client.ws.ping}ms ${new Date(Date.now())}: <console> - ${text2}`);
   },
   error: function (text, time, client) {
@@ -75,8 +75,8 @@ module.exports = {
     const embededd = new MessageEmbed()
       .setTitle(`Death`)
       .setColor('#25c059')
-      .setDescription(`<@${int.user.id}> ${cause}`)
-    return int.channel.send({ embeds: [embededd] })
+      .setDescription(`<@${user.user_id}> ${cause}`)
+    return int.reply({ embeds: [embededd] })
   },
   updateEffects: function (message, user, userEffects) {
     if (userEffects.burn > 0) {

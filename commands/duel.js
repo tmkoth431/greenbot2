@@ -22,6 +22,10 @@ module.exports = {
     const tUser = app.currency.get(target.id)
     const equipped = await UserItems.findOne({ where: { user_id: int.user.id, equipped: true } })
     const tEquipped = await UserItems.findOne({ where: { user_id: target.id, equipped: true } })
+    if (target.id == int.user.id) {
+      embededd.setDescription('You cannot battle yourself!').setThumbnail('https://i.imgur.com/tDWLV66.png')
+      return int.reply({ embeds: [embededd] })
+    }
     if (!tUser || !target) {
       embededd.setDescription(`Unable to find <@${target.id}>`).setThumbnail('https://i.imgur.com/tDWLV66.png')
       return int.reply({ embeds: [embededd] })

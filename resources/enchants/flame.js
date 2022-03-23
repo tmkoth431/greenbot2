@@ -1,5 +1,6 @@
 const func = require('../functions')
 const app = require('../../app')
+const { MessageEmbed } = require('discord.js')
 
 module.exports = {
   name: 'flame',

@@ -2,7 +2,7 @@ module.exports = (sequelize, DataTypes) => {
   return sequelize.define('shop', {
     name: {
       type: DataTypes.STRING,
-      unique: true,
+      unique: false,
     },
     cost: {
       type: DataTypes.INTEGER,
@@ -15,6 +15,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     enchant: {
       type: DataTypes.STRING,
+<<<<<<< HEAD
+=======
+      unique: false,
+>>>>>>> ui
       allowNull: true,
     },
     damage: {
