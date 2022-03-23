@@ -6,6 +6,11 @@ module.exports = {
   async execute(int, userEffects, tUserEffects, user, tUser) {
     tUserEffects.burn = Number(3)
     tUserEffects.save()
-    return int.channel.send(`Debuff 'On Fire' added to <@${tUser.user_id}>.`)
+    const embededd = new MessageEmbed()
+      .setTitle('Effects')
+      .setColor('#25c059')
+      .setDescription(`Debuff 'Fire' added to <@${int.user.id}>!`)
+
+    return int.channel.send({ embeds: [embededd] })
   },
 }

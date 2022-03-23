@@ -7,6 +7,11 @@ module.exports = {
     tUser.curse = true
     tUser.curse_time = Date.now()
     tUser.save()
-    return int.channel.send(`Debuff 'Curse' added to ${int.user.username}.`);
+    const embededd = new MessageEmbed()
+      .setTitle('Effects')
+      .setColor('#25c059')
+      .setDescription(`Debuff 'Curse' added to <@${int.user.id}>!`)
+
+    return int.channel.send({ embeds: [embededd] })
   },
 }

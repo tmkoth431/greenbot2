@@ -1,7 +1,7 @@
 const func = require('../functions')
 const app = require('../../app')
 
-// Toby make these all take from the different .js files, instead of this
+// Toby make these all take from the other ones
 
 module.exports = {
   name: 'randomness',
