@@ -1,4 +1,6 @@
 const startTime = Date.now();
+const force = process.argv.includes('--force') || process.argv.includes('-f');
+console.log(`${new Date(Date.now())}: <console> - Database ${force ? 'resetting' : 'syncing'}...`)
 
 const Sequelize = require('sequelize');
 const config = require('./config.json')
@@ -20,7 +22,6 @@ const PlayerShop = require('./models/PlayerShop')(sequelize, Sequelize.DataTypes
 const QuestBoard = require('./models/QuestBoard')(sequelize, Sequelize.DataTypes)
 const Enemy = require('./models/Enemy')(sequelize, Sequelize.DataTypes)
 
-const force = process.argv.includes('--force') || process.argv.includes('-f');
 
 sequelize.sync({ force }).then(async () => {
   const shop = [
