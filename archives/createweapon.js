@@ -58,8 +58,8 @@ module.exports = {
     ]
     const user = app.currency.get(int.user.id)
     if (!args[0]) return int.reply('item, type, enchant, damage, attribute, scale, heal, ecost, amount')
-    func.log(`created an item`, int, c)
     await user.addUniqueItem(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8])
+    func.log(`created an item`, int, c)
     return int.reply('created: ' + args[0] + args[1] + args[2] + args[3] + args[4] + args[5] + args[6] + args[7] + args[8])
   },
 }

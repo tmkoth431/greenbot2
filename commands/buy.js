@@ -48,7 +48,7 @@ module.exports = {
     const totalCost = item.cost * Number(buyAmmount)
     const bal = user.balance || 0;
     if (totalCost > bal) {
-      embededd.setDescription('No enough money!').setThumbnail('https://i.imgur.com/tDWLV66.png')
+      embededd.setDescription('Not enough money!').setThumbnail('https://i.imgur.com/tDWLV66.png')
       return int.reply({ embeds: [embededd] })
     }
 

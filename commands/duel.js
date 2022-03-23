@@ -23,7 +23,7 @@ module.exports = {
     const equipped = await UserItems.findOne({ where: { user_id: int.user.id, equipped: true } })
     const tEquipped = await UserItems.findOne({ where: { user_id: target.id, equipped: true } })
     if (!tUser || !target) {
-      embededd.setDescription(`Unable to find ${target.username}`).setThumbnail('https://i.imgur.com/tDWLV66.png')
+      embededd.setDescription(`Unable to find <@${target.id}>`).setThumbnail('https://i.imgur.com/tDWLV66.png')
       return int.reply({ embeds: [embededd] })
     }
     if (user.combat) {
@@ -31,7 +31,7 @@ module.exports = {
       return int.reply({ embeds: [embededd] })
     }
     if (tUser.combat) {
-      embededd.setDescription(`${target.username} is already in combat!`).setThumbnail('https://i.imgur.com/tDWLV66.png')
+      embededd.setDescription(`<@${target.id}> is already in combat!`).setThumbnail('https://i.imgur.com/tDWLV66.png')
       return int.reply({ embeds: [embededd] })
     }
     if (!equipped) {
@@ -39,11 +39,11 @@ module.exports = {
       return int.reply({ embeds: [embededd] })
     }
     if (!tEquipped) {
-      embededd.setDescription(`${target.username} does not have a weapon!`).setThumbnail('https://i.imgur.com/tDWLV66.png')
+      embededd.setDescription(`<@${target.id}> does not have a weapon!`).setThumbnail('https://i.imgur.com/tDWLV66.png')
       return int.reply({ embeds: [embededd] })
     }
     if (Number(tUser.health / tUser.max_health) < Number(3 / 4)) {
-      embededd.setDescription(`${target.username} has too little health!`).setThumbnail('https://i.imgur.com/tDWLV66.png')
+      embededd.setDescription(`<@${target.id}> has too little health!`).setThumbnail('https://i.imgur.com/tDWLV66.png')
       return int.reply({ embeds: [embededd] })
     }
 
@@ -61,7 +61,7 @@ module.exports = {
     tUser.save()
 
     func.log(`initiated combat with ${target.id}`, int, c);
-    embededd.setDescription(`${int.user.username} initiated combat with <@${target.id}>\n\nIt is ${user.combat_target}'s turn`)
+    embededd.setDescription(`<@${int.user.id}> initiated combat with <@${target.id}>\n\nIt is <@${target.id}>'s turn`)
     return int.reply({ embeds: [embededd] })
   },
 }

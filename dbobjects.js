@@ -37,7 +37,7 @@ Reflect.defineProperty(Users.prototype, 'addItem', {
 });
 
 Reflect.defineProperty(Users.prototype, 'addUniqueItem', {
-  value: async function addUniqueItem(item, type, enchant, damage, attribute, scale, heal, ecost, amount) {
+  value: async function addUniqueItem(item, type, enchant, damage, attribute, scale, heal, ecost, desc, amount) {
     const userItem = await UserItems.findOne({
       where: {
         user_id: this.user_id,
@@ -55,13 +55,8 @@ Reflect.defineProperty(Users.prototype, 'addUniqueItem', {
       userItem.amount += Number(amount)
       return userItem.save()
     }
-    await Shop.create({ name: item, type: type, enchant: enchant, damage: damage, attribute: attribute, scale: scale, ecost: ecost, buyable: false })
-    const shopItem = await Shop.findOne({
-      where: {
-        name: item,
-        enchant: enchant
-      }
-    })
+    const shopItem = await Shop.create({ name: item, type: type, enchant: enchant, damage: damage, attribute: attribute, scale: scale, ecost: ecost, desc: desc, buyable: false })
+
     return UserItems.create({ user_id: this.user_id, item_id: item, shop_id: shopItem.id, amount: amount, type: type, enchant: enchant, damage: damage, attribute: attribute, scale: scale, heal: heal, ecost: ecost });
   }
 })
