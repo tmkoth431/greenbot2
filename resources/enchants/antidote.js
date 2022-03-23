@@ -6,13 +6,13 @@ const { MessageEmbed } = require('@discordjs/builders')
 
 module.exports = {
   name: 'antidote',
-  async execute(int, userEffects, tUserEffects, user, tUser) {
+  async execute(int, userEffects, user) {
     userEffects.poison = Number(0)
     userEffects.save()
     const embededd = new MessageEmbed()
       .setTitle('Effects')
       .setColor('#25c059')
-      .setDescription(`Debuff 'Poison' removed from <@${int.user.id}>!`)
+      .setDescription(`Debuff 'Poison' removed from <@${user.user.id}>!`)
 
     return int.channel.send({ embeds: [embededd] })
   }

@@ -76,7 +76,7 @@ module.exports = {
       .setTitle(`Death`)
       .setColor('#25c059')
       .setDescription(`<@${int.user.id}> ${cause}`)
-    return int.reply({ embeds: [embededd] })
+    return int.channel.send({ embeds: [embededd] })
   },
   updateEffects: function (message, user, userEffects) {
     if (userEffects.burn > 0) {
