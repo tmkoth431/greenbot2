@@ -1,5 +1,4 @@
 const startTime = Date.now();
-console.log(`${client.ws.ping}ms ${new Date(Date.now())}: <console> - Logging in as ${client.user.tag}...`)
 const { Client, Collection, Intents } = require('discord.js')
 const config = require('./config.json')
 const fs = require('fs');
@@ -109,6 +108,7 @@ client.on('interactionCreate', async int => {
 });
 
 client.once('ready', async () => {
+  console.log(`${client.ws.ping}ms ${new Date(Date.now())}: <console> - Logging in as ${client.user.tag}...`)
   const enchantFiles = fs.readdirSync('./resources/enchants').filter(file => file.endsWith('.js'));
   for (const file of enchantFiles) {
     const ench = require(`./resources/enchants/${file}`);

@@ -1,6 +1,6 @@
 const func = require('../functions')
 const app = require('../../app')
-const { MessageEmbed } = require('@discordjs/builders')
+const { MessageEmbed } = require('discord.js')
 
 // Toby add func.logs for all the enchants
 
