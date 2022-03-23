@@ -13,9 +13,9 @@ module.exports = {
       if (text2.includes(config.coolids[x])) console.log('name change failed')
       author = author.replace(`${config.coolids[x]}`, `${config.coolnames[x]}`)
     }
-    fs.writeFileSync('archives.txt', readarchives + `\n${client.ws.ping}ms ${new Date(Date.now)}: ${i.guild} - ${author} ${text2}`)
+    fs.writeFileSync('archives.txt', readarchives + `\n${client.ws.ping}ms ${new Date(Date.now())}: ${i.guild} - ${author} ${text2}`)
     client.channels.cache.get(config.log_channel).send(`${client.ws.ping}ms ${i.guild} - ${author} ${text2}`)
-    return console.log(`${client.ws.ping}ms ${new Date(Date.now)}: ${i.guild} - ${author} ${text2}`);
+    return console.log(`${client.ws.ping}ms ${new Date(Date.now())}: ${i.guild} - ${author} ${text2}`);
   },
   logconsole: function (text, time, client) {
     var readarchives = fs.readFileSync('archives.txt', `utf-8`);
@@ -24,15 +24,15 @@ module.exports = {
       text2 = text2.replace(`${config.coolids[x]}`, `${config.coolnames[x]}`)
       if (text2.includes(config.coolids[x])) console.log('name change failed')
     }
-    fs.writeFileSync('archives.txt', readarchives + `\n${client.ws.ping}ms ${new Date(Date.now)}: <console> - ${text2}`)
+    fs.writeFileSync('archives.txt', readarchives + `\n${client.ws.ping}ms ${new Date(Date.now())}: <console> - ${text2}`)
     if (!client) return console.log(`<console> - ${text2}`);
     client.channels.cache.get(config.log_channel).send(`${client.ws.ping}ms <console> - ${text2}`)
-    return console.log(`${client.ws.ping}ms ${new Date(Date.now)}: <console> - ${text2}`);
+    return console.log(`${client.ws.ping}ms ${new Date(Date.now())}: <console> - ${text2}`);
   },
   error: function (text, time, client) {
     // var errorfile = fs.readFileSync('error.txt', 'utf-8')
     // fs.writeFileSync('error.txt', `${errorfile}` + `\n${time}: ${text}`)
-    fs.appendFileSync('error.txt', `\n${client.ws.ping}ms ${new Date(Date.now)}: ${text}`)
+    fs.appendFileSync('error.txt', `\n${client.ws.ping}ms ${new Date(Date.now())}: ${text}`)
   },
   clearStatus: function (userEffects) {
     userEffects.burn = Number(0)
@@ -48,7 +48,7 @@ module.exports = {
       user.level += Number(1)
       user.level_points += Number(1)
       user.save()
-      this.logconsole(`${user.user_id} leveled up`, new Date(Date.now), client)
+      this.logconsole(`${user.user_id} leveled up`, new Date(Date.now()), client)
       const embededd = new MessageEmbed()
       .setTitle(`Level Up`)
       .setColor('#25c059')
