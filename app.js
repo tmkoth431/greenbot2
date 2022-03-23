@@ -1,4 +1,5 @@
 const startTime = Date.now();
+console.log(`${client.ws.ping}ms ${new Date(Date.now())}: <console> - Logging in as ${client.user.tag}...`)
 const { Client, Collection, Intents } = require('discord.js')
 const config = require('./config.json')
 const fs = require('fs');

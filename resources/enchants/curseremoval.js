@@ -9,7 +9,7 @@ module.exports = {
     const embededd = new MessageEmbed()
       .setTitle('Effects')
       .setColor('#25c059')
-      .setDescription(`Debuff 'Curse' removed from <@${user.user.id}>!`)
+      .setDescription(`Debuff 'Curse' removed from <@${int.user.id}>!`)
 
     return int.channel.send({ embeds: [embededd] })
   },

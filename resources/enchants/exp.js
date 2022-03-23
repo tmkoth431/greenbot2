@@ -10,7 +10,7 @@ module.exports = {
     const embededd = new MessageEmbed()
       .setTitle('Effects')
       .setColor('#25c059')
-      .setDescription(`<@${user.user.id}> gained ${rand}XP!`)
+      .setDescription(`<@${int.user.id}> gained ${rand}XP!`)
 
     return int.channel.send({ embeds: [embededd] })
   },
