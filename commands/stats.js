@@ -30,7 +30,8 @@ module.exports = {
     if (userEffects.burn > 0) effects += `\nburn: ${userEffects.burn}`
     if (userEffects.poison > 0) effects += `\npoison: ${userEffects.poison}`
     if (user.curse) effects += `\nCURSED`
-    if (!weapon) { wep = 'No Weapon Eqipped' } else { wep = weapon.item_id }
+    let wepEquipped;
+    if (!weapon) { wep = 'No Weapon Eqipped'; wepEquipped = false } else { wep = weapon.item_id; wepEquipped = true }
     const enemy = await Enemy.findOne({ where: { user_id: target.id } })
 
     func.log(`is checking the stats of ${target.id}`, int, c)
@@ -47,8 +48,8 @@ module.exports = {
         `Dexterity: ${user.dexterity}` + '\n' +
         `Fish XP: ${user.fish_exp}` + '\n' +
         `Biggest Fish: ${user.biggest_catch}` + '\n' +
-        `Death Count: ${user.death_count}\n` +
-        `Weapon: ${wep}` +
+        `Death Count: ${user.death_count}` +
+        `${wepEquipped ? `\nWeapon: ${wep}` : ''}\n` +
         `${user.combat ? `\nOpponent: <@${user.combat_target_id}>` : ''}\n` +
         `${effects ? `Status:${effects}` + '\n' : ''}` +
         `${enemy ? `\nEnemy:\n 
