@@ -65,11 +65,9 @@ module.exports = {
   die: function (int, cause, user, userEffects, client) {
     user.health = Number(1)
     user.balance = 0
-    // user.save()
-    // userEffects.save()
     user.death_count += Number(1)
-    // user.save()
-    // userEffects.save()
+    user.save()
+    userEffects.save()
     this.clearStatus(userEffects)
     this.log(cause, int, client)
     const embededd = new MessageEmbed()
@@ -88,7 +86,7 @@ module.exports = {
         const embededd = new MessageEmbed()
         .setTitle(`Effects`)
         .setColor('#25c059')
-        .setDescription(`Debuff 'On Fire' removed from ${int.user.username}`)
+        .setDescription(`Debuff 'On Fire' removed from <@${int.user.id}>`)
         message.reply({ embeds: [embededd] })
       }
       return cause = 'burned to a crisp!'
@@ -102,11 +100,15 @@ module.exports = {
         const embededd = new MessageEmbed()
         .setTitle(`Effects`)
         .setColor('#25c059')
-        .setDescription(`Debuff 'Poison' removed from ${int.user.username}`)
+        .setDescription(`Debuff 'Poison' removed from <@${int.user.id}>`)
         message.reply({ embeds: [embededd] })
       }
       return cause = 'did not get the antidote in time!'
     }
     return cause = 'passed away!'
+  },
+
+  startsWithVowel: function (string) {
+    return (string.charAt(0) === 'a' || string.charAt(0) === 'e' || string.charAt(0) === 'i' || string.charAt(0) === 'o' || string.charAt(0) === 'u');
   }
 }

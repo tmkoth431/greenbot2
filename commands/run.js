@@ -15,10 +15,12 @@ module.exports = {
 
     const user = app.currency.get(int.user.id)
     if (!user.combat) {
+      func.log(`attempted to run away when not in combat`, int, c)
       embededd.setDescription('You are not in combat!').setThumbnail('https://i.imgur.com/tDWLV66.png')
       return int.reply({ embeds: [embededd] })
     }
     if (!user.turn) {
+      func.log(`attempted to run when it wasn't their turn`, int, c)
       embededd.setDescription('It is not your turn!').setThumbnail('https://i.imgur.com/tDWLV66.png')
       return int.reply({ embeds: [embededd] })
     }
@@ -55,6 +57,7 @@ module.exports = {
     tUser.save()
 
     if (rand < 3) {
+      func.log(`failed to run away from ${user.combat_target_id}`, int, c)
       embededd.setDescription(`You failed to run away.\n\nIt is ${user.combat_target}'s turn`)
       return int.reply({ embeds: [embededd] })
     }

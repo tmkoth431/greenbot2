@@ -16,7 +16,14 @@ module.exports = {
 
     const id = int.options.getString('user')
     const user = app.currency.get(id)
-    if (!user.combat) return int.reply(`${user.id.username} is not in combat.`)
+    if (!user) {
+      func.log(`attempted to force an unrecognized player out of combat`, int, c)
+      return int.reply(`<@${id}> is not initialized!`)
+    }
+    if (!user.combat) {
+      func.log(`attempted to force`, int, c)
+      return int.reply(`<@${id}> is not in combat.`)
+    }
     await Enemy.destroy({ where: { user_id: user.user_id } })
     const tUser = app.currency.get(user.combat_target_id)
     user.combat = Boolean(false)

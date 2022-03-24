@@ -15,6 +15,7 @@ module.exports = {
 
     const user = app.currency.get(int.user.id);
     if (user.combat) {
+      func.log(`attempted to fish while in combat`, int, c)
       embededd.setDescription('You cannot fish while in combat!').setThumbnail('https://i.imgur.com/tDWLV66.png')
       return int.reply({ embeds: [embededd] })
     }

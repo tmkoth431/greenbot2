@@ -19,7 +19,10 @@ module.exports = {
 
     const target = int.options.getUser('user') || int.user;
     const user = app.currency.get(target.id)
-    if (!user) return int.reply(`<@${target.id}> is not initialized!`)
+    if (!user) {
+      func.log(`attempted to view the stats of an unrecognized player`, int, c)
+      return int.reply(`<@${target.id}> is not initialized!`)
+    }
     let wep
     const weapon = await UserItems.findOne({ where: { user_id: target.id, equipped: true } })
     const userEffects = await UserEffects.findOne({ where: { user_id: target.id } })
@@ -29,22 +32,9 @@ module.exports = {
     if (user.curse) effects += `\nCURSED`
     if (!weapon) { wep = 'No Weapon Eqipped' } else { wep = weapon.item_id }
     const enemy = await Enemy.findOne({ where: { user_id: target.id } })
-    func.log(`is checking the stats of ${target}`, int, c)
-    // return int.reply(`${target.username}'s stats: \n` +
-    //   `Level: ${user.level}  ${user.exp}/${func.calclvl(user.level)}\n` +
-    //   `Points: ${user.level_points}\n` +
-    //   `Health: ${user.health}/${user.max_health} \n` +
-    //   `Luck: ${user.luck} \n` +
-    //   `Strength: ${user.strength}\n` +
-    //   `Dexterity: ${user.dexterity}\n` +
-    //   `Fish XP: ${user.fish_exp}\n` +
-    //   `Biggest Fish: ${user.biggest_catch}\n` +
-    //   `Weapon: ${wep}\n` +
-    //   `Status:${effects}` +
-    //   `${enemy ? `\n\nEnemy:\n` +
-    //     `Name: ${enemy.name}\n` +
-    //     `Health: ${enemy.health}/${enemy.max_health}` : ''}`
-    //   , { code: true })
+
+    func.log(`is checking the stats of ${target.id}`, int, c)
+
     const embededd = new MessageEmbed()
       .setTitle(`${target.username}'s Stats: \n`)
       .setColor('#25c059')
@@ -58,7 +48,8 @@ module.exports = {
         `Fish XP: ${user.fish_exp}` + '\n' +
         `Biggest Fish: ${user.biggest_catch}` + '\n' +
         `Death Count: ${user.death_count}\n` +
-        `Weapon: ${wep}` + '\n' +
+        `Weapon: ${wep}` +
+        `${user.combat ? `\nOpponent: <@${user.combat_target_id}>` : ''}\n` +
         `${effects ? `Status:${effects}` + '\n' : ''}` +
         `${enemy ? `\nEnemy:\n 
           Name: ${enemy.name}\n

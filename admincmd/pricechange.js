@@ -22,10 +22,13 @@ module.exports = {
     const price = int.options.getNumber('price') || 1
     let item = await Shop.findOne({ where: { id: name } })
     let originalPrice = item.cost;
-    if (!item) return int.reply(`${item.name} is not an item!`)
+    if (!item) {
+      func.log(`attempted to edit the price of an unrecognized item`, int, c)
+      return int.reply(`${item.name} is not an item!`)
+    }
     item.cost = Number(price)
-    func.log(`changed the price of ${item.name} to ${item.cost}`, int, c)
     item.save()
+    func.log(`changed the price of ${item.name} to ${item.cost}`, int, c)
     return int.reply(`changed the price of [ID: ${item.id}] ${item.name} from ${originalPrice} to ${item.cost}`)
   },
 }

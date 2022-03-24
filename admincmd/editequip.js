@@ -24,6 +24,7 @@ module.exports = {
     if (name == 'none') {
       let weapon = await UserItems.findOne({ where: { user_id: player, equipped: true } })
       if (!weapon) {
+        func.log(`attempted to remove a weapon from ${player} that they don't have`, int, c)
         return int.reply(`<@${player}> does not have anything equipped.`)
       }
       weapon.equipped = Boolean(false)
@@ -36,13 +37,16 @@ module.exports = {
     if (!weapon) {
       weapon = await UserItems.findOne({ where: { user_id: player, shop_id: name } })
       if (!weapon) {
+        func.log(`attempted to add a non-existant item to ${player}'s equip`, int, c)
         return int.reply('couldn\'t find that item')
       }
     }
     if (weapon.amount <= 0) {
+      func.log(`attempted to remove ${weapon.item_id} from ${player} when they didn't have it equipped`, int, c)
       return int.reply(`<@${player}> does not have any ${weapon.name}'s`)
     }
     if (weapon.type != 'w') {
+      func.log(`attempted to add ${weapon.item_id} to ${player}'s equip, when it is not a weapon`, int, c)
       return int.reply(`${weapon.name} is not a weapon`)
     }
     const user = app.currency.get(player)

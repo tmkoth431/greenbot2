@@ -22,6 +22,7 @@ module.exports = {
     if (name == 'none') {
       let weapon = await UserItems.findOne({ where: { user_id: int.user.id, equipped: true } })
       if (!weapon) {
+        func.log(`did not enter the id the item they wanted to equip`, int, c)
         embededd.setDescription('Please enter the ID of the weapon you wish to equip.').setThumbnail('https://i.imgur.com/tDWLV66.png')
         return int.reply({ embeds: [embededd] })
       }
@@ -37,23 +38,28 @@ module.exports = {
     if (!weapon) {
       weapon = await UserItems.findOne({ where: { user_id: int.user.id, shop_id: name } })
       if (!weapon) {
+        func.log(`attempted to equip an unrecognized item`, int, c)
         embededd.setDescription('Could not find that item!').setThumbnail('https://i.imgur.com/tDWLV66.png')
         return int.reply({ embeds: [embededd] })
       }
       if (weapon.amount <= 0) {
+        func.log(`attempted to equip an item they don't own`, int, c)
         embededd.setDescription(`You do not have any ${weapon.name}'s!`).setThumbnail('https://i.imgur.com/tDWLV66.png')
         return int.reply({ embeds: [embededd] })
       }
       if (weapon.type != 'w') {
+        func.log(`attempted to equip an item that is not a weapon`, int, c)
         embededd.setDescription(`${name} is not a weapon!`).setThumbnail('https://i.imgur.com/tDWLV66.png')
         return int.reply({ embeds: [embededd] })
       }
     }
     if (weapon.amount <= 0) {
+      func.log(`attempted to equip an item they don't own`, int, c)
       embededd.setDescription(`You do not have any ${weapon.name}'s!`).setThumbnail('https://i.imgur.com/tDWLV66.png')
       return int.reply({ embeds: [embededd] })
     }
     if (weapon.type != 'w') {
+      func.log(`attempted to equip an item that is not a weapon`, int, c)
       embededd.setDescription(`${name} is not a weapon!`).setThumbnail('https://i.imgur.com/tDWLV66.png')
       return int.reply({ embeds: [embededd] })
     }

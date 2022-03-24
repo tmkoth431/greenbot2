@@ -34,7 +34,7 @@ module.exports = {
         user.crime_exp -= 1
         user.balance -= (money * 1.5)
         user.save()
-        func.log(`tried mugged an innocent civilian and lost ${money * 1.5}`, int, c)
+        func.log(`tried mugging an innocent civilian and lost ${money * 1.5}`, int, c)
         embededd.setDescription(`<@${int.user.id}> tried to steal from an innocent civilian and lost \$${money * 1.5}!`)
         return int.reply({ embeds: [embededd] })
       }

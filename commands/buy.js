@@ -25,6 +25,7 @@ module.exports = {
     var buyAmmount = int.options.getNumber('count') || 1
     const user = app.currency.get(int.user.id);
     if (user.combat) {
+      func.log(`attempted to purchase an item while in combat`, int, c)
       embededd.setDescription('You cannot purchase an item while in combat.').setThumbnail('https://i.imgur.com/tDWLV66.png')
       return int.reply({ embeds: [embededd] })
     }
@@ -32,22 +33,21 @@ module.exports = {
     if (!item) {
       item = await Shop.findOne({ where: { id: buyName } });
       if (!item) {
+        func.log(`attempted to purchase an unrecognized item`, int, c)
         embededd.setDescription(`Could not find ${buyName}!`).setThumbnail('https://i.imgur.com/tDWLV66.png')
         return int.reply({ embeds: [embededd] })
       }
     }
     if (!item.buyable) {
+      func.log(`attempted to purchase an unpurchasable item`, int, c)
       embededd.setDescription('Unable to purchase that item!').setThumbnail('https://i.imgur.com/tDWLV66.png')
       return int.reply({ embeds: [embededd] })
     }
     if (buyAmmount == 'max' || buyAmmount == 'all') buyAmmount = Math.floor(user.balance / item.cost)
-    if (isNaN(buyAmmount)) {
-      embededd.setDescription('Please select an amount!').setThumbnail('https://i.imgur.com/tDWLV66.png')
-      return int.reply({ embeds: [embededd] })
-    }
     const totalCost = item.cost * Number(buyAmmount)
     const bal = user.balance || 0;
     if (totalCost > bal) {
+      func.log(`attempted to purchase an item they couldn't afford`, int, c)
       embededd.setDescription('Not enough money!').setThumbnail('https://i.imgur.com/tDWLV66.png')
       return int.reply({ embeds: [embededd] })
     }

@@ -134,6 +134,11 @@ client.once('ready', async () => {
   const storedBalances = await Users.findAll();
   storedBalances.forEach(b => currency.set(b.user_id, b));
   console.log(`${client.ws.ping}ms ${new Date(Date.now())}: <console> - Logged in as ${client.user.tag} in ${(Date.now() - startTime) / 1000} seconds!`)
+  const embededd = new MessageEmbed()
+    .setTitle('Update')
+    .setColor('#25c059')
+    .setDescription('The bot is online!');
+  client.channels.cache.get(config.updates_channel).send({ disableEveryone: false, content: '@everyone', embeds: [embededd] });
 })
 Reflect.defineProperty(currency, 'add', {
   value: async function add(id, amount) {

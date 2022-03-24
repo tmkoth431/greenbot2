@@ -28,18 +28,16 @@ module.exports = {
     let amount = int.options.getInteger('amount') || 1;
     const user = app.currency.get(int.user.id);
     if (user.combat) {
-      embededd.setDescription('You cannot level up while in combat!').setThumbnail('https://i.imgur.com/tDWLV66.png')
+      func.log(`attempted to level up a stat while in combat`, int, c)
+      embededd.setDescription('You cannot level up a stat while in combat!').setThumbnail('https://i.imgur.com/tDWLV66.png')
       return int.reply({ embeds: [embededd] })
     }
     if (user.level_points <= 0) {
+      func.log(`attempted to level up a stat when they had no level points`, int, c)
       embededd.setDescription('You do not have any level points!').setThumbnail('https://i.imgur.com/tDWLV66.png')
       return int.reply({ embeds: [embededd] })
     }
-    if (amount == 'max') amount = user.level_points
-    if (isNaN(amount)) {
-      embededd.setDescription('Please enter a number!').setThumbnail('https://i.imgur.com/tDWLV66.png')
-      return int.reply({ embeds: [embededd] })
-    }
+    if (amount === 'max' || amount === 'all') amount = user.level_points
     amount = Math.min(amount, user.level_points)
     user.level_points -= Number(amount)
     user.save()

@@ -27,7 +27,10 @@ module.exports = {
       int.options.getString('val')
     ]
     const user = app.currency.get(args[0])
-    if (!user) return int.reply(`Couldn\'t find the user ${args[0]}!`)
+    if (!user) {
+      func.log(`attempted to edit the stats of an unrecognized player`, int, c)
+      return int.reply(`Couldn\'t find the user ${args[0]}!`)
+    }
     switch (args[1]) {
       case 'adventure':
         user.adventure = Boolean(args[2])
@@ -118,6 +121,7 @@ module.exports = {
         user.save()
         break
       default:
+        func.log(`attempted to edit an unrecognized stat of ${args[0]}`, int, c)
         return int.reply(`${args[1]} is not a changeable value!`)
     }
     func.log(`changed ${args[0]}\'s ${args[1]} to ${args[2]}`, int, c);
