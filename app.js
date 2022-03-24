@@ -74,7 +74,7 @@ client.on('interactionCreate', async int => {
   //   if (now > expirationTime) {
   //     try {
   //       await int.delete()
-  //       user.curse_time = now
+  //       user.curse_time = Date.now();
   //       user.save()
   //     } catch (e) {
   //       console.log('could not delete message')
