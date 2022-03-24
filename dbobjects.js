@@ -36,6 +36,22 @@ Reflect.defineProperty(Users.prototype, 'addItem', {
   }
 });
 
+Reflect.defineProperty(Users.prototype, 'addItemShopItem', {
+  value: async function addItemShopItem(shopid, add) {
+    const userItem = await UserItems.findOne({
+      where: { user_id: this.user_id, shop_id: shopid },
+    });
+    const shopItem = await Shop.findOne({
+      where: { id: shopid },
+    });
+    if (userItem) {
+      userItem.amount += Number(add);
+      return userItem.save();
+    }
+    return await UserItems.create({ user_id: this.user_id, item_id: shopItem.name, shop_id: shopItem.id, amount: add, type: shopItem.type, enchant: shopItem.enchant, damage: shopItem.damage, attribute: shopItem.attribute, scale: shopItem.scale, heal: shopItem.heal, ecost: shopItem.ecost });
+  }
+});
+
 Reflect.defineProperty(Users.prototype, 'addUniqueItem', {
   value: async function addUniqueItem(item, type, enchant, damage, attribute, scale, heal, ecost, desc, amount) {
     const userItem = await UserItems.findOne({

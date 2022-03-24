@@ -65,18 +65,16 @@ module.exports = {
   die: function (int, cause, user, userEffects, client) {
     user.health = Number(1)
     user.balance = 0
-    // user.save()
-    // userEffects.save()
     user.death_count += Number(1)
-    // user.save()
-    // userEffects.save()
+    user.save()
+    userEffects.save()
     this.clearStatus(userEffects)
     this.log(cause, int, client)
     const embededd = new MessageEmbed()
       .setTitle(`Death`)
       .setColor('#25c059')
       .setDescription(`<@${user.user_id}> ${cause}`)
-    return int.reply({ embeds: [embededd] })
+    return int.channel.send({ embeds: [embededd] })
   },
   updateEffects: function (message, user, userEffects) {
     if (userEffects.burn > 0) {
@@ -89,7 +87,7 @@ module.exports = {
         .setTitle(`Effects`)
         .setColor('#25c059')
         .setDescription(`Debuff 'On Fire' removed from ${int.user.username}`)
-        message.reply({ embeds: [embededd] })
+        message.channel.send({ embeds: [embededd] })
       }
       return cause = 'burned to a crisp!'
     }
@@ -103,7 +101,7 @@ module.exports = {
         .setTitle(`Effects`)
         .setColor('#25c059')
         .setDescription(`Debuff 'Poison' removed from ${int.user.username}`)
-        message.reply({ embeds: [embededd] })
+        message.channel.send({ embeds: [embededd] })
       }
       return cause = 'did not get the antidote in time!'
     }
