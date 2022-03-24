@@ -1,4 +1,5 @@
 const startTime = Date.now();
+console.log(`${client.ws.ping}ms ${new Date(Date.now())}: <console> - Logging in as ${client.user.tag}...`)
 const { Client, Collection, Intents } = require('discord.js')
 const config = require('./config.json')
 const fs = require('fs');
@@ -67,6 +68,23 @@ client.on('interactionCreate', async int => {
       user.save()
     }
     func.logconsole(`initialized user ${int.user.id}`, new Date(Date.now()), client)
+  }
+  // if (user.curse) {
+  //   const curseTime = 60000;
+  //   const expirationTime = Number(user.curse_time) + curseTime;
+  //   if (now > expirationTime) {
+  //     try {
+  //       await int.delete()
+  //       user.curse_time = now
+  //       user.save()
+  //     } catch (e) {
+  //       console.log('could not delete message')
+  //     }
+  //   }
+  // }
+  const cause = func.updateEffects(int, user, userEffects)
+  if (user.health < 1) {
+    func.die(int, cause, user, userEffects, client)
   }
 
   if (admincommands.includes(int.commandName) && !allowed.includes(int.user.id)) {
