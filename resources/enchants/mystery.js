@@ -1,5 +1,6 @@
 const func = require('../functions')
 const app = require('../../app')
+const { MessageEmbed } = require('discord.js')
 
 // toby make all these take from the other ones
 

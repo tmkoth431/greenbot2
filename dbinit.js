@@ -45,11 +45,9 @@ sequelize.sync({ force }).then(async () => {
   ];
   try {
     await Promise.all(shop);
-    if (force) {
-      console.log(`${new Date(Date.now())}: Database reset in ${(Date.now() - startTime) / 1000} seconds.`);
-    } else {
-      console.log(`${new Date(Date.now())}: Database synced in ${(Date.now() - startTime) / 1000} seconds.`);
-    }
+
+    console.log(`${new Date(Date.now())}: Database ${force ? 'reset' : 'synced'} in ${(Date.now() - startTime) / 1000} seconds.`);
+
     sequelize.close();
   } catch (e) {
     console.log(e)
