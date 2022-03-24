@@ -72,7 +72,7 @@ module.exports = {
       if (item.enchant != null) {
         let ench = app.getEnchants()
         ench = ench.get(item.enchant)
-        await ench.execute(int, userEffects, null, user, null)
+        await ench.execute(int, userEffects, user)
       }
 
       user.health = Number(Math.min(user.max_health, user.health + heal))

@@ -4,7 +4,7 @@ const { MessageEmbed } = require('discord.js')
 
 module.exports = {
   name: 'curseremoval',
-  async execute(int, userEffects, tUserEffects, user, tUser) {
+  async execute(int, userEffects, user) {
     user.curse = false
     user.save()
     const embededd = new MessageEmbed()

@@ -4,7 +4,7 @@ const { MessageEmbed } = require('discord.js')
 
 module.exports = {
   name: 'water',
-  async execute(int, userEffects, tUserEffects, user, tUser) {
+  async execute(int, userEffects, user) {
     userEffects.burn = Number(0)
     userEffects.save()
     const embededd = new MessageEmbed()
