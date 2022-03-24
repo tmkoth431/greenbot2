@@ -1,5 +1,4 @@
 const startTime = Date.now();
-console.log(`${client.ws.ping}ms ${new Date(Date.now())}: <console> - Logging in as ${client.user.tag}...`)
 const { Client, Collection, Intents } = require('discord.js')
 const config = require('./config.json')
 const fs = require('fs');
@@ -63,7 +62,7 @@ client.on('interactionCreate', async int => {
     currency.set(int.user.id, user);
     if (config.author.includes(int.user.id)) {
       user.addUniqueItem('god\_sword', 'w', null, 100, 'str', 1, null, null, 1)
-      user.addUniqueItem('wacking\_stick', 'w', 'randomness', 0, 'none', 0, null, null, 1)
+      user.addUniqueItem('wacking\_stick', 'w', 'mystery', 0, 'none', 0, null, null, 1)
       user.balance += Number(100)
       user.save()
     }
@@ -75,7 +74,7 @@ client.on('interactionCreate', async int => {
   //   if (now > expirationTime) {
   //     try {
   //       await int.delete()
-  //       user.curse_time = now
+  //       user.curse_time = Date.now();
   //       user.save()
   //     } catch (e) {
   //       console.log('could not delete message')

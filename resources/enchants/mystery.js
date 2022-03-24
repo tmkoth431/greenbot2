@@ -6,23 +6,17 @@ const { MessageEmbed } = require('discord.js')
 
 module.exports = {
   name: 'mystery',
-  async execute(int, userEffects, tUserEffects, user, tUser) {
+  async execute(int, userEffects, user) {
     const rand = Math.round(Math.random() * 4)
     switch (rand) {
       case 0:
-        userEffects.burn = Number(2)
-        userEffects.save()
-        int.channel.send('you have been set on fire')
+        await require('./flame.js').execute(int, userEffects, user)
         break;
       case 1:
-        userEffects.poison = Number(5)
-        userEffects.save()
-        int.channel.send('you have been poisoned')
+        await require('./poison.js').execute(int, userEffects, user)
         break;
       case 2:
-        user.fish_exp += Math.round(user.fish_exp / 10)
-        user.save()
-        int.channel.send('you get better at fishing')
+        await require('./fishing.js').execute(int, userEffects, user)
         break;
       case 3:
         user.luck += Number(2)
@@ -30,10 +24,7 @@ module.exports = {
         int.channel.send('you get luckier')
         break;
       case 4:
-        user.curse = true
-        user.curse_time = Date.now()
-        user.save()
-        int.channel.send(`you have been cursed`);
+        await require('./curse.js').execute(int, userEffects, user)
         break
     }
   },

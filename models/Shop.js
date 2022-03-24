@@ -15,7 +15,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     enchant: {
       type: DataTypes.STRING,
-      unique: false,
       allowNull: true,
     },
     damage: {

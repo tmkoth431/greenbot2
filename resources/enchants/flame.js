@@ -4,9 +4,9 @@ const { MessageEmbed } = require('discord.js')
 
 module.exports = {
   name: 'flame',
-  async execute(int, userEffects, tUserEffects, user, tUser) {
-    tUserEffects.burn = Number(3)
-    tUserEffects.save()
+  async execute(int, userEffects, user) {
+    userEffects.burn = Number(3)
+    userEffects.save()
     const embededd = new MessageEmbed()
       .setTitle('Effects')
       .setColor('#25c059')

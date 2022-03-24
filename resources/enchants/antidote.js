@@ -6,7 +6,7 @@ const { MessageEmbed } = require('discord.js')
 
 module.exports = {
   name: 'antidote',
-  async execute(int, userEffects, tUserEffects, user, tUser) {
+  async execute(int, userEffects, user) {
     userEffects.poison = Number(0)
     userEffects.save()
     const embededd = new MessageEmbed()
