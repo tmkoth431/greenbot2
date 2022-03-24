@@ -13,11 +13,17 @@ module.exports = {
         .setDescription('enchantment for the item')
         .setRequired(true)
         .addChoice('none', 'null')
+        .addChoice('antidote', 'antidote')
+        .addChoice('curse', 'curse')
+        .addChoice('curseremoval', 'curseremoval')
+        .addChoice('XP', 'exp')
+        .addChoice('fishing', 'fishing')
+        .addChoice('flame', 'flame')
+        .addChoice('mystery', 'mystery')
         .addChoice('necrofire', 'necrofire')
         .addChoice('poison', 'poison')
         .addChoice('randomness', 'randomness')
-        .addChoice('flame', 'flame')
-        .addChoice('mystery', 'mystery'))
+        .addChoice('water', 'water'))
     .addIntegerOption(options =>
       options.setName('damage')
         .setDescription('damage')
@@ -53,6 +59,9 @@ module.exports = {
       int.options.getString('desc') || 'no description provided',
       int.options.getInteger('amount') || 1,
     ]
+
+    args[1] = args[1] == 'null' ? null : args[1];
+
     const user = app.currency.get(int.user.id)
     await user.addUniqueItem(args[0], 'w', args[1], args[2], args[3], args[4], null, null, args[5], args[6])
     func.log(`created ${args[6]} new consumable '${args[0]}': '${args[5]}' ench: ${args[1]}, damage: ${args[2]}, attribute: ${args[3]} dmgscale: ${args[4]}.`, int, c)

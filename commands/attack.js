@@ -91,7 +91,7 @@ module.exports = {
     if (weapon.enchant != null) {
       let ench = app.getEnchants()
       ench = ench.get(weapon.enchant)
-      await ench.execute(int, tUser, tUserEffects, user, tUser)
+      await ench.execute(int, tUserEffects, tUser)
     }
 
     func.log(`attacked <@${user.combat_target_id}>`, int, c);
@@ -102,7 +102,7 @@ module.exports = {
       embededd.setDescription(`<@${int.user.id}> attacked <@${user.combat_target_id}> for ${rand}. Critical hit!`)
       int.channel.send({ embeds: [embededd] }) 
     }
-    if (tUser.health < 1) {
+    if (tUser.health <= 0) {
       user.combat = Boolean(false)
       tUser.combat = Boolean(false)
       user.combat_exp += Number(tUser.combat_exp)
@@ -111,7 +111,7 @@ module.exports = {
       tUser.save()
       func.clearStatus(tUserEffects)
       func.log(`killed ${user.combat_target_id}`, int, c)
-      func.die(int, `was killed by <@${int.user.id}>`, user.combat_target_id, tUserEffects, c)
+      func.die(int, `was killed by <@${int.user.id}>`, tUser, tUserEffects, c)
     } else {
       embededd.setDescription(`<@${user.combat_target_id}> it is your turn`)
       return int.reply({ embeds: [embededd] })

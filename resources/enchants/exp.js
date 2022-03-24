@@ -1,11 +1,18 @@
 const func = require('../functions')
 const app = require('../../app')
+const { MessageEmbed } = require('discord.js')
 
 module.exports = {
   name: 'exp',
-  async execute(int, userEffects, tUserEffects, user, tUser) {
-    user.exp += Number(10)
+  async execute(int, userEffects, user) {
+    let rand = Math.round((Math.random() * 10) + 5)
+    user.exp += Number(rand)
     user.save()
-    return int.channel.send(`+10 XP added to ${int.user.username}.`)
+    const embededd = new MessageEmbed()
+      .setTitle('Effects')
+      .setColor('#25c059')
+      .setDescription(`<@${int.user.id}> gained ${rand}XP!`)
+
+    return int.channel.send({ embeds: [embededd] })
   },
 }

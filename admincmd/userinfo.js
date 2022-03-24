@@ -25,8 +25,8 @@ module.exports = {
 		level_points: ${user.level_points}
 		turn: ${user.turn}
 		combat: ${user.combat}
-		combat_target_id: ${user.comabt_target_id}
-		combat_target: ${user.comabt_target}
+		combat_target_id: ${user.combat_target_id}
+		combat_target: ${user.combat_target}
 		max_health: ${user.max_health}
 		health: ${user.health}
 		balance: ${user.balance}

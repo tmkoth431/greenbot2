@@ -1,4 +1,6 @@
 const startTime = Date.now();
+const force = process.argv.includes('--force') || process.argv.includes('-f');
+console.log(`${new Date(Date.now())}: <console> - Database ${force ? 'resetting' : 'syncing'}...`)
 
 const Sequelize = require('sequelize');
 const config = require('./config.json')
@@ -20,7 +22,6 @@ const PlayerShop = require('./models/PlayerShop')(sequelize, Sequelize.DataTypes
 const QuestBoard = require('./models/QuestBoard')(sequelize, Sequelize.DataTypes)
 const Enemy = require('./models/Enemy')(sequelize, Sequelize.DataTypes)
 
-const force = process.argv.includes('--force') || process.argv.includes('-f');
 
 sequelize.sync({ force }).then(async () => {
   const shop = [
@@ -44,11 +45,9 @@ sequelize.sync({ force }).then(async () => {
   ];
   try {
     await Promise.all(shop);
-    if (force) {
-      console.log(`${new Date(Date.now())}: Database reset in ${(Date.now() - startTime) / 1000} seconds.`);
-    } else {
-      console.log(`${new Date(Date.now())}: Database synced in ${(Date.now() - startTime) / 1000} seconds.`);
-    }
+
+    console.log(`${new Date(Date.now())}: Database ${force ? 'reset' : 'synced'} in ${(Date.now() - startTime) / 1000} seconds.`);
+
     sequelize.close();
   } catch (e) {
     console.log(e)

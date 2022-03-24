@@ -1,11 +1,17 @@
 const func = require('../functions')
 const app = require('../../app')
+const { MessageEmbed } = require('discord.js')
 
 module.exports = {
   name: 'curseremoval',
-  async execute(int, userEffects, tUserEffects, user, tUser) {
+  async execute(int, userEffects, user) {
     user.curse = false
     user.save()
-    return int.channel.send(`Debuff 'Curse' removed from ${int.user.username}.`)
+    const embededd = new MessageEmbed()
+      .setTitle('Effects')
+      .setColor('#25c059')
+      .setDescription(`Debuff 'Curse' removed from <@${int.user.id}>!`)
+
+    return int.channel.send({ embeds: [embededd] })
   },
 }

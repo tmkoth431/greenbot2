@@ -62,11 +62,28 @@ client.on('interactionCreate', async int => {
     currency.set(int.user.id, user);
     if (config.author.includes(int.user.id)) {
       user.addUniqueItem('god\_sword', 'w', null, 100, 'str', 1, null, null, 1)
-      user.addUniqueItem('wacking\_stick', 'w', 'randomness', 0, 'none', 0, null, null, 1)
+      user.addUniqueItem('wacking\_stick', 'w', 'mystery', 0, 'none', 0, null, null, 1)
       user.balance += Number(100)
       user.save()
     }
     func.logconsole(`initialized user ${int.user.id}`, new Date(Date.now()), client)
+  }
+  // if (user.curse) {
+  //   const curseTime = 60000;
+  //   const expirationTime = Number(user.curse_time) + curseTime;
+  //   if (now > expirationTime) {
+  //     try {
+  //       await int.delete()
+  //       user.curse_time = now
+  //       user.save()
+  //     } catch (e) {
+  //       console.log('could not delete message')
+  //     }
+  //   }
+  // }
+  const cause = func.updateEffects(int, user, userEffects)
+  if (user.health < 1) {
+    func.die(int, cause, user, userEffects, client)
   }
 
   if (admincommands.includes(int.commandName) && !allowed.includes(int.user.id)) {
@@ -108,6 +125,7 @@ client.on('interactionCreate', async int => {
 });
 
 client.once('ready', async () => {
+  console.log(`${client.ws.ping}ms ${new Date(Date.now())}: <console> - Logging in as ${client.user.tag}...`)
   const enchantFiles = fs.readdirSync('./resources/enchants').filter(file => file.endsWith('.js'));
   for (const file of enchantFiles) {
     const ench = require(`./resources/enchants/${file}`);
