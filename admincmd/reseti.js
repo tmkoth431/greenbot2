@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders')
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName('reseti')
+    .setName('resetinventory')
     .setDescription('resets inventory')
     .addStringOption(options =>
       options.setName('user')
@@ -16,7 +16,7 @@ module.exports = {
     const target = int.options.getString('user')
     const tuser = app.currency.get(target)
     UserItems.destroy({ where: { user_id: tuser.user_id } })
-    func.log(`reset ${tuser.user_id} inv`, int, c);
+    func.log(`reset ${tuser.user_id}\'s inventory`, int, c);
     return int.reply(`reset <@${target}>'s inventory`)
   },
 }

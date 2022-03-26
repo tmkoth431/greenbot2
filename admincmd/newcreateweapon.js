@@ -64,7 +64,7 @@ module.exports = {
 
     const user = app.currency.get(int.user.id)
     await user.addUniqueItem(args[0], 'w', args[1], args[2], args[3], args[4], null, null, args[5], args[6])
-    func.log(`created ${args[6]} new consumable '${args[0]}': '${args[5]}' ench: ${args[1]}, damage: ${args[2]}, attribute: ${args[3]} dmgscale: ${args[4]}.`, int, c)
+    func.log(`created ${args[6]} new weapon '${args[0]}': '${args[5]}' ench: ${args[1]}, damage: ${args[2]}, attribute: ${args[3]} dmgscale: ${args[4]}.`, int, c)
     return int.reply(`<@${int.user.id}> created ${args[6] > 1 ? `${args[6]}` : 'a'} new weapon${args[6] > 1 ? 's' : ''}: ${args[0]}.`)
   },
 }

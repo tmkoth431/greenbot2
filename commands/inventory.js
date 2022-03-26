@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
-const { Formatters, MessageEmbed } = require('discord.js')
+const { MessageEmbed } = require('discord.js')
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -14,7 +14,7 @@ module.exports = {
     const func = require('../resources/functions')
     const { UserItems } = require('../dbobjects')
 
-    let target = int.options.getUser('user') || int.user
+    let target = int.options.getUser('user') || int.user;
 
     const embededd = new MessageEmbed()
       .setTitle(`${target.username}'s Inventory`)

@@ -30,14 +30,14 @@ module.exports = {
       weapon.equipped = Boolean(false)
       weapon.save()
 
-      func.log(`unequipped ${weapon.item_id}`, int, c);
+      func.log(`unequipped ${weapon.item_id} from ${player}`, int, c);
       return int.reply(`uneqipped ${weapon.name} from <@${player}>`);
     }
     let weapon = await UserItems.findOne({ where: { user_id: player, item_id: { [Op.like]: name } } })
     if (!weapon) {
       weapon = await UserItems.findOne({ where: { user_id: player, shop_id: name } })
       if (!weapon) {
-        func.log(`attempted to add a non-existant item to ${player}'s equip`, int, c)
+        func.log(`attempted to add a non-existent item to ${player}'s equip`, int, c)
         return int.reply('couldn\'t find that item')
       }
     }

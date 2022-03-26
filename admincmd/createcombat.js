@@ -13,11 +13,11 @@ module.exports = {
       options.setName('name')
         .setDescription('name of enemy')
         .setRequired(true))
-    .addStringOption(options =>
+    .addIntegerOption(options =>
       options.setName('max_health')
         .setDescription('max health')
         .setRequired(true))
-    .addStringOption(options =>
+    .addIntegerOption(options =>
       options.setName('health')
         .setDescription('health')
         .setRequired(true))
@@ -25,7 +25,7 @@ module.exports = {
       options.setName('enchant')
         .setDescription('enchant')
         .setRequired(true))
-    .addStringOption(options =>
+    .addIntegerOption(options =>
       options.setName('damage')
         .setDescription('damage')
         .setRequired(true))
@@ -40,10 +40,10 @@ module.exports = {
 
     const id = int.options.getString('user_id')
     const name = int.options.getString('name')
-    const max = int.options.getString('max')
-    const hp = int.options.getString('hp')
+    const max = int.options.getInteger('max')
+    const hp = int.options.getInteger('hp')
     const enchant = int.options.getString('enchant')
-    const damage = int.options.getString('damage')
+    const damage = int.options.getInteger('damage')
     const reward = int.options.getString('reward')
     func.log(`says hello`, int, c)
     await int.reply('hello')

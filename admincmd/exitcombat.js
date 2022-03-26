@@ -21,7 +21,7 @@ module.exports = {
       return int.reply(`<@${id}> is not initialized!`)
     }
     if (!user.combat) {
-      func.log(`attempted to force`, int, c)
+      func.log(`attempted to force ${id} out of combat when they were not in combat`, int, c)
       return int.reply(`<@${id}> is not in combat.`)
     }
     await Enemy.destroy({ where: { user_id: user.user_id } })

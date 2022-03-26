@@ -4,37 +4,33 @@ const { MessageEmbed } = require('discord.js');
 const { codeBlock } = require('@discordjs/builders');
 
 module.exports = {
-  log: function (text, i, client) {
+  log: function (text, int, client) {
     var readarchives = fs.readFileSync('archives.txt', `utf-8`);
     var text2 = `${String(text)}`
-    var author = `${i.user.id}`
-    for (var x = 0; x < config.coolids.length; x++) {
+    var author = `${int.user.id}`
+    for (var i = 0; i < config.coolids.length; i++) {
       text2 = text2.replace('@', '')
       text2 = text2.replace('<', '')
       text2 = text2.replace('>', '')
-      text2 = text2.replace(`${config.coolids[x]}`, `${config.coolnames[x]}`)
-      if (text2.includes(config.coolids[x])) console.log('name change failed')
-      author = author.replace(`${config.coolids[x]}`, `${config.coolnames[x]}`)
+      text2 = text2.replace(`${config.coolids[i]}`, `${config.coolnames[i]}`)
+      if (text2.includes(config.coolids[i])) console.log('name change failed')
+      author = author.replace(`${config.coolids[i]}`, `${config.coolnames[i]}`)
     }
-    fs.writeFileSync('archives.txt', readarchives + `\n${client.ws.ping}ms ${new Date(Date.now())}: ${i.guild} - ${author} ${text2}`)
-    client.channels.cache.get(config.log_channel).send(codeBlock(`${client.ws.ping}ms ${i.guild} - ${author} ${text2}`))
-    return console.log(`${client.ws.ping}ms ${new Date(Date.now())}: ${i.guild} - ${author} ${text2}`);
+    fs.writeFileSync('archives.txt', readarchives + `\n${client.ws.ping}ms ${new Date(Date.now())}: ${int.guild} - ${author} ${text2} in ${(Date.now() - int.createdAt) / 1000} seconds`)
+    client.channels.cache.get(config.log_channel).send(codeBlock(`${client.ws.ping}ms ${int.guild} - ${author} ${text2} in ${(Date.now() - int.createdAt) / 1000} seconds`))
+    return console.log(`${client.ws.ping}ms ${new Date(Date.now())}: ${int.guild} - ${author} ${text2} in ${(Date.now() - int.createdAt) / 1000} seconds`);
   },
-  logconsole: function (text, time, client) {
-    // var readarchives = fs.readFileSync('archives.txt', `utf-8`);
+  logconsole: function (text, client) {
     var text2 = `${String(text)}`
     for (var x = 0; x < config.coolids.length; x++) {
       text2 = text2.replace(`${config.coolids[x]}`, `${config.coolnames[x]}`)
       if (text2.includes(config.coolids[x])) console.log('name change failed')
     }
-    fs.appendFileSync('archives.txt', `\n${client.ws.ping}ms ${new Date(Date.now())}: <console> - ${text2}`)
-    if (!client) return console.log(`<console> - ${text2}`);
-    client.channels.cache.get(config.log_channel).send(codeBlock(`${client.ws.ping}ms <console> - ${text2}`))
-    return console.log(`${client.ws.ping}ms ${new Date(Date.now())}: <console> - ${text2}`);
+    fs.appendFileSync('archives.txt', `\n${client.ws.ping}ms ${new Date(Date.now())}: <console> - ${text2} in ${(Date.now() - int.createdAt) / 1000} seconds`)
+    client.channels.cache.get(config.log_channel).send(codeBlock(`${client.ws.ping}ms <console> - ${text2} in ${(Date.now() - int.createdAt) / 1000} seconds`))
+    return console.log(`${client.ws.ping}ms ${new Date(Date.now())}: <console> - ${text2} in ${(Date.now() - int.createdAt) / 1000} seconds`);
   },
-  error: function (text, time, client) {
-    // var errorfile = fs.readFileSync('error.txt', 'utf-8')
-    // fs.writeFileSync('error.txt', `${errorfile}` + `\n${time}: ${text}`)
+  error: function (text, client) {
     fs.appendFileSync('error.txt', `\n${client.ws.ping}ms ${new Date(Date.now())}: ${text}`)
   },
   clearStatus: function (userEffects) {
@@ -51,7 +47,7 @@ module.exports = {
       user.level += Number(1)
       user.level_points += Number(1)
       user.save()
-      this.logconsole(`${user.user_id} leveled up`, new Date(Date.now()), client)
+      this.logconsole(`${user.user_id} leveled up`, client)
       const embededd = new MessageEmbed()
       .setTitle(`Level Up`)
       .setColor('#25c059')
@@ -87,7 +83,7 @@ module.exports = {
         .setTitle(`Effects`)
         .setColor('#25c059')
         .setDescription(`Debuff 'On Fire' removed from <@${int.user.id}>`)
-        message.reply({ embeds: [embededd] })
+        message.channel.send({ embeds: [embededd] })
       }
       return cause = 'burned to a crisp!'
     }
@@ -101,7 +97,7 @@ module.exports = {
         .setTitle(`Effects`)
         .setColor('#25c059')
         .setDescription(`Debuff 'Poison' removed from <@${int.user.id}>`)
-        message.reply({ embeds: [embededd] })
+        message.channel.send({ embeds: [embededd] })
       }
       return cause = 'did not get the antidote in time!'
     }
@@ -109,6 +105,8 @@ module.exports = {
   },
 
   startsWithVowel: function (string) {
+    string = String(string);
+
     return (string.charAt(0) === 'a' || string.charAt(0) === 'e' || string.charAt(0) === 'i' || string.charAt(0) === 'o' || string.charAt(0) === 'u');
   }
 }

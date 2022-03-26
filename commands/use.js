@@ -30,7 +30,7 @@ module.exports = {
     }
     const userEffects = await UserEffects.findOne({ where: { user_id: int.user.id } })
     if (item.amount < 0) {
-      embededd.setDescription(`You do not own any ${item.name}s`).setThumbnail('https://i.imgur.com/tDWLV66.png')
+      embededd.setDescription(`You do not own any ${item.item_id}s`).setThumbnail('https://i.imgur.com/tDWLV66.png')
       return int.reply({ embeds: [embededd] })
     }
     if (user.combat) {
@@ -77,9 +77,13 @@ module.exports = {
 
       user.health = Number(Math.min(user.max_health, user.health + heal))
       await user.addItem(item.item_id, item.id, -1)
-
-      func.log(`used a${func.startsWithVowel(item.name) ? 'n' : ''}`, int, c);
-      embededd.setDescription(`<@${int.user.id}> healed ${heal} health`)
+      if (item.heal != 0) {
+        func.log(`used a${func.startsWithVowel(item.item_id) ? 'n' : ''} ${item.item_id}`, int, c);
+        embededd.setDescription(`<@${int.user.id}> healed ${heal} health!`);
+      } else {
+        func.log(`used a${func.startsWithVowel(item.item_id) ? 'n' : ''} ${item.item_id}`, int, c);
+        embededd.setDescription(`<@${int.user.id}> improved their ${item.enchant} ability!`);
+      }
       return int.reply({ embeds: [embededd] });
     } else if (item.type == 'e') {
       const equipped = await UserItems.findOne({ where: { user_id: { [Op.like]: int.user.id }, equipped: true } })
@@ -109,14 +113,14 @@ module.exports = {
       is_item.save()
 
       func.log(`${int.user.id} Enchanted ${equipped.item_id} with ${item.enchant}.`, message, client);
-      if (!isNaN(item.ench) && item.heal <= 0) {
+      if (!item.ench && item.heal <= 0) {
         embededd.setDescription(`<@${int.user.id}> improved their ${item.ench} ability!`)
         return int.reply({ embeds: [embededd] })
       }
       embededd.setDescription(`<@${int.user.id}> healed for ${heal} and improved their ${item.ench} ability!.`)
       return int.reply({ embeds: [embededd] });
     } else {
-      embededd.setDescription(`${itemName} is not consumable!`).setThumbnail('https://i.imgur.com/tDWLV66.png')
+      embededd.setDescription(`${item.item_id} is not consumable!`).setThumbnail('https://i.imgur.com/tDWLV66.png')
       return int.reply({ embeds: [embededd] })
     }
   },

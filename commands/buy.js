@@ -57,7 +57,7 @@ module.exports = {
     user.save();
 
     func.log(`bought ${buyAmmount} ${item.name}`, int, c)
-    embededd.setDescription(`${int.user.username} bought ${buyAmmount} ${buyAmmount > 1 ? `${item.name}` + 's' : `${item.name}`}.`)
+    embededd.setDescription(`<@${int.user.id}> bought ${buyAmmount} ${buyAmmount > 1 ? `${item.name}` + 's' : `${item.name}`}.`)
     return int.reply({ embeds: [embededd] });
   },
 }

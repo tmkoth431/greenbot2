@@ -28,7 +28,7 @@ module.exports = {
     }
     item.cost = Number(price)
     item.save()
-    func.log(`changed the price of ${item.name} to ${item.cost}`, int, c)
+    func.log(`changed the price of ${item.name} from ${originalPrice} to ${item.cost}`, int, c)
     return int.reply(`changed the price of [ID: ${item.id}] ${item.name} from ${originalPrice} to ${item.cost}`)
   },
 }
