@@ -143,6 +143,10 @@ client.once('ready', async () => {
   }
   const storedBalances = await Users.findAll();
   storedBalances.forEach(b => currency.set(b.user_id, b));
+  client.user.setPresence({
+    activity: { type: 'LISTENING', name: `${client.guilds.cache.size} servers. | ::help` }
+  })
+  // console.log(`${client.guilds.cache.map(guild => guild.name + '\n')}`)
   console.log(`${client.ws.ping}ms ${new Date(Date.now())}: <console> - Logged in as ${client.user.tag} in ${(Date.now() - startTime) / 1000} seconds!`)
   const embededd = new MessageEmbed()
     .setTitle('Update')
