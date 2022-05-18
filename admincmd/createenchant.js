@@ -49,7 +49,7 @@ module.exports = {
     ]
     const user = app.currency.get(int.user.id)
     await user.addUniqueItem(args[0], 'e', args[1], null, null, null, null, args[2], args[3], args[4])
-    func.log(`created new consumable '${args[0]}': '${args[3]}' ench: ${args[1]}, ecost: ${args[2]}.`, int, c)
+    func.log(`created new enchant '${args[0]}': '${args[3]}' ench: ${args[1]}, ecost: ${args[2]}.`, int, c)
     return int.reply(`<@${int.user.id}> created ${args[4] > 1 ? `${args[4]}` : 'a'} new enchant${args[4] > 1 ? 's' : ''}: ${args[0]}.`)
   },
 }

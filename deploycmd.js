@@ -1,9 +1,13 @@
+const startTime = Date.now();
+console.log(`${new Date(startTime)}: <console> - Refreshing user application (/) commands...`);
+
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 const config = require('./config.json');
 const fs = require('fs');
 
 const commands = [];
+
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
@@ -11,17 +15,16 @@ for (const file of commandFiles) {
   commands.push(command.data.toJSON());
 }
 
-const rest = new REST({}).setToken(config.token);
+const rest = new REST({ }).setToken(config.token);
 
 (async () => {
   try {
-    console.log('Started refreshing application (/) commands.');
 
     await rest.put(
       Routes.applicationCommands(config.clientId),
       { body: commands },
     );
-    console.log('Successfully reloaded application (/) commands.')
+    console.log(`${new Date(Date.now())}: <console> - Refreshed user application (/) commands in ${(Date.now() - startTime) / 1000} seconds.`)
   } catch (error) {
     console.error(error);
   }

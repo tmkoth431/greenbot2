@@ -16,8 +16,11 @@ module.exports = {
 
     const name = int.options.getString('user_id')
     const user = app.currency.get(name)
-    if (!user) return int.reply(`${user.user_id} :: not initialized`)
-    func.log(`is looking at user ${name} in a sussy way`, int, c);
+    if (!user) {
+      func.log(`attempted to view the stats of an unrecognized player as an admin`, int, c)
+			return int.reply(`${user.user_id} :: not initialized`)
+		}
+    func.log(`is looking at advanced stats of ${name}`, int, c);
 		return int.reply(Formatters.codeBlock(`${user.user_id} ::
 		adventure: ${user.adventure}
 		leaderboard: ${user.leaderboard}

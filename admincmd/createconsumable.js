@@ -50,6 +50,6 @@ module.exports = {
     const user = app.currency.get(int.user.id)
     await user.addUniqueItem(args[0], 'c', args[1], null, null, null, args[2], null, args[3], args[4])
     func.log(`created new consumable '${args[0]}': '${args[3]}' ench: ${args[2]}, heal: ${args[2]}.`, int, c)
-    return int.reply(`<@${int.user.id}> created ${args[4] > 1 ? `${args[4]}` : 'a'} new consumable${args[4] > 1 ? 's' : ''} ${args[0]}: ${args[3]} ench: ${args[1]}, heal: ${args[2]}.`)
+    return int.reply(`<@${int.user.id}> created ${args[4] > 1 ? `${args[4]}` : 'a'} new consumable${args[4] != 1 ? 's' : ''} ${args[0]}: ${args[3]} ench: ${args[1]}, heal: ${args[2]}.`)
   },
 }

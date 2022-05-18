@@ -23,6 +23,7 @@ module.exports = {
     if (!item) {
       item = await Shop.findOne({ where: { id: itemName } });
       if (!item) {
+        func.log(`attempted to view info about an unrecognized item`, int, c)
         embededd.setDescription(`Could not find item: ${itemName}!`).setThumbnail('https://i.imgur.com/tDWLV66.png')
         return int.reply({ embeds: [embededd] })
       }

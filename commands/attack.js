@@ -17,10 +17,12 @@ module.exports = {
     const user = app.currency.get(int.user.id)
     const user2 = app.currency.get(int.user)
     if (!user.combat) {
+      func.log(`attempted to attack while not in combat`, int, c)
       embededd.setDescription('You are not in combat!').setThumbnail('https://i.imgur.com/tDWLV66.png')
       return int.reply({ embeds: [embededd] })
     }
     if (!user.turn) {
+      func.log(`attempted to attack while it wasn't their turn`, int, c)
       embededd.setDescription('It is not your turn!').setThumbnail('https://i.imgur.com/tDWLV66.png')
       return int.reply({ embeds: [embededd] })
     }
@@ -43,7 +45,7 @@ module.exports = {
       const enemy = await Enemy.findOne({ where: { user_id: int.user.id } })
       enemy.health -= Number(rand)
       enemy.save()
-      func.log(`attacked enemy: ${enemy.name}`, int, c);
+      func.log(`${crit ? 'critically ' : ''}hit enemy: ${enemy.name}`, int, c);
       if (!crit) { 
         embededd.setDescription(`<@${int.user.id}> hit ${enemy.name} for ${rand} damage.`)
         return int.reply({ embeds: [embededd] });
@@ -65,6 +67,7 @@ module.exports = {
       if (ecrit) erand * 2
       user.health -= Number(erand)
       user.save()
+      func.log(`was ${ecrit ? 'critically' : ''} hit by ${enemy.name}`, int, c)
       if (!ecrit) { 
         embededd.setDescription(`<@${int.user.id}> was hit by ${enemy.name} for ${erand}.`)
         int.reply({ embeds: [embededd] });
@@ -94,7 +97,7 @@ module.exports = {
       await ench.execute(int, tUserEffects, tUser)
     }
 
-    func.log(`attacked <@${user.combat_target_id}>`, int, c);
+    func.log(`${crit ? 'critically ' : ''}hit <@${user.combat_target_id}>`, int, c);
     if (!crit) { 
       embededd.setDescription(`<@${int.user.id}> attacked <@${user.combat_target_id}> for ${rand} damage.`)
       int.channel.send({ embeds: [embededd] }); 
@@ -113,6 +116,7 @@ module.exports = {
       func.log(`killed ${user.combat_target_id}`, int, c)
       func.die(int, `was killed by <@${int.user.id}>`, tUser, tUserEffects, c)
     } else {
+      func.log(`'s combat turn changed to ${user.combat_target_id}`)
       embededd.setDescription(`<@${user.combat_target_id}> it is your turn`)
       return int.reply({ embeds: [embededd] })
     }

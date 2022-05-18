@@ -3,5 +3,6 @@ config.json
 database.sqlite
 node_modules
 package-lock.json
-start.bat
 error.txt
+start.bat
+logs/

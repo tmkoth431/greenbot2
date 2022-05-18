@@ -17,7 +17,7 @@ module.exports = {
     const input = int.options.getNumber('input')
     user.balance += Math.round(input)
     user.save()
-    func.log(`generated $${input}`, int, c)
+    func.log(`generated \$${input}`, int, c)
     return int.reply(`generated $${input}`)
   },
 }

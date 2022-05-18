@@ -2,9 +2,10 @@ const startTime = Date.now();
 const { Client, Collection, Intents } = require('discord.js')
 const config = require('./config.json')
 const fs = require('fs');
-const { Users, Shop, UserEffects } = require('./dbObjects.js');
+const { Users, Shop, UserEffects } = require('./dbobjects.js');
 const func = require('./resources/functions')
 const { MessageEmbed } = require('discord.js');
+const { fileURLToPath } = require('url');
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] })
 client.commands = new Collection();
@@ -15,6 +16,10 @@ const adminFiles = fs.readdirSync('./admincmd').filter(file => file.endsWith('.j
 
 const currency = new Collection();
 const cooldowns = new Collection();
+
+let epicstartdate = `${new Date(Date.now())}`
+epicstartdate = epicstartdate.replace(':', '.')
+epicstartdate = epicstartdate.replace(':', '.')
 
 const allowed = [];
 for (var i = 0; i < config.author.length; i++) {
@@ -55,47 +60,35 @@ client.on('interactionCreate', async int => {
   let user = currency.get(int.user.id)
   let userEffects = await UserEffects.findOne({ where: { user_id: int.user.id } })
   const now = Date.now();
+  const command = client.commands.get(int.commandName);
 
   if (!user) {
-    user = await Users.create({ user_id: int.user.id });
-    userEffects = await UserEffects.create({ user_id: int.user.id })
-    currency.set(int.user.id, user);
-    if (config.author.includes(int.user.id)) {
-      user.addUniqueItem('god\_sword', 'w', null, 100, 'str', 1, null, null, 1)
-      user.addUniqueItem('wacking\_stick', 'w', 'mystery', 0, 'none', 0, null, null, 1)
-      user.balance += Number(100)
-      user.save()
+    if (int.commandName === 'help') {
+      user = await Users.create({ user_id: int.user.id });
+      userEffects = await UserEffects.create({ user_id: int.user.id })
+      currency.set(int.user.id, user);
+      if (config.author.includes(int.user.id)) {
+        user.addUniqueItem('god\_sword', 'w', null, 100, 'str', 1, null, null, 1)
+        user.addUniqueItem('wacking\_stick', 'w', 'mystery', 0, 'none', 0, null, null, 1)
+        user.balance += Number(100)
+        user.save()
+      }
+      func.logconsole(`initialized user ${int.user.id}`, client);
+    } else {
+      const embededd = new MessageEmbed() 
+        .setTitle('New User')
+        .setColor('#25c059')
+        .setDescription(`Hello <@${int.user.id}>!\n\nUse /help to get started!`);
+
+      int.reply({ embeds: [embededd] });
     }
-    func.logconsole(`initialized user ${int.user.id}`, new Date(Date.now()), client)
-  }
-  // if (user.curse) {
-  //   const curseTime = 60000;
-  //   const expirationTime = Number(user.curse_time) + curseTime;
-  //   if (now > expirationTime) {
-  //     try {
-  //       await int.delete()
-  //       user.curse_time = now
-  //       user.save()
-  //     } catch (e) {
-  //       console.log('could not delete message')
-  //     }
-  //   }
-  // }
-  const cause = func.updateEffects(int, user, userEffects)
-  if (user.health < 1) {
-    func.die(int, cause, user, userEffects, client)
-  }
+  } 
 
   if (admincommands.includes(int.commandName) && !allowed.includes(int.user.id)) {
     func.log('attempted to use an unauthorized command', int, client);
     embededd.setDescription('You do not have access to this command!').setThumbnail('https://i.imgur.com/tDWLV66.png');
     return int.reply({ embeds: [embededd], ephemeral: true });
   }
-
-  func.levelup(int, user, client)
-  const command = client.commands.get(int.commandName);
-
-  if (!command) return;
 
   //cooldowns
   if (!cooldowns.has(command.commandName)) {
@@ -107,25 +100,48 @@ client.on('interactionCreate', async int => {
     const expirationTime = timestamps.get(int.user.id) + cooldownAmount;
     if (now < expirationTime) {
       const timeLeft = (expirationTime - now) / 1000;
-      return int.reply({ content: `Too fast. Wait for ${timeLeft.toFixed(1)} more second${timeLeft.toFixed(1) > 1 ? 's' : ''} before reusing the \`${int.commandName}\` command.`, ephemeral: true });
+      return int.reply({ content: `Too fast. Wait for ${timeLeft.toFixed(1)} more second${timeLeft.toFixed(1) > 1 ? 's' : ''} before reusing the \`/${int.commandName}\` command.`, ephemeral: true });
     }
   }
+
+  // if (user.curse) {
+  //   const curseTime = 60000;
+  //   const expirationTime = Number(user.curse_time) + curseTime;
+  //   if (now > expirationTime) {
+  //     try {
+  //       await int.delete()
+  //       user.curse_time = Date.now();
+  //       user.save()
+  //     } catch (e) {
+  //       func.error(e, c)
+  //     }
+  //   }
+  // }
+  
+  const cause = func.updateEffects(int, user, userEffects)
+  if (user.health <= 0) {
+    func.die(int, cause, user, userEffects, client)
+  }
+
+  func.levelup(int, user, client)
+
+  if (!command) return;
 
   try {
     timestamps.set(int.user.id, now);
     setTimeout(() => timestamps.delete(int.user.id), cooldownAmount);
     await command.execute(int, client);
   } catch (error) {
-    func.error(error, new Date(Date.now()), client);
+    func.error(error, client);
     await int.reply({ content: 'There was an error while executing this command!', ephemeral: true });
   }
   func.levelup(int, user, client)
   
-
 });
 
 client.once('ready', async () => {
   console.log(`${client.ws.ping}ms ${new Date(Date.now())}: <console> - Logging in as ${client.user.tag}...`)
+  fs.mkdirSync(`./logs/${epicstartdate}/`)
   const enchantFiles = fs.readdirSync('./resources/enchants').filter(file => file.endsWith('.js'));
   for (const file of enchantFiles) {
     const ench = require(`./resources/enchants/${file}`);
@@ -137,6 +153,11 @@ client.once('ready', async () => {
     activity: { type: 'LISTENING', name: `${client.guilds.cache.size} servers. | ::help` }
   })
   // console.log(`${client.guilds.cache.map(guild => guild.name + '\n')}`)
+  const embededd = new MessageEmbed()
+    .setTitle('Update')
+    .setColor('#25c059')
+    .setDescription('The bot is online!');
+  // client.channels.cache.get(config.updates_channel).send({ disableEveryone: false, content: '@everyone', embeds: [embededd] });
   console.log(`${client.ws.ping}ms ${new Date(Date.now())}: <console> - Logged in as ${client.user.tag} in ${(Date.now() - startTime) / 1000} seconds!`)
 })
 Reflect.defineProperty(currency, 'add', {
@@ -162,5 +183,5 @@ Reflect.defineProperty(currency, 'getBalance', {
   },
 });
 
-module.exports = { getCommands, getEnchants, currency }
+module.exports = { getCommands, getEnchants, currency, epicstartdate }
 client.login(config.token)

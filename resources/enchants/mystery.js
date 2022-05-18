@@ -19,13 +19,11 @@ module.exports = {
         await require('./fishing.js').execute(int, userEffects, user)
         break;
       case 3:
-        user.luck += Number(2)
-        user.save()
-        int.channel.send('you get luckier')
+        await require('./luck.js').execute(int, userEffects, user)
         break;
       case 4:
         await require('./curse.js').execute(int, userEffects, user)
-        break
+        break;
     }
   },
 }

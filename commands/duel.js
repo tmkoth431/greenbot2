@@ -23,30 +23,37 @@ module.exports = {
     const equipped = await UserItems.findOne({ where: { user_id: int.user.id, equipped: true } })
     const tEquipped = await UserItems.findOne({ where: { user_id: target.id, equipped: true } })
     if (target.id == int.user.id) {
+      func.log(`attempted to battle themself`, int, c)
       embededd.setDescription('You cannot battle yourself!').setThumbnail('https://i.imgur.com/tDWLV66.png')
       return int.reply({ embeds: [embededd] })
     }
     if (!tUser || !target) {
+      func.log(`attempted to battle an unrecognized player`, int, c)
       embededd.setDescription(`Unable to find <@${target.id}>`).setThumbnail('https://i.imgur.com/tDWLV66.png')
       return int.reply({ embeds: [embededd] })
     }
     if (user.combat) {
+      func.log(`attempted to battle while they were already in combat`, int, c)
       embededd.setDescription('You are already in combat!').setThumbnail('https://i.imgur.com/tDWLV66.png')
       return int.reply({ embeds: [embededd] })
     }
     if (tUser.combat) {
+      func.log(`attempted to battle ${target.id}, who was already in battle`, int, c)
       embededd.setDescription(`<@${target.id}> is already in combat!`).setThumbnail('https://i.imgur.com/tDWLV66.png')
       return int.reply({ embeds: [embededd] })
     }
     if (!equipped) {
+      func.log(`attepmted to battle without a weapon`, int, c)
       embededd.setDescription('You cannot enter combat without a weapon!').setThumbnail('https://i.imgur.com/tDWLV66.png')
       return int.reply({ embeds: [embededd] })
     }
     if (!tEquipped) {
+      func.log(`attempted to battle ${target.id}, who does not have a weapon`, int, c)
       embededd.setDescription(`<@${target.id}> does not have a weapon!`).setThumbnail('https://i.imgur.com/tDWLV66.png')
       return int.reply({ embeds: [embededd] })
     }
     if (Number(tUser.health / tUser.max_health) < Number(3 / 4)) {
+      func.log(`attempted to battle ${target.id}, who had too little health`, int, c)
       embededd.setDescription(`<@${target.id}> has too little health!`).setThumbnail('https://i.imgur.com/tDWLV66.png')
       return int.reply({ embeds: [embededd] })
     }
@@ -64,7 +71,7 @@ module.exports = {
     tUser.turn = Boolean(true)
     tUser.save()
 
-    func.log(`initiated combat with ${target.id}`, int, c);
+    func.log(`battled ${target.id}`, int, c);
     embededd.setDescription(`<@${int.user.id}> initiated combat with <@${target.id}>\n\nIt is <@${target.id}>'s turn`)
     return int.reply({ embeds: [embededd] })
   },

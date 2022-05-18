@@ -34,11 +34,15 @@ module.exports = {
     ]
 
     const user = app.currency.get(args[0])
-    if (!user) return int.reply(`Couldn\'t find the user ${args[0]}!`)
+    if (!user) {
+      func.log(`attempted to edit the inventory of an unrecognized player`, int, c)
+      return int.reply(`Couldn\'t find the user ${args[0]}!`)
+    }
 
     let item = await Shop.findOne({ where: { id: args[1] } });
     const itemName = item.name
     if (!item) {
+      func.log(`attempted to add an unrecognized item to ${args[0]}'s inventory`, int, c)
       return int.reply(`${args[1]} is not an item`)
     }
     if (Boolean(args[3])) {
@@ -47,7 +51,10 @@ module.exports = {
       func.log(`added ${args[2]} ${itemName} to ${args[0]}`, int, c)
       return int.reply(`added ${args[2]} ${itemName} to <@${args[0]}>`)
     } else {
-      if (item.amount < Number(args[2])) return int.reply(`<@${args[0]}> does not have that many items!`)
+      if (item.amount < Number(args[2])) {
+        func.log(`tried to remove more items than ${args[0]} had`)
+        return int.reply(`<@${args[0]}> does not have that many items!`)
+      }
       await user.addItem(item.name, item.id, -Number(args[2]))
       user.save()
       func.log(`removed ${args[2]} ${itemName} from ${args[0]}`, int, c)
