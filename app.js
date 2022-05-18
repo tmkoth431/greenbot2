@@ -5,6 +5,7 @@ const fs = require('fs');
 const { Users, Shop, UserEffects } = require('./dbobjects.js');
 const func = require('./resources/functions')
 const { MessageEmbed } = require('discord.js');
+const { fileURLToPath } = require('url');
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] })
 client.commands = new Collection();
@@ -15,6 +16,10 @@ const adminFiles = fs.readdirSync('./admincmd').filter(file => file.endsWith('.j
 
 const currency = new Collection();
 const cooldowns = new Collection();
+
+let epicstartdate = `${new Date(Date.now())}`
+epicstartdate = epicstartdate.replace(':', '.')
+epicstartdate = epicstartdate.replace(':', '.')
 
 const allowed = [];
 for (var i = 0; i < config.author.length; i++) {
@@ -136,6 +141,7 @@ client.on('interactionCreate', async int => {
 
 client.once('ready', async () => {
   console.log(`${client.ws.ping}ms ${new Date(Date.now())}: <console> - Logging in as ${client.user.tag}...`)
+  fs.mkdirSync(`./logs/${epicstartdate}/`)
   const enchantFiles = fs.readdirSync('./resources/enchants').filter(file => file.endsWith('.js'));
   for (const file of enchantFiles) {
     const ench = require(`./resources/enchants/${file}`);
@@ -147,12 +153,12 @@ client.once('ready', async () => {
     activity: { type: 'LISTENING', name: `${client.guilds.cache.size} servers. | ::help` }
   })
   // console.log(`${client.guilds.cache.map(guild => guild.name + '\n')}`)
-  console.log(`${client.ws.ping}ms ${new Date(Date.now())}: <console> - Logged in as ${client.user.tag} in ${(Date.now() - startTime) / 1000} seconds!`)
   const embededd = new MessageEmbed()
     .setTitle('Update')
     .setColor('#25c059')
     .setDescription('The bot is online!');
-  client.channels.cache.get(config.updates_channel).send({ disableEveryone: false, content: '@everyone', embeds: [embededd] });
+  // client.channels.cache.get(config.updates_channel).send({ disableEveryone: false, content: '@everyone', embeds: [embededd] });
+  console.log(`${client.ws.ping}ms ${new Date(Date.now())}: <console> - Logged in as ${client.user.tag} in ${(Date.now() - startTime) / 1000} seconds!`)
 })
 Reflect.defineProperty(currency, 'add', {
   value: async function add(id, amount) {
@@ -177,5 +183,5 @@ Reflect.defineProperty(currency, 'getBalance', {
   },
 });
 
-module.exports = { getCommands, getEnchants, currency }
+module.exports = { getCommands, getEnchants, currency, epicstartdate }
 client.login(config.token)

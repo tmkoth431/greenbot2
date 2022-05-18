@@ -16,7 +16,7 @@ module.exports = {
       if (text2.includes(config.coolids[i])) console.log('name change failed')
       author = author.replace(`${config.coolids[i]}`, `${config.coolnames[i]}`)
     }
-    fs.writeFileSync('archives.txt', readarchives + `\n${client.ws.ping}ms ${new Date(Date.now())}: ${int.guild} - ${author} ${text2} in ${(Date.now() - int.createdAt) / 1000} seconds`)
+    this.writetoarchive(`${client.ws.ping}ms ${new Date(Date.now())}: ${int.guild} - ${author} ${text2} in ${(Date.now() - int.createdAt) / 1000} seconds\n`)
     client.channels.cache.get(config.log_channel).send(codeBlock(`${client.ws.ping}ms ${int.guild} - ${author} ${text2} in ${(Date.now() - int.createdAt) / 1000} seconds`))
     return console.log(`${client.ws.ping}ms ${new Date(Date.now())}: ${int.guild} - ${author} ${text2} in ${(Date.now() - int.createdAt) / 1000} seconds`);
   },
@@ -26,12 +26,15 @@ module.exports = {
       text2 = text2.replace(`${config.coolids[x]}`, `${config.coolnames[x]}`)
       if (text2.includes(config.coolids[x])) console.log('name change failed')
     }
-    fs.appendFileSync('archives.txt', `\n${client.ws.ping}ms ${new Date(Date.now())}: <console> - ${text2} in ${(Date.now() - int.createdAt) / 1000} seconds`)
+    this.writetoarchive(`${client.ws.ping}ms ${new Date(Date.now())}: <console> - ${text2} in ${(Date.now() - int.createdAt) / 1000} seconds\n`)
     client.channels.cache.get(config.log_channel).send(codeBlock(`${client.ws.ping}ms <console> - ${text2} in ${(Date.now() - int.createdAt) / 1000} seconds`))
     return console.log(`${client.ws.ping}ms ${new Date(Date.now())}: <console> - ${text2} in ${(Date.now() - int.createdAt) / 1000} seconds`);
   },
+  writetoarchive: function (text) {
+    fs.appendFileSync(`logs/${require('../app').epicstartdate}/archives.txt`, text)
+  },
   error: function (text, client) {
-    fs.appendFileSync('error.txt', `\n${client.ws.ping}ms ${new Date(Date.now())}: ${text}`)
+    fs.appendFileSync(`logs/${require('../app').epicstartdate}/error.txt`, `${client.ws.ping}ms ${new Date(Date.now())}: ${text}\n`)
   },
   clearStatus: function (userEffects) {
     userEffects.burn = Number(0)
