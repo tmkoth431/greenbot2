@@ -61,27 +61,32 @@ client.on('interactionCreate', async int => {
   const now = Date.now();
   const command = client.commands.get(int.commandName);
 
-  if (!user) {
-    if (int.commandName === 'help') {
-      user = await Users.create({ user_id: int.user.id });
-      userEffects = await UserEffects.create({ user_id: int.user.id })
-      currency.set(int.user.id, user);
-      if (config.author.includes(int.user.id)) {
-        user.addUniqueItem('god\_sword', 'w', null, 100, 'str', 1, null, null, 1)
-        user.addUniqueItem('wacking\_stick', 'w', 'mystery', 0, 'none', 0, null, null, 1)
-        user.balance += Number(100)
-        user.save()
-      }
-      func.logconsole(`initialized user ${int.user.id}`, client);
-    } else {
-      const embededd = new MessageEmbed() 
-        .setTitle('New User')
-        .setColor('#25c059')
-        .setDescription(`Hello <@${int.user.id}>!\n\nUse /help to get started!`);
+  // create user
+  try {
+    if (!user) {
+      if (int.commandName === 'help') {
+        user = await Users.create({ user_id: int.user.id });
+        userEffects = await UserEffects.create({ user_id: int.user.id })
+        currency.set(int.user.id, user);
+        if (config.author.includes(int.user.id)) {
+          user.addUniqueItem('god\_sword', 'w', null, 100, 'str', 1, null, null, 1)
+          user.addUniqueItem('wacking\_stick', 'w', 'mystery', 0, 'none', 0, null, null, 1)
+          user.balance += Number(100)
+          user.save()
+        }
+        func.logconsole(`initialized user ${int.user.id}`, client);
+      } else {
+        const embededd = new MessageEmbed()
+          .setTitle('New User')
+          .setColor('#25c059')
+          .setDescription(`Hello <@${int.user.id}>!\n\nUse /help to get started!`);
 
-      int.reply({ embeds: [embededd] });
+        int.reply({ embeds: [embededd] });
+      }
     }
-  } 
+  } catch (e) {
+    return func.error(e, client)
+  }
 
   if (admincommands.includes(int.commandName) && !allowed.includes(int.user.id)) {
     func.log('attempted to use an unauthorized command', int, client);
@@ -90,18 +95,19 @@ client.on('interactionCreate', async int => {
   }
 
   //cooldowns
-  if (!cooldowns.has(command.commandName)) {
-    cooldowns.set(command.commandName, new Collection());
-  }
-  const timestamps = cooldowns.get(command.commandName);
-  const cooldownAmount = (command.cooldown || 1) * 1000;
-  if (timestamps.has(int.user.id) && (!config.tester.includes(int.user.id) && !config.author.includes(int.user.id))) {
-    const expirationTime = timestamps.get(int.user.id) + cooldownAmount;
-    if (now < expirationTime) {
-      const timeLeft = (expirationTime - now) / 1000;
-      return int.reply({ content: `Too fast. Wait for ${timeLeft.toFixed(1)} more second${timeLeft.toFixed(1) > 1 ? 's' : ''} before reusing the \`/${int.commandName}\` command.`, ephemeral: true });
+  try {
+    if (!cooldowns.has(command.commandName)) {
+      cooldowns.set(command.commandName, new Collection());
     }
-  }
+    const timestamps = cooldowns.get(command.commandName);
+    const cooldownAmount = (command.cooldown || 1) * 1000;
+    if (timestamps.has(int.user.id) && (!config.tester.includes(int.user.id) && !config.author.includes(int.user.id))) {
+      const expirationTime = timestamps.get(int.user.id) + cooldownAmount;
+      if (now < expirationTime) {
+        const timeLeft = (expirationTime - now) / 1000;
+        return int.reply({ content: `Too fast. Wait for ${timeLeft.toFixed(1)} more second${timeLeft.toFixed(1) > 1 ? 's' : ''} before reusing the \`/${int.commandName}\` command.`, ephemeral: true });
+      }
+    }
 
   // if (user.curse) {
   //   const curseTime = 60000;
@@ -126,15 +132,14 @@ client.on('interactionCreate', async int => {
 
   if (!command) return;
 
-  try {
     timestamps.set(int.user.id, now);
     setTimeout(() => timestamps.delete(int.user.id), cooldownAmount);
     await command.execute(int, client);
+    func.levelup(int, user, client)
   } catch (error) {
     func.error(error, client);
-    await int.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+    return await int.reply({ content: 'There was an error while executing this command!', ephemeral: true });
   }
-  func.levelup(int, user, client)
   
 });
 
