@@ -3,7 +3,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders')
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('hello')
-    .setDescription('says hello'),
+    .setDescription('Says hello'),
   async execute(int, c) {
     const app = require('../app')
     const func = require('../resources/functions')

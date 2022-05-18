@@ -5,7 +5,6 @@ const { codeBlock } = require('@discordjs/builders');
 
 module.exports = {
   log: function (text, int, client) {
-    var readarchives = fs.readFileSync('archives.txt', `utf-8`);
     var text2 = `${String(text)}`
     var author = `${int.user.id}`
     for (var i = 0; i < config.coolids.length; i++) {
@@ -16,38 +15,43 @@ module.exports = {
       if (text2.includes(config.coolids[i])) console.log('name change failed')
       author = author.replace(`${config.coolids[i]}`, `${config.coolnames[i]}`)
     }
-    fs.writeFileSync('archives.txt', readarchives + `\n${client.ws.ping}ms ${new Date(Date.now())}: ${int.guild} - ${author} ${text2} in ${(Date.now() - int.createdAt) / 1000} seconds`)
+    fs.appendFileSync('archives/archives.txt', `\n${client.ws.ping}ms ${new Date(Date.now())}: ${int.guild} - ${author} ${text2} in ${(Date.now() - int.createdAt) / 1000} seconds`)
     client.channels.cache.get(config.log_channel).send(codeBlock(`${client.ws.ping}ms ${int.guild} - ${author} ${text2} in ${(Date.now() - int.createdAt) / 1000} seconds`))
     return console.log(`${client.ws.ping}ms ${new Date(Date.now())}: ${int.guild} - ${author} ${text2} in ${(Date.now() - int.createdAt) / 1000} seconds`);
   },
-  logconsole: function (text, client) {
+
+  logconsole: function (text, client, int) {
     var text2 = `${String(text)}`
     for (var x = 0; x < config.coolids.length; x++) {
       text2 = text2.replace(`${config.coolids[x]}`, `${config.coolnames[x]}`)
       if (text2.includes(config.coolids[x])) console.log('name change failed')
     }
-    fs.appendFileSync('archives.txt', `\n${client.ws.ping}ms ${new Date(Date.now())}: <console> - ${text2} in ${(Date.now() - int.createdAt) / 1000} seconds`)
+    fs.appendFileSync('archives/archives.txt', `\n${client.ws.ping}ms ${new Date(Date.now())}: <console> - ${text2} in ${(Date.now() - int.createdAt) / 1000} seconds`)
     client.channels.cache.get(config.log_channel).send(codeBlock(`${client.ws.ping}ms <console> - ${text2} in ${(Date.now() - int.createdAt) / 1000} seconds`))
     return console.log(`${client.ws.ping}ms ${new Date(Date.now())}: <console> - ${text2} in ${(Date.now() - int.createdAt) / 1000} seconds`);
   },
+
   error: function (text, client) {
-    fs.appendFileSync('error.txt', `\n${client.ws.ping}ms ${new Date(Date.now())}: ${text}`)
+    fs.appendFileSync('archives/error.txt', `\n${client.ws.ping}ms ${new Date(Date.now())}: ${text}`)
   },
+
   clearStatus: function (userEffects) {
     userEffects.burn = Number(0)
     userEffects.poison = Number(0)
     return userEffects.save()
   },
+
   calclvl: function (lvl) {
     return Math.round(Math.pow((lvl + 1), 1.5))
   },
+
   levelup: function (int, user, client) {
     if (user.exp >= this.calclvl(user.level)) {
       user.exp -= this.calclvl(user.level)
       user.level += Number(1)
       user.level_points += Number(1)
       user.save()
-      this.logconsole(`${user.user_id} leveled up`, client)
+      this.logconsole(`${user.user_id} leveled up`, client, int)
       const embededd = new MessageEmbed()
       .setTitle(`Level Up`)
       .setColor('#25c059')
@@ -58,6 +62,7 @@ module.exports = {
       return
     }
   },
+
   die: function (int, cause, user, userEffects, client) {
     user.health = Number(1)
     user.balance = 0
@@ -72,6 +77,7 @@ module.exports = {
       .setDescription(`<@${user.user_id}> ${cause}`)
     return int.reply({ embeds: [embededd] })
   },
+
   updateEffects: function (message, user, userEffects) {
     if (userEffects.burn > 0) {
       user.health -= Number(2)
@@ -109,4 +115,5 @@ module.exports = {
 
     return (string.charAt(0) === 'a' || string.charAt(0) === 'e' || string.charAt(0) === 'i' || string.charAt(0) === 'o' || string.charAt(0) === 'u');
   }
+
 }

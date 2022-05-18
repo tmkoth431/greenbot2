@@ -7,6 +7,7 @@ const func = require('./resources/functions')
 const { MessageEmbed } = require('discord.js');
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] })
+client.admincmds = new Collection();
 client.commands = new Collection();
 client.enchants = new Collection();
 
@@ -26,8 +27,9 @@ for (var i = 0; i < config.admincommands.length; i++) {
 }
 
 const embededd = new MessageEmbed()
-      .setTitle(`Error`)
-      .setColor('#25c059')
+  .setTitle(`Error`)
+  .setColor('#25c059')
+  .setThumbnail('https://i.imgur.com/tDWLV66.png');
 
 for (const file of commandFiles) {
   const command = require(`./commands/${file}`);
@@ -35,14 +37,17 @@ for (const file of commandFiles) {
 }
 for (const file of adminFiles) {
   const command = require(`./admincmd/${file}`);
-  client.commands.set(command.data.name, command);
+  client.admincmds.set(command.data.name, command);
 }
 
 function getCommands() {
-  return client.commands
+  return client.commands;
+}
+function getAdminCmds() {
+  return client.admincmds;
 }
 function getEnchants() {
-  return client.enchants
+  return client.enchants;
 }
 
 client.on('messageCreate', async message => {
@@ -55,10 +60,14 @@ client.on('interactionCreate', async int => {
   let user = currency.get(int.user.id)
   let userEffects = await UserEffects.findOne({ where: { user_id: int.user.id } })
   const now = Date.now();
-  const command = client.commands.get(int.commandName);
+  let command
+  command = client.commands.get(int.commandName);
+  if (!command) {
+    command = client.admincmds.get(int.commandName);
+  }
 
-  if (!user) {
-    if (int.commandName === 'help') {
+  if (int.commandName === 'help') {
+    if (!user) {
       user = await Users.create({ user_id: int.user.id });
       userEffects = await UserEffects.create({ user_id: int.user.id })
       currency.set(int.user.id, user);
@@ -68,8 +77,10 @@ client.on('interactionCreate', async int => {
         user.balance += Number(100)
         user.save()
       }
-      func.logconsole(`initialized user ${int.user.id}`, client);
-    } else {
+      func.logconsole(`initialized user ${int.user.id}`, client, int);
+    } 
+  } else {
+    if (!user) {
       const embededd = new MessageEmbed() 
         .setTitle('New User')
         .setColor('#25c059')
@@ -77,11 +88,11 @@ client.on('interactionCreate', async int => {
 
       int.reply({ embeds: [embededd] });
     }
-  } 
+  }
 
   if (admincommands.includes(int.commandName) && !allowed.includes(int.user.id)) {
     func.log('attempted to use an unauthorized command', int, client);
-    embededd.setDescription('You do not have access to this command!').setThumbnail('https://i.imgur.com/tDWLV66.png');
+    embededd.setDescription('You do not have access to this command!');
     return int.reply({ embeds: [embededd], ephemeral: true });
   }
 
@@ -128,14 +139,15 @@ client.on('interactionCreate', async int => {
     await command.execute(int, client);
   } catch (error) {
     func.error(error, client);
-    await int.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+    embededd.setDescription('There was an error while executing this command!');
+    await int.reply({ embeds: [ embededd ], ephemeral: true });
   }
   func.levelup(int, user, client)
   
 });
 
 client.once('ready', async () => {
-  console.log(`${client.ws.ping}ms ${new Date(Date.now())}: <console> - Logging in as ${client.user.tag}...`)
+  console.log(`${new Date(Date.now())}: <console> - Logging in as ${client.user.tag}...`)
   const enchantFiles = fs.readdirSync('./resources/enchants').filter(file => file.endsWith('.js'));
   for (const file of enchantFiles) {
     const ench = require(`./resources/enchants/${file}`);
@@ -143,13 +155,17 @@ client.once('ready', async () => {
   }
   const storedBalances = await Users.findAll();
   storedBalances.forEach(b => currency.set(b.user_id, b));
-  console.log(`${client.ws.ping}ms ${new Date(Date.now())}: <console> - Logged in as ${client.user.tag} in ${(Date.now() - startTime) / 1000} seconds!`)
+  console.log(`${new Date(Date.now())}: <console> - Logged in as ${client.user.tag} in ${(Date.now() - startTime) / 1000} seconds!`)
+
+  client.user.setActivity('/help', { type: 'PLAYING' })
+
   const embededd = new MessageEmbed()
     .setTitle('Update')
     .setColor('#25c059')
     .setDescription('The bot is online!');
-  client.channels.cache.get(config.updates_channel).send({ disableEveryone: false, content: '@everyone', embeds: [embededd] });
+  client.channels.cache.get(config.updates_channel).send({ embeds: [embededd] });
 })
+
 Reflect.defineProperty(currency, 'add', {
   value: async function add(id, amount) {
     const user = currency.get(id);
@@ -173,5 +189,5 @@ Reflect.defineProperty(currency, 'getBalance', {
   },
 });
 
-module.exports = { getCommands, getEnchants, currency }
+module.exports = { getCommands, getAdminCmds, getEnchants, currency }
 client.login(config.token)

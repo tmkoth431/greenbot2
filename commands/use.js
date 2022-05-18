@@ -12,7 +12,7 @@ module.exports = {
   async execute(int, c) {
     const app = require('../app')
     const func = require('../resources/functions')
-    const { UserItems, UserEffects, Shop, Enemy } = require('../dbObjects')
+    const { UserItems, UserEffects, Shop, Enemy } = require('../dbobjects')
     const { Op } = require('sequelize');
     const embededd = new MessageEmbed()
       .setTitle(`Use`)

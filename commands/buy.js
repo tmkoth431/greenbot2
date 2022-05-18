@@ -4,10 +4,10 @@ const { MessageEmbed } = require('discord.js');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('buy')
-    .setDescription('Buys an Item From the Shop')
+    .setDescription('Buys an item from the shop')
     .addStringOption(options =>
       options.setName('item_id')
-        .setDescription('Item Name')
+        .setDescription('Item name')
         .setRequired(true))
     .addNumberOption(options =>
       options.setName('count')

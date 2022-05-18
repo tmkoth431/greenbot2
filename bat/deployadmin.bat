@@ -1,2 +1,5 @@
 cd ..
-node deployadmin
+cd deploy
+node deploy --admin
+cd ..
+node .

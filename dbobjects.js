@@ -61,7 +61,6 @@ Reflect.defineProperty(Users.prototype, 'addUniqueItem', {
   }
 })
 
-
 Reflect.defineProperty(Users.prototype, 'getItems', {
   value: function getItems() {
     return UserItems.findAll({
@@ -88,7 +87,7 @@ Reflect.defineProperty(Users.prototype, 'equip', {
     equip.save()
     return
   }
-})
+});
 
 Reflect.defineProperty(Users.prototype, 'setBalance', {
   value: async function add(amount) {

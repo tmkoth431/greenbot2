@@ -4,7 +4,7 @@ const { MessageEmbed } = require('discord.js')
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('inventory')
-    .setDescription("Shows Items in a Players' inventory.")
+    .setDescription("Shows items in a players' inventory")
     .addUserOption(options =>
       options.setName('user')
         .setDescription('Targeted User')

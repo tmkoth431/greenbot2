@@ -5,9 +5,13 @@ const { MessageEmbed } = require('discord.js')
 module.exports = {
   name: 'flame',
   async execute(int, userEffects, user) {
-    userEffects.necrofire = Boolean(true)
+    userEffects.necrofire = Boolean(true);
     userEffects.save()
-    return int.channel.send(`<@${user.user_id}>, you have been set on fire`)
-    // Toby! Make the reply always be the same as flame.js
+    const embededd = new MessageEmbed()
+      .setTitle('Effects')
+      .setColor('#25c059')
+      .setDescription(`Debuff 'Fire' added to <@${int.user.id}>!`)
+
+    return int.channel.send({ embeds: [embededd] })
   },
 }
