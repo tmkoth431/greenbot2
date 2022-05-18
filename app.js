@@ -18,8 +18,7 @@ const currency = new Collection();
 const cooldowns = new Collection();
 
 let epicstartdate = `${new Date(Date.now())}`
-epicstartdate = epicstartdate.replace(':', '.')
-epicstartdate = epicstartdate.replace(':', '.')
+epicstartdate = epicstartdate.replace(':', '.').replace(':', '.').slice(0, 24)
 
 const allowed = [];
 for (var i = 0; i < config.author.length; i++) {
