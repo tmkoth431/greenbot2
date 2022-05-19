@@ -77,13 +77,8 @@ Reflect.defineProperty(Users.prototype, 'equip', {
       where: { user_id: this.user_id, item_id: item },
       include: ['item'],
     });
-    const prev = await UserItems.findOne({
-      where: { user_id: this.user_id, equipped: true },
-      include: ['item'],
-    }) || equip
-    prev.equipped = Boolean(false);
     equip.equipped = Boolean(true);
-    prev.save()
+    equip.amount -= Number(1)
     equip.save()
     return
   }
