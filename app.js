@@ -64,7 +64,6 @@ client.on('interactionCreate', async int => {
   // create user
   try {
     if (!user) {
-      if (int.commandName === 'help') {
         user = await Users.create({ user_id: int.user.id });
         userEffects = await UserEffects.create({ user_id: int.user.id })
         currency.set(int.user.id, user);
@@ -75,14 +74,6 @@ client.on('interactionCreate', async int => {
           user.save()
         }
         func.logconsole(`initialized user ${int.user.id}`, client);
-      } else {
-        const embededd = new MessageEmbed()
-          .setTitle('New User')
-          .setColor('#25c059')
-          .setDescription(`Hello <@${int.user.id}>!\n\nUse /help to get started!`);
-
-        int.reply({ embeds: [embededd] });
-      }
     }
   } catch (e) {
     return func.error(e, client)
@@ -91,7 +82,7 @@ client.on('interactionCreate', async int => {
   if (admincommands.includes(int.commandName) && !allowed.includes(int.user.id)) {
     func.log('attempted to use an unauthorized command', int, client);
     embededd.setDescription('You do not have access to this command!').setThumbnail('https://i.imgur.com/tDWLV66.png');
-    return int.reply({ embeds: [embededd], ephemeral: true });
+    return await int.reply({ embeds: [embededd], ephemeral: true });
   }
 
   //cooldowns
@@ -105,7 +96,7 @@ client.on('interactionCreate', async int => {
       const expirationTime = timestamps.get(int.user.id) + cooldownAmount;
       if (now < expirationTime) {
         const timeLeft = (expirationTime - now) / 1000;
-        return int.reply({ content: `Too fast. Wait for ${timeLeft.toFixed(1)} more second${timeLeft.toFixed(1) > 1 ? 's' : ''} before reusing the \`/${int.commandName}\` command.`, ephemeral: true });
+        return await int.reply({ content: `Too fast. Wait for ${timeLeft.toFixed(1)} more second${timeLeft.toFixed(1) > 1 ? 's' : ''} before reusing the \`/${int.commandName}\` command.`, ephemeral: true });
       }
     }
 

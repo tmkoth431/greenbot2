@@ -30,6 +30,7 @@ module.exports = {
     client.channels.cache.get(config.log_channel).send(codeBlock(`${client.ws.ping}ms <console> - ${text2} in ${(Date.now() - int.createdAt) / 1000} seconds`))
     return console.log(`${client.ws.ping}ms ${new Date(Date.now())}: <console> - ${text2} in ${(Date.now() - int.createdAt) / 1000} seconds`);
   },
+  // Date.now() % (Date.now() / 86400) = seconds since day started idk ill add eventually
   writetoarchive: function (text) {
     fs.appendFileSync(`logs/${require('../app').epicstartdate}/archives.txt`, text)
   },
