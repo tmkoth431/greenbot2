@@ -72,8 +72,10 @@ client.on('interactionCreate', async int => {
           user.addUniqueItem('wacking\_stick', 'w', 'mystery', 0, 'none', 0, null, null, 1)
           user.balance += Number(100)
           user.save()
-        }
-        func.logconsole(`initialized user ${int.user.id}`, client);
+      }
+      user.save()
+      userEffects.save()
+      func.logconsole(`initialized user ${int.user.id}`, client);
     }
   } catch (e) {
     return func.error(e, client)
@@ -129,7 +131,8 @@ client.on('interactionCreate', async int => {
     func.levelup(int, user, client)
   } catch (error) {
     func.error(error, client);
-    return await int.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+    await int.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+    return
   }
   
 });
