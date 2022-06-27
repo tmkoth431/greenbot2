@@ -19,7 +19,7 @@ const currency = new Collection();
 const cooldowns = new Collection();
 
 let epicstartdate = `${new Date(Date.now())}`
-epicstartdate = epicstartdate.replace(':', '.').replace(':', '.').slice(0, 24)
+epicstartdate = epicstartdate.replaceAll(':', '.').slice(0, 24)
 
 const allowed = [];
 for (var i = 0; i < config.author.length; i++) {
@@ -66,7 +66,7 @@ client.on('interactionCreate', async int => {
   const command = client.commands.get(int.commandName);
 
   // create user
-  try {
+  // try {
     if (!user) {
       if (int.commandName === 'help') {
         user = await Users.create({ user_id: int.user.id });
@@ -85,21 +85,21 @@ client.on('interactionCreate', async int => {
           .setColor('#25c059')
           .setDescription(`Hello <@${int.user.id}>!\n\nUse /help to get started!`);
 
-        int.reply({ embeds: [embededd] });
+        return await int.reply({ embeds: [embededd] });
       }
     }
-  } catch (e) {
-    return func.error(e, client)
-  }
+  // } catch (e) {
+  //   return func.error(e, client)
+  // }
 
   if (admincommands.includes(int.commandName) && !allowed.includes(int.user.id)) {
     func.log('attempted to use an unauthorized command', int, client);
     embededd.setDescription('You do not have access to this command!').setThumbnail('https://i.imgur.com/tDWLV66.png');
-    return int.reply({ embeds: [embededd], ephemeral: true });
+    return await int.reply({ embeds: [embededd], ephemeral: true });
   }
 
-  //cooldowns
-  try {
+  //cooldowns the try statement broke it???????
+  // try {
     if (!cooldowns.has(command.commandName)) {
       cooldowns.set(command.commandName, new Collection());
     }
@@ -109,14 +109,14 @@ client.on('interactionCreate', async int => {
       const expirationTime = timestamps.get(int.user.id) + cooldownAmount;
       if (int.createdAt < expirationTime) {
         const timeLeft = (expirationTime - int.createdAt) / 1000;
-        return int.reply({ content: `Too fast. Wait for ${timeLeft.toFixed(1)} more second${timeLeft.toFixed(1) > 1 ? 's' : ''} before reusing the \`/${int.commandName}\` command.`, ephemeral: true });
+        return await int.reply({ content: `Too fast. Wait for ${timeLeft.toFixed(1)} more second${timeLeft.toFixed(1) > 1 ? 's' : ''} before reusing the \`/${int.commandName}\` command.`, ephemeral: true });
       }
     }
-  } catch (error) {
-    func.error(error, client);
-    embededd.setDescription('There was an error while executing this command!');
-    return await int.reply({ embeds: [ embededd ], ephemeral: true });
-  }
+  // } catch (error) {
+  //   func.error(error, client);
+  //   embededd.setDescription('There was an error while executing this command!');
+  //   return await int.reply({ embeds: [ embededd ], ephemeral: true });
+  // }
 
   // if (user.curse) {
   //   const curseTime = 60000;
@@ -149,13 +149,13 @@ client.on('interactionCreate', async int => {
   } catch (error) {
     func.error(error, client);
     embededd.setDescription('There was an error while executing this command!');
-    return await int.reply({ embeds: [ embededd ], ephemeral: true });
+    return await int.channel.send({ embeds: [ embededd ], ephemeral: true });
   }
   
 });
 
 client.once('ready', async () => {
-  console.log(`${client.ws.ping}ms ${new Date(Date.now())}: <console> - Logging in as ${client.user.tag}...`)
+  console.log(`${new Date(Date.now())}: <console> - Logging in as ${client.user.tag}...`)
   fs.mkdirSync(`./logs/${epicstartdate}/`)
   const enchantFiles = fs.readdirSync('./resources/enchants').filter(file => file.endsWith('.js'));
   for (const file of enchantFiles) {
