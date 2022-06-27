@@ -131,7 +131,12 @@ client.on('interactionCreate', async int => {
     func.levelup(int, user, client)
   } catch (error) {
     func.error(error, client);
-    await int.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+    await int.reply({ content: 'There was an error while executing this command!', ephemeral: true }).catch(async error => {
+      if (error.name == 'INTERACTION_ALREADY_REPLIED') {
+        func.error(error, int, client);
+        // What do I do here?
+      }
+    });
     return
   }
   
