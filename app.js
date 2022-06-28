@@ -68,7 +68,7 @@ client.on('interactionCreate', async int => {
   // create user
   // try {
     if (!user) {
-      if (int.commandName === 'help') {
+      if (int.command.name == 'help') {
         user = await Users.create({ user_id: int.user.id });
         userEffects = await UserEffects.create({ user_id: int.user.id })
         currency.set(int.user.id, user);
@@ -87,6 +87,9 @@ client.on('interactionCreate', async int => {
 
         return await int.reply({ embeds: [embededd] });
       }
+      user.save()
+      userEffects.save()
+      func.logconsole(`initialized user ${int.user.id}`, client);
     }
   // } catch (e) {
   //   return func.error(e, client)
@@ -148,8 +151,13 @@ client.on('interactionCreate', async int => {
     func.levelup(int, user, client)
   } catch (error) {
     func.error(error, client);
-    embededd.setDescription('There was an error while executing this command!');
-    return await int.channel.send({ embeds: [ embededd ], ephemeral: true });
+    await int.reply({ content: 'There was an error while executing this command!', ephemeral: true }).catch(async error => {
+      if (error.name == 'INTERACTION_ALREADY_REPLIED') {
+        func.error(error, int, client);
+        // What do I do here?
+      }
+    });
+    return
   }
   
 });
