@@ -17,6 +17,11 @@ const Adventures = require('./models/Adventure')(sequelize, Sequelize.DataTypes)
 const PlayerShop = require('./models/PlayerShop')(sequelize, Sequelize.DataTypes)
 const QuestBoard = require('./models/QuestBoard')(sequelize, Sequelize.DataTypes)
 const Enemy = require('./models/Enemy')(sequelize, Sequelize.DataTypes)
+const Guild = require('./models/Warnings.js')(sequelize, Sequelize.DataTypes);
+const Badwords = require('./models/Badwords.js')(sequelize, Sequelize.DataTypes);
+const GuildSettings = require('./models/GuildSettings.js')(sequelize, Sequelize.DataTypes);
+const Punishments = require('./models/Punishments.js')(sequelize, Sequelize.DataTypes);
+Badwords.removeAttribute('id');
 
 UserItems.belongsTo(Shop, { foreignKey: 'item_id', as: 'item' });
 
@@ -98,4 +103,4 @@ Reflect.defineProperty(Users.prototype, 'getBalance', {
   },
 });
 
-module.exports = { Users, Shop, PlayerShop, UserItems, UserEffects, Adventures, QuestBoard, Enemy };
+module.exports = { Users, Shop, PlayerShop, UserItems, UserEffects, Adventures, QuestBoard, Enemy, Guild, Badwords, GuildSettings, Punishments };
