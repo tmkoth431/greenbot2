@@ -5,14 +5,14 @@ const fs = require('fs');
 const { Users, Shop, UserEffects } = require('./dbobjects.js');
 const func = require('./resources/functions')
 const { MessageEmbed } = require('discord.js');
-const { fileURLToPath } = require('url');
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] })
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] })
 client.commands = new Collection();
 client.enchants = new Collection();
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 const adminFiles = fs.readdirSync('./admincmd').filter(file => file.endsWith('.js'));
+const modFiles = fs.readdirSync('./moderation').filter(file => file.endsWith('.js'));
 
 const currency = new Collection();
 const cooldowns = new Collection();
@@ -41,6 +41,10 @@ for (const file of adminFiles) {
   const command = require(`./admincmd/${file}`);
   client.commands.set(command.data.name, command);
 }
+for (const file of modFiles) {
+  const command = require(`./moderation/${file}`);
+  client.commands.set(command.data.name, command);
+}
 
 function getCommands() {
   return client.commands
@@ -51,7 +55,20 @@ function getEnchants() {
 
 client.on('messageCreate', async message => {
   if (message.author.bot) return;
-  currency.add(message.author.id, 1);
+	if (message.author == client.user) return;
+	func.logMessage(message);
+  if (await func.getBadwordsEnabled(message.guild.id)) {
+    await func.checkWords(message, client);
+  }
+});
+
+client.on('messageUpdate', async message => {
+  if (message.author.bot) return;
+	if (message.author == client.user) return;
+	func.logMessage(message);
+  if (await func.getBadwordsEnabled(message.guild.id)) {
+    await func.checkWords(message, client);
+  }
 });
 
 client.on('interactionCreate', async int => {
@@ -86,7 +103,7 @@ client.on('interactionCreate', async int => {
   }
 
   //cooldowns
-  try {
+  // try {
     if (!cooldowns.has(command.commandName)) {
       cooldowns.set(command.commandName, new Collection());
     }
@@ -127,15 +144,20 @@ client.on('interactionCreate', async int => {
     setTimeout(() => timestamps.delete(int.user.id), cooldownAmount);
     await command.execute(int, client);
     func.levelup(int, user, client)
-  } catch (error) {
-    func.error(error, client);
-    return await int.reply({ content: 'There was an error while executing this command!', ephemeral: true });
-  }
+  // } catch (error) {
+  //   func.error(error, client);
+  //   return await int.reply({ content: 'There was an error while executing this command!', ephemeral: true }).catch(async error =>  {
+  //     if (error.name == 'INTERATION_ALREADY_REPLIED') {
+  //       await func.modError(error, int, client);
+  //     }
+  //     func.error(error, client)
+  //   });
+  // }
   
 });
 
 client.once('ready', async () => {
-  console.log(`${client.ws.ping}ms ${new Date(Date.now())}: <console> - Logging in as ${client.user.tag}...`)
+  console.log(`${new Date(Date.now())}: <console> - Logging in as ${client.user.tag}...`)
   fs.mkdirSync(`./logs/${epicstartdate}/`)
   const enchantFiles = fs.readdirSync('./resources/enchants').filter(file => file.endsWith('.js'));
   for (const file of enchantFiles) {
@@ -145,7 +167,7 @@ client.once('ready', async () => {
   const storedBalances = await Users.findAll();
   storedBalances.forEach(b => currency.set(b.user_id, b));
   client.user.setPresence({
-    activity: { type: 'LISTENING', name: `${client.guilds.cache.size} servers. | ::help` }
+    activity: { type: 'LISTENING', name: `${client.guilds.cache.size} servers. | /help` }
   })
   // console.log(`${client.guilds.cache.map(guild => guild.name + '\n')}`)
   const embededd = new MessageEmbed()

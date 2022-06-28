@@ -8,8 +8,10 @@ const fs = require('fs');
 
 const commands = [];
 const admincmds = [];
+const modcmds = [];
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 const adminFiles = fs.readdirSync('./admincmd').filter(file => file.endsWith('.js'));
+const modFiles = fs.readdirSync('./moderation').filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
   const command = require(`./commands/${file}`);
@@ -18,6 +20,10 @@ for (const file of commandFiles) {
 for (const file of adminFiles) {
   const command = require(`./admincmd/${file}`);
   admincmds.push(command.data.toJSON());
+}
+for (const file of modFiles) {
+  const command = require(`./moderation/${file}`);
+  commands.push(command.data.toJSON());
 }
 
 const rest = new REST({ }).setToken(config.token);
