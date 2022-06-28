@@ -89,8 +89,10 @@ client.on('interactionCreate', async int => {
           user.addUniqueItem('wacking\_stick', 'w', 'mystery', 0, 'none', 0, null, null, 1)
           user.balance += Number(100)
           user.save()
-        }
-        func.logconsole(`initialized user ${int.user.id}`, client);
+      }
+      user.save()
+      userEffects.save()
+      func.logconsole(`initialized user ${int.user.id}`, client);
     }
   } catch (e) {
     return func.error(e, client)
@@ -103,7 +105,7 @@ client.on('interactionCreate', async int => {
   }
 
   //cooldowns
-  // try {
+  try {
     if (!cooldowns.has(command.commandName)) {
       cooldowns.set(command.commandName, new Collection());
     }
@@ -144,15 +146,15 @@ client.on('interactionCreate', async int => {
     setTimeout(() => timestamps.delete(int.user.id), cooldownAmount);
     await command.execute(int, client);
     func.levelup(int, user, client)
-  // } catch (error) {
-  //   func.error(error, client);
-  //   return await int.reply({ content: 'There was an error while executing this command!', ephemeral: true }).catch(async error =>  {
-  //     if (error.name == 'INTERATION_ALREADY_REPLIED') {
-  //       await func.modError(error, int, client);
-  //     }
-  //     func.error(error, client)
-  //   });
-  // }
+  } catch (error) {
+    func.error(error, client);
+    return await int.reply({ content: 'There was an error while executing this command!', ephemeral: true }).catch(async error =>  {
+      if (error.name == 'INTERATION_ALREADY_REPLIED') {
+        await func.modError(error, int, client);
+      }
+      func.error(error, client)
+    });
+  }
   
 });
 
