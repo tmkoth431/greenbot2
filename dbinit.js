@@ -12,7 +12,6 @@ const sequelize = new Sequelize('database', 'username', 'password', {
   storage: 'database.sqlite',
 });
 
-
 const Users = require('./models/Users')(sequelize, Sequelize.DataTypes);
 const Shop = require('./models/Shop')(sequelize, Sequelize.DataTypes);
 const UserItems = require('./models/UserItems')(sequelize, Sequelize.DataTypes);
@@ -46,7 +45,7 @@ sequelize.sync({ force }).then(async () => {
   try {
     await Promise.all(shop);
 
-    console.log(`${new Date(Date.now())}: Database ${force ? 'reset' : 'synced'} in ${(Date.now() - startTime) / 1000} seconds.`);
+    console.log(`${new Date(Date.now())}: <console> - Database ${force ? 'reset' : 'synced'} in ${(Date.now() - startTime) / 1000} seconds.`);
 
     sequelize.close();
   } catch (e) {

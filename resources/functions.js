@@ -5,7 +5,6 @@ const { codeBlock } = require('@discordjs/builders');
 
 module.exports = {
   log: function (text, int, client) {
-    var readarchives = fs.readFileSync('archives.txt', `utf-8`);
     var text2 = `${String(text)}`
     var author = `${int.user.id}`
     for (var i = 0; i < config.coolids.length; i++) {
@@ -37,14 +36,17 @@ module.exports = {
   error: function (text, client) {
     fs.appendFileSync(`logs/${require('../app').epicstartdate}/error.txt`, `${client.ws.ping}ms ${Date.now()}: ${text}\n`)
   },
+
   clearStatus: function (userEffects) {
     userEffects.burn = Number(0)
     userEffects.poison = Number(0)
     return userEffects.save()
   },
+
   calclvl: function (lvl) {
     return Math.round(Math.pow((lvl + 1), 1.5))
   },
+
   levelup: function (int, user, client) {
     if (user.exp >= this.calclvl(user.level)) {
       user.exp -= this.calclvl(user.level)
@@ -62,6 +64,7 @@ module.exports = {
       return
     }
   },
+
   die: function (int, cause, user, userEffects, client) {
     user.health = Number(1)
     user.balance = 0
@@ -76,6 +79,7 @@ module.exports = {
       .setDescription(`<@${user.user_id}> ${cause}`)
     return int.reply({ embeds: [embededd] })
   },
+
   updateEffects: function (message, user, userEffects) {
     if (userEffects.burn > 0) {
       user.health -= Number(2)
@@ -113,4 +117,5 @@ module.exports = {
 
     return (string.charAt(0) === 'a' || string.charAt(0) === 'e' || string.charAt(0) === 'i' || string.charAt(0) === 'o' || string.charAt(0) === 'u');
   }
+
 }
