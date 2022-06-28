@@ -7,7 +7,7 @@ const func = require('./resources/functions')
 const { MessageEmbed } = require('discord.js');
 const { fileURLToPath } = require('url');
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] })
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] })
 client.commands = new Collection();
 client.enchants = new Collection();
 
@@ -52,6 +52,18 @@ function getEnchants() {
 client.on('messageCreate', async message => {
   if (message.author.bot) return;
   currency.add(message.author.id, 1);
+  if (message.content.substring(0, config.commandPrefix.length) == config.commandPrefix) {
+    const args = message.content.split(" ");
+    args[0] = args[0].slice(1);
+    const command = client.commands.get(args[0]);
+    try {
+      command.execute2(message, args);
+    } catch (e) {
+      if (e instanceof TypeError) {
+        // Something
+      }
+    }
+  }
 });
 
 client.on('interactionCreate', async int => {
@@ -137,7 +149,7 @@ client.on('interactionCreate', async int => {
         // What do I do here?
       }
     });
-    return
+    return;
   }
   
 });

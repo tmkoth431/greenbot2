@@ -20,6 +20,22 @@ module.exports = {
     client.channels.cache.get(config.log_channel).send(codeBlock(`${client.ws.ping}ms ${int.guild} - ${author} ${text2} in ${(Date.now() - int.createdAt) / 1000} seconds`))
     return console.log(`${client.ws.ping}ms ${new Date(Date.now())}: ${int.guild} - ${author} ${text2} in ${(Date.now() - int.createdAt) / 1000} seconds`);
   },
+  logMessageCommand: function (text, int, client) {
+    var readarchives = fs.readFileSync('archives.txt', `utf-8`);
+    var text2 = `${String(text)}`
+    var author = `${int.author.id}`
+    for (var i = 0; i < config.coolids.length; i++) {
+      text2 = text2.replace('@', '')
+      text2 = text2.replace('<', '')
+      text2 = text2.replace('>', '')
+      text2 = text2.replace(`${config.coolids[i]}`, `${config.coolnames[i]}`)
+      if (text2.includes(config.coolids[i])) console.log('name change failed')
+      author = author.replace(`${config.coolids[i]}`, `${config.coolnames[i]}`)
+    }
+    this.writetoarchive(`${client.ws.ping}ms ${Date.now()}: ${int.guild} - ${author} ${text2} in ${(Date.now() - int.createdAt) / 1000} seconds\n`)
+    client.channels.cache.get(config.log_channel).send(codeBlock(`${client.ws.ping}ms ${int.guild} - ${author} ${text2} in ${(Date.now() - int.createdAt) / 1000} seconds`))
+    return console.log(`${client.ws.ping}ms ${new Date(Date.now())}: ${int.guild} - ${author} ${text2} in ${(Date.now() - int.createdAt) / 1000} seconds`);
+  },
   logconsole: function (text, client) {
     var text2 = `${String(text)}`
     for (var x = 0; x < config.coolids.length; x++) {
